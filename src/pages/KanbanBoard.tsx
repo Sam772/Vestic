@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './KanbanBoard.css';
 
 interface Task {
   id: number;
@@ -57,6 +58,7 @@ const KanbanBoard: React.FC = () => {
         {tasks.todo.map(task => (
           <div
             key={task.id}
+            className="task"
             draggable
             onDragStart={(e) => {
               e.dataTransfer.setData('taskId', String(task.id));
@@ -79,6 +81,7 @@ const KanbanBoard: React.FC = () => {
         {tasks.inProgress.map(task => (
           <div
             key={task.id}
+            className="task"
             draggable
             onDragStart={(e) => {
               e.dataTransfer.setData('taskId', String(task.id));
@@ -101,6 +104,7 @@ const KanbanBoard: React.FC = () => {
         {tasks.done.map(task => (
           <div
             key={task.id}
+            className="task"
             draggable
             onDragStart={(e) => {
               e.dataTransfer.setData('taskId', String(task.id));
