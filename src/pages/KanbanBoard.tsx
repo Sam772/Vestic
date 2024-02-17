@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './KanbanBoard.css';
+import Task from '../components/Task'
+import TaskModal from '../components/TaskModal';
 
 interface Task {
   id: number;
@@ -23,22 +25,36 @@ const KanbanBoard: React.FC = () => {
   const [tasks, setTasks] = useState<Tasks>(initialTasks);
   const [newTaskText, setNewTaskText] = useState<string>('');
 
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = (taskId: number) => {
+    setSelectedTaskId(taskId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedTaskId(null);
+    setIsModalOpen(false);
+  };
+
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
-    const sourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
-    const targetTask = tasks[sourceColumn].find(task => task.id === taskId);
+  const sourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
+  const targetTask = tasks[sourceColumn].find(task => task.id === taskId);
 
-    if (!targetTask) {
-      return; // handle the case where the task is not found
-    }
+  if (!targetTask) {
+    return; // handle the case where the task is not found
+  }
 
-    const targetTasks = [...tasks[targetColumn], targetTask];
+  const targetTasks = [...tasks[targetColumn], targetTask];
 
-    setTasks(prevTasks => ({
+  setTasks(prevTasks => ({
       ...prevTasks,
       [sourceColumn]: sourceTasks,
       [targetColumn]: targetTasks,
     }));
   };
+
   const handleCreateNewTask = () => {
     if (newTaskText.trim() !== '') {
       const newTask: Task = {
@@ -64,17 +80,17 @@ const KanbanBoard: React.FC = () => {
         onDragOver={(e) => e.preventDefault()}>
         <h2>Todo</h2>
         {tasks.todo.map(task => (
-          <div
+          <Task
             key={task.id}
-            className="task"
+            id={task.id}
+            text={task.text}
+            onClick={() => openModal(task.id)}
             draggable
             onDragStart={(e) => {
               e.dataTransfer.setData('taskId', String(task.id));
               e.dataTransfer.setData('sourceColumn', 'todo');
             }}
-          >
-            {task.text}
-          </div>
+          />
         ))}
         <div>
           <input
@@ -96,17 +112,17 @@ const KanbanBoard: React.FC = () => {
         onDragOver={(e) => e.preventDefault()}>
         <h2>In Progress</h2>
         {tasks.inProgress.map(task => (
-          <div
+          <Task
             key={task.id}
-            className="task"
+            id={task.id}
+            text={task.text}
+            onClick={() => openModal(task.id)}
             draggable
             onDragStart={(e) => {
               e.dataTransfer.setData('taskId', String(task.id));
               e.dataTransfer.setData('sourceColumn', 'inProgress');
             }}
-          >
-            {task.text}
-          </div>
+          />
         ))}
       </div>
 
@@ -119,19 +135,27 @@ const KanbanBoard: React.FC = () => {
         onDragOver={(e) => e.preventDefault()}>
         <h2>Done</h2>
         {tasks.done.map(task => (
-          <div
+          <Task
             key={task.id}
-            className="task"
+            id={task.id}
+            text={task.text}
+            onClick={() => openModal(task.id)}
             draggable
             onDragStart={(e) => {
               e.dataTransfer.setData('taskId', String(task.id));
               e.dataTransfer.setData('sourceColumn', 'done');
             }}
-          >
-            {task.text}
-          </div>
+          />
         ))}
       </div>
+
+      {isModalOpen && (
+        <TaskModal
+          isOpen={isModalOpen}
+          taskId={selectedTaskId!} // Pass the selected task ID to the modal
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 };

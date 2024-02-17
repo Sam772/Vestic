@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Navbar from './pages/Navbar';
+import Navbar from './components/Navbar';
 import KanbanBoard from './pages/KanbanBoard';
 
 function App() {
