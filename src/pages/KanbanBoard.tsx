@@ -13,20 +13,15 @@ interface Tasks {
 }
 
 const initialTasks: Tasks = {
-  todo: [
-    { id: 1, text: 'Task 1' },
-    { id: 2, text: 'Task 2' },
-  ],
-  inProgress: [
-    { id: 3, text: 'Task 3' },
-  ],
-  done: [
-    { id: 4, text: 'Task 4' },
-  ],
+  todo: [],
+  inProgress: [],
+  done: [],
+  // { id: 4, text: 'Task 4' },
 };
 
 const KanbanBoard: React.FC = () => {
   const [tasks, setTasks] = useState<Tasks>(initialTasks);
+  const [newTaskText, setNewTaskText] = useState<string>('');
 
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
     const sourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
@@ -43,6 +38,19 @@ const KanbanBoard: React.FC = () => {
       [sourceColumn]: sourceTasks,
       [targetColumn]: targetTasks,
     }));
+  };
+  const handleCreateNewTask = () => {
+    if (newTaskText.trim() !== '') {
+      const newTask: Task = {
+        id: Date.now(), // Generating a unique id for the new task
+        text: newTaskText,
+      };
+      setTasks(prevTasks => ({
+        ...prevTasks,
+        todo: [...prevTasks.todo, newTask],
+      }));
+      setNewTaskText(''); // Clearing the input field after creating the new task
+    }
   };
 
   return (
@@ -68,6 +76,15 @@ const KanbanBoard: React.FC = () => {
             {task.text}
           </div>
         ))}
+        <div>
+          <input
+            type="text"
+            value={newTaskText}
+            onChange={(e) => setNewTaskText(e.target.value)}
+            placeholder="Enter task name"
+          />
+          <button onClick={handleCreateNewTask}>Create New Task</button>
+        </div>
       </div>
 
       <div className="column" onDrop={(e) => {
