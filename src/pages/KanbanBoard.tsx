@@ -14,6 +14,12 @@ interface Tasks {
   done: Task[];
 }
 
+enum ColumnName {
+  TODO = 'todo',
+  IN_PROGRESS = 'inProgress',
+  DONE = 'done',
+}
+
 const initialTasks: Tasks = {
   todo: [],
   inProgress: [],
@@ -67,6 +73,15 @@ const KanbanBoard: React.FC = () => {
       }));
       setNewTaskText(''); // Clearing the input field after creating the new task
     }
+  };
+
+  const deleteTask = (taskId: number) => {
+    const updatedTasks: Tasks = { ...tasks };
+    for (const column of [ColumnName.TODO, ColumnName.IN_PROGRESS, ColumnName.DONE]) {
+      updatedTasks[column] = updatedTasks[column].filter(task => task.id !== taskId);
+    }
+    setTasks(updatedTasks);
+    closeModal();
   };
 
   return (
@@ -154,6 +169,7 @@ const KanbanBoard: React.FC = () => {
           isOpen={isModalOpen}
           taskId={selectedTaskId!} // Pass the selected task ID to the modal
           onClose={closeModal}
+          onDelete={deleteTask}
         />
       )}
     </div>
