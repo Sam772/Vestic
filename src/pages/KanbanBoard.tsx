@@ -30,7 +30,6 @@ const initialTasks: Tasks = {
 const KanbanBoard: React.FC = () => {
   const [tasks, setTasks] = useState<Tasks>(initialTasks);
   const [newTaskText, setNewTaskText] = useState<string>('');
-
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -82,6 +81,16 @@ const KanbanBoard: React.FC = () => {
     }
     setTasks(updatedTasks);
     closeModal();
+  };
+
+  const getTaskName = (taskId: number): string => {
+    for (const column of Object.values(tasks)) {
+      const task = column.find((task : Task) => task.id === taskId);
+      if (task) {
+        return task.text;
+      }
+    }
+    return ''; // Task not found
   };
 
   return (
@@ -168,6 +177,7 @@ const KanbanBoard: React.FC = () => {
         <TaskModal
           isOpen={isModalOpen}
           taskId={selectedTaskId!} // Pass the selected task ID to the modal
+          taskName={selectedTaskId ? getTaskName(selectedTaskId) : ''}
           onClose={closeModal}
           onDelete={deleteTask}
         />
