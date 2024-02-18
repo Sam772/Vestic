@@ -1,14 +1,20 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import KanbanBoard from './pages/KanbanBoard';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <Navbar />
-      <KanbanBoard />
-    </div>
+    <Router>
+      <div>
+        <Navbar />
+        <KanbanBoard />
+        <Routes>
+          <Route path="/board" Component={KanbanBoard} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

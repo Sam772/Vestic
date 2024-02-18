@@ -6,7 +6,7 @@ interface TaskModalProps {
   onClose: () => void;
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({isOpen, taskId, onClose }) => {
+const TaskModal: React.FC<TaskModalProps> = ({isOpen, taskId, onClose}) => {
   return (
     <div className={`modal ${isOpen ? 'open' : ''}`}>
       <div className="modal-content">
