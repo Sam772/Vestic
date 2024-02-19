@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './KanbanBoard.css';
+import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
 
