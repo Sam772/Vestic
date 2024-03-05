@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // Import the CSS file for styling
+import './Navbar.css';
 
 const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <ul className="navbar-links">
-      <li className="navbar-item">
+        <li className="navbar-item">
           <div className="navbar-link">Vestic</div>
         </li>
         <li className="navbar-item">

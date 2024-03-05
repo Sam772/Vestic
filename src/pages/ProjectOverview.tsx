@@ -43,6 +43,16 @@ const KanbanBoard: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleTaskRename = (taskId: number, newTaskName: string) => {
+    const updatedTasks = {
+      ...tasks,
+      todo: tasks.todo.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      inProgress: tasks.inProgress.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      done: tasks.done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+    };
+    setTasks(updatedTasks);
+  };
+
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
   const sourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
   const targetTask = tasks[sourceColumn].find(task => task.id === taskId);
@@ -180,6 +190,7 @@ const KanbanBoard: React.FC = () => {
           taskName={selectedTaskId ? getTaskName(selectedTaskId) : ''}
           onClose={closeModal}
           onDelete={deleteTask}
+          onSave={(newTaskName) => handleTaskRename(selectedTaskId!, newTaskName)}
         />
       )}
     </div>
