@@ -29,9 +29,17 @@ const initialTasks: Tasks = {
 
 const KanbanBoard: React.FC = () => {
   const [tasks, setTasks] = useState<Tasks>(initialTasks);
-  const [newTaskText, setNewTaskText] = useState<string>('');
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [columnOrder, setColumnOrder] = useState<ColumnName[]>([ColumnName.TODO, ColumnName.IN_PROGRESS, ColumnName.DONE]);
+  const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
+  
+  const [newTaskTexts, setNewTaskTexts] = useState<{[key: string]: string}>({
+    todo: '',
+    inProgress: '',
+    done: '',
+  });
 
   const openModal = (taskId: number) => {
     setSelectedTaskId(taskId);
@@ -41,6 +49,31 @@ const KanbanBoard: React.FC = () => {
   const closeModal = () => {
     setSelectedTaskId(null);
     setIsModalOpen(false);
+  };
+
+  const handleNewTaskTextChange = (columnName: ColumnName, newText: string) => {
+    setNewTaskTexts(prevTexts => ({
+      ...prevTexts,
+      [columnName]: newText,
+    }));
+  };
+
+  const handleCreateNewTask = (columnName: ColumnName) => {
+    const text = newTaskTexts[columnName];
+    if (text.trim() !== '') {
+      const newTask: Task = {
+        id: Date.now(),
+        text: text,
+      };
+      setTasks(prevTasks => ({
+        ...prevTasks,
+        [columnName]: [...prevTasks[columnName], newTask],
+      }));
+      setNewTaskTexts(prevTexts => ({
+        ...prevTexts,
+        [columnName]: '',
+      }));
+    }
   };
 
   const handleTaskRename = (taskId: number, newTaskName: string) => {
@@ -58,7 +91,7 @@ const KanbanBoard: React.FC = () => {
   const targetTask = tasks[sourceColumn].find(task => task.id === taskId);
 
   if (!targetTask) {
-    return; // handle the case where the task is not found
+    return;
   }
 
   const targetTasks = [...tasks[targetColumn], targetTask];
@@ -68,20 +101,6 @@ const KanbanBoard: React.FC = () => {
       [sourceColumn]: sourceTasks,
       [targetColumn]: targetTasks,
     }));
-  };
-
-  const handleCreateNewTask = () => {
-    if (newTaskText.trim() !== '') {
-      const newTask: Task = {
-        id: Date.now(), // Generating a unique id for the new task
-        text: newTaskText,
-      };
-      setTasks(prevTasks => ({
-        ...prevTasks,
-        todo: [...prevTasks.todo, newTask],
-      }));
-      setNewTaskText(''); // Clearing the input field after creating the new task
-    }
   };
 
   const deleteTask = (taskId: number) => {
@@ -100,89 +119,90 @@ const KanbanBoard: React.FC = () => {
         return task.text;
       }
     }
-    return ''; // Task not found
+    return '';
+  };
+
+  const handleCreateNewColumn = (columnName: ColumnName | null, newName: string) => {
+    if (columnName !== null) {
+      if (newName.trim() !== '') {
+        setTasks(prevTasks => {
+          const updatedTasks = {...prevTasks};
+          updatedTasks[newName as ColumnName] = updatedTasks[columnName];
+          delete updatedTasks[columnName];
+          return updatedTasks;
+        });
+        setColumnOrder(prevOrder => {
+          const newOrder = [...prevOrder];
+          const index = newOrder.indexOf(columnName);
+          if (index !== -1) {
+            newOrder[index] = newName as ColumnName;
+          }
+          return newOrder;
+        });
+        setSelectedColumn(null);
+      }
+    } else {
+      if (newName.trim() !== '') {
+        setTasks(prevTasks => ({
+          ...prevTasks,
+          [newName.trim()]: [],
+        }));
+        setColumnOrder(prevOrder => [...prevOrder, newName as ColumnName]);
+      }
+    }
   };
 
   return (
     <div className="kanban-board">
-      <div className="column" onDrop={(e) => {
-        e.preventDefault();
-        const taskId = +e.dataTransfer.getData('taskId');
-        const sourceColumn = e.dataTransfer.getData('sourceColumn') as keyof Tasks;
-        moveTask(taskId, sourceColumn, 'todo');
-      }}
-        onDragOver={(e) => e.preventDefault()}>
-        <h2>Todo</h2>
-        {tasks.todo.map(task => (
-          <Task
-            key={task.id}
-            id={task.id}
-            text={task.text}
-            onClick={() => openModal(task.id)}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData('taskId', String(task.id));
-              e.dataTransfer.setData('sourceColumn', 'todo');
-            }}
-          />
-        ))}
-        <div>
-          <input
-            type="text"
-            value={newTaskText}
-            onChange={(e) => setNewTaskText(e.target.value)}
-            placeholder="Enter task name"
-          />
-          <button onClick={handleCreateNewTask}>Create New Task</button>
+      {columnOrder.map(columnName => (
+        <div key={columnName} className="column">
+          <h2>
+            {selectedColumn === columnName ? (
+              <div>
+                <input
+                  type="text"
+                  value={columnName}
+                  onChange={(e) => handleCreateNewColumn(columnName as ColumnName, e.target.value)}
+                />
+                <button onClick={() => setSelectedColumn(null)}>Save</button>
+              </div>
+            ) : (
+              <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
+            )}
+          </h2>
+          {tasks[columnName].map(task => (
+            <Task
+              key={task.id}
+              id={task.id}
+              text={task.text}
+              onClick={() => openModal(task.id)}
+              draggable
+              onDragStart={(e) => {
+                e.dataTransfer.setData('taskId', String(task.id));
+                e.dataTransfer.setData('sourceColumn', columnName);
+              }}
+            />
+          ))}
+          <div>
+            <input
+              type="text"
+              value={newTaskTexts[columnName]}
+              onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
+              placeholder="Enter task name"
+            />
+            <button onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task</button>
+          </div>
         </div>
+      ))}
+      <div>
+        <input
+          type="text"
+          value={""}
+          onChange={(e) => setSelectedColumn(e.target.value)}
+          placeholder="Enter new column name"
+        />
+        <button onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column</button>
       </div>
-
-      <div className="column" onDrop={(e) => {
-        e.preventDefault();
-        const taskId = +e.dataTransfer.getData('taskId');
-        const sourceColumn = e.dataTransfer.getData('sourceColumn') as keyof Tasks;
-        moveTask(taskId, sourceColumn, 'inProgress');
-      }}
-        onDragOver={(e) => e.preventDefault()}>
-        <h2>In Progress</h2>
-        {tasks.inProgress.map(task => (
-          <Task
-            key={task.id}
-            id={task.id}
-            text={task.text}
-            onClick={() => openModal(task.id)}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData('taskId', String(task.id));
-              e.dataTransfer.setData('sourceColumn', 'inProgress');
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="column" onDrop={(e) => {
-        e.preventDefault();
-        const taskId = +e.dataTransfer.getData('taskId');
-        const sourceColumn = e.dataTransfer.getData('sourceColumn') as keyof Tasks;
-        moveTask(taskId, sourceColumn, 'done');
-      }}
-        onDragOver={(e) => e.preventDefault()}>
-        <h2>Done</h2>
-        {tasks.done.map(task => (
-          <Task
-            key={task.id}
-            id={task.id}
-            text={task.text}
-            onClick={() => openModal(task.id)}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData('taskId', String(task.id));
-              e.dataTransfer.setData('sourceColumn', 'done');
-            }}
-          />
-        ))}
-      </div>
-
       {isModalOpen && (
         <TaskModal
           isOpen={isModalOpen}
