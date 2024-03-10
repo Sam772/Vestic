@@ -152,6 +152,23 @@ const KanbanBoard: React.FC = () => {
     }
   };
 
+  const handleDeleteColumn = (columnName: ColumnName) => {
+    // Remove the column from the column order
+    setColumnOrder(prevOrder => prevOrder.filter(col => col !== columnName));
+  
+    // Remove the tasks associated with the column
+    setTasks(prevTasks => {
+      const updatedTasks = { ...prevTasks };
+      delete updatedTasks[columnName];
+      return updatedTasks;
+    });
+  
+    // Close any open modal if the task to be deleted is in the column being deleted
+    if (selectedTaskId && tasks[columnName].find(task => task.id === selectedTaskId)) {
+      closeModal();
+    }
+  };
+
   return (
     <div className="kanban-board">
       {columnOrder.map(columnName => (
@@ -191,6 +208,7 @@ const KanbanBoard: React.FC = () => {
               placeholder="Enter task name"
             />
             <button onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task</button>
+            <button onClick={() => handleDeleteColumn(columnName)}>Delete Column</button>
           </div>
         </div>
       ))}

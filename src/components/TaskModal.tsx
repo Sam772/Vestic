@@ -33,7 +33,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, taskId, taskName, onClose
           value={currentTaskName}
           onChange={(e) => setCurrentTaskName(e.target.value)}
         />
-        <h3>Task ID: {taskId}</h3>
         <h2>Task Details</h2>
         <p>This is a placeholder for task details.</p>
         <button onClick={handleSave}>Save</button>
