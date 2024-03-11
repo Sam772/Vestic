@@ -41,6 +41,14 @@ const KanbanBoard: React.FC = () => {
     done: '',
   });
 
+  const [filterText, setFilterText] = useState<string>('');
+
+  const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
+    filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => task.text.toLowerCase().includes(filterText.toLowerCase()));
+    return filtered;
+  }, {} as Partial<Tasks>) as Tasks;
+  
+
   const openModal = (taskId: number) => {
     setSelectedTaskId(taskId);
     setIsModalOpen(true);
@@ -153,17 +161,14 @@ const KanbanBoard: React.FC = () => {
   };
 
   const handleDeleteColumn = (columnName: ColumnName) => {
-    // Remove the column from the column order
     setColumnOrder(prevOrder => prevOrder.filter(col => col !== columnName));
   
-    // Remove the tasks associated with the column
     setTasks(prevTasks => {
       const updatedTasks = { ...prevTasks };
       delete updatedTasks[columnName];
       return updatedTasks;
     });
   
-    // Close any open modal if the task to be deleted is in the column being deleted
     if (selectedTaskId && tasks[columnName].find(task => task.id === selectedTaskId)) {
       closeModal();
     }
@@ -171,6 +176,12 @@ const KanbanBoard: React.FC = () => {
 
   return (
     <div className="kanban-board">
+      <input
+        type="text"
+        value={filterText}
+        onChange={(e) => setFilterText(e.target.value)}
+        placeholder="Filter tasks by name"
+      />
       {columnOrder.map(columnName => (
         <div key={columnName} className="column">
           <h2>
@@ -187,7 +198,7 @@ const KanbanBoard: React.FC = () => {
               <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
             )}
           </h2>
-          {tasks[columnName].map(task => (
+          {filteredTasks[columnName].map(task => (
             <Task
               key={task.id}
               id={task.id}
