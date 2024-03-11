@@ -6,6 +6,7 @@ import TaskModal from '../components/TaskModal';
 interface Task {
   id: number;
   text: string;
+  description: string;
 }
 
 interface Tasks {
@@ -41,6 +42,13 @@ const KanbanBoard: React.FC = () => {
     done: '',
   });
 
+  const [newTaskDescriptions, setNewTaskDescriptions] = useState<Record<ColumnName, string>>({
+    todo: '',
+    inProgress: '',
+    done: '',
+  });
+  
+
   const [filterText, setFilterText] = useState<string>('');
 
   const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
@@ -68,10 +76,13 @@ const KanbanBoard: React.FC = () => {
 
   const handleCreateNewTask = (columnName: ColumnName) => {
     const text = newTaskTexts[columnName];
+    const description = newTaskDescriptions[columnName];
+  
     if (text.trim() !== '') {
       const newTask: Task = {
         id: Date.now(),
         text: text,
+        description: description,
       };
       setTasks(prevTasks => ({
         ...prevTasks,
@@ -81,8 +92,14 @@ const KanbanBoard: React.FC = () => {
         ...prevTexts,
         [columnName]: '',
       }));
+      setNewTaskDescriptions(prevDescriptions => ({
+        ...prevDescriptions,
+        [columnName]: '', // Clear description after adding task
+      }));
     }
   };
+  
+  
 
   const handleTaskRename = (taskId: number, newTaskName: string) => {
     const updatedTasks = {
@@ -92,6 +109,13 @@ const KanbanBoard: React.FC = () => {
       done: tasks.done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
     };
     setTasks(updatedTasks);
+  };
+
+  const handleDescriptionChange = (columnName: ColumnName, description: string) => {
+    setNewTaskDescriptions(prevDescriptions => ({
+      ...prevDescriptions,
+      [columnName]: description,
+    }));
   };
 
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
@@ -174,6 +198,17 @@ const KanbanBoard: React.FC = () => {
     }
   };
 
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string) => {
+    const updatedTasks = {
+      ...tasks,
+      todo: tasks.todo.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      inProgress: tasks.inProgress.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      done: tasks.done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+    };
+    setTasks(updatedTasks);
+    closeModal();
+  };
+
   return (
     <div className="kanban-board">
       <input
@@ -234,12 +269,13 @@ const KanbanBoard: React.FC = () => {
       </div>
       {isModalOpen && (
         <TaskModal
-          isOpen={isModalOpen}
-          taskId={selectedTaskId!} // Pass the selected task ID to the modal
-          taskName={selectedTaskId ? getTaskName(selectedTaskId) : ''}
-          onClose={closeModal}
-          onDelete={deleteTask}
-          onSave={(newTaskName) => handleTaskRename(selectedTaskId!, newTaskName)}
+        isOpen={isModalOpen}
+        taskId={selectedTaskId || 0}
+        taskName={selectedTaskId ? tasks.todo.concat(tasks.inProgress, tasks.done).find(task => task.id === selectedTaskId)?.text || '' : ''}
+        taskDescription={selectedTaskId ? tasks.todo.concat(tasks.inProgress, tasks.done).find(task => task.id === selectedTaskId)?.description || '' : ''}
+        onClose={closeModal}
+        onDelete={deleteTask} // Implement delete task functionality
+        onSave={handleSaveTask}
         />
       )}
     </div>

@@ -8,12 +8,81 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
   
-.task-modal-content {
+  .task-modal-content {
     background-color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-}
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 400px;
+  }
+  
+  .task-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .task-modal-body .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .task-modal-body label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .task-modal-body input,
+  .task-modal-body textarea {
+    width: calc(100% - 40px);
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .task-modal-footer button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .save-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+  }
+  
+  .delete-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+  }
+  
+  .cancel-btn {
+    background-color: #ccc;
+    color: black;
+    border: none;
+  }
+  
+  .close-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .task-modal-content {
+    font-family: Arial, sans-serif; /* Specify the desired font-family */
+    /* Add any other styles you want */
+  }
+  
+  #taskName,
+  #taskDescription {
+    font-family: inherit; /* Inherit font-family from the parent */
+    /* Add any other styles you want */
+  }
   
