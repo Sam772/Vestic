@@ -222,7 +222,7 @@ const KanbanBoard: React.FC = () => {
     <div ref={drop} className="kanban-board">
       <input
         type="text"
-        className="input-field"
+        className="filter-box"
         value={filterText}
         onChange={(e) => setFilterText(e.target.value)}
         placeholder="Filter tasks by name"
@@ -231,7 +231,7 @@ const KanbanBoard: React.FC = () => {
         <div key={columnName} className="column">
           <h2>
             {selectedColumn === columnName ? (
-              <div>
+              <div className="column">
                 <input
                   type="text"
                   className="input-field"

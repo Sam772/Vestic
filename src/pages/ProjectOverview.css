@@ -18,7 +18,7 @@
   }
   
   .task {
-    background-color: #fff;
+    background-color: #333;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 8px;
@@ -27,7 +27,7 @@
   }
   
   .task:hover {
-    background-color: #f0f0f0;
+    background-color: #434242;
   }
   
   .task input[type="text"] {
@@ -75,11 +75,13 @@
     background-color: #218838;
   }
 
-.input-field {
+  .input-field {
     margin-bottom: 8px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    background-color: #333;
+    color: white;
   }
   
   .create-task-button {
@@ -117,5 +119,26 @@
   .delete-column-button:hover {
     background-color: #bd2130;
   }
+
+  .column {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
   
+  .column:hover {
+    background-color: #434242;
+  }
+  
+  .filter-box {
+    background-color: #333;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 200px;
+  }
   
