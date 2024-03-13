@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
+import { useDrop } from 'react-dnd';
 
 interface Task {
   id: number;
@@ -209,8 +210,16 @@ const KanbanBoard: React.FC = () => {
     closeModal();
   };
 
+  const [, drop] = useDrop({
+    accept: 'TASK',
+    drop: (item: { id: number; sourceColumn: ColumnName }, monitor) => {
+      const sourceColumn = item.sourceColumn;
+      moveTask(item.id, sourceColumn, selectedColumn as keyof Tasks);
+    },
+  });
+
   return (
-    <div className="kanban-board">
+    <div ref={drop} className="kanban-board">
       <input
         type="text"
         value={filterText}
@@ -238,8 +247,9 @@ const KanbanBoard: React.FC = () => {
               key={task.id}
               id={task.id}
               text={task.text}
+              sourceColumn={columnName}
               onClick={() => openModal(task.id)}
-              draggable
+              draggable={true}
               onDragStart={(e) => {
                 e.dataTransfer.setData('taskId', String(task.id));
                 e.dataTransfer.setData('sourceColumn', columnName);
