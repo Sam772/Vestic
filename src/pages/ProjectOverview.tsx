@@ -222,6 +222,7 @@ const KanbanBoard: React.FC = () => {
     <div ref={drop} className="kanban-board">
       <input
         type="text"
+        className="input-field"
         value={filterText}
         onChange={(e) => setFilterText(e.target.value)}
         placeholder="Filter tasks by name"
@@ -233,6 +234,7 @@ const KanbanBoard: React.FC = () => {
               <div>
                 <input
                   type="text"
+                  className="input-field"
                   value={columnName}
                   onChange={(e) => handleCreateNewColumn(columnName as ColumnName, e.target.value)}
                 />
@@ -259,23 +261,34 @@ const KanbanBoard: React.FC = () => {
           <div>
             <input
               type="text"
+              className="input-field"
               value={newTaskTexts[columnName]}
               onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
               placeholder="Enter task name"
             />
-            <button onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task</button>
-            <button onClick={() => handleDeleteColumn(columnName)}>Delete Column</button>
+            <button 
+              className="create-task-button"
+              onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
+            </button>
+            <button 
+              className="delete-column-button"
+              onClick={() => handleDeleteColumn(columnName)}>Delete Column  
+            </button>
           </div>
         </div>
       ))}
       <div>
         <input
           type="text"
+          className="input-field"
           value={""}
           onChange={(e) => setSelectedColumn(e.target.value)}
           placeholder="Enter new column name"
         />
-        <button onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column</button>
+        <button
+          className="create-column-button"
+          onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
+        </button>
       </div>
       {isModalOpen && (
         <TaskModal
