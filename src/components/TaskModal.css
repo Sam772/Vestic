@@ -58,21 +58,34 @@
     color: white;
     border: none;
   }
+
+  .save-btn:hover {
+    background-color: #218838;
+  }
   
   .delete-btn {
     background-color: #f44336;
     color: white;
     border: none;
   }
+
+  .delete-btn:hover {
+    background-color: #bd2130;
+  }
   
-  .cancel-btn {
+  .exit-btn {
     background-color: #007bff;
     color: white;
     border: none;
   }
+
+  .exit-btn:hover {
+    background-color: #0056b3;
+  }
   
   .close-btn {
     background-color: #333;
+    color: white;
     border: none;
     cursor: pointer;
   }

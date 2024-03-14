@@ -11,22 +11,21 @@ interface Task {
 }
 
 interface Tasks {
-  todo: Task[];
-  inProgress: Task[];
-  done: Task[];
+  New: Task[];
+  Committed: Task[];
+  Done: Task[];
 }
 
 enum ColumnName {
-  TODO = 'todo',
-  IN_PROGRESS = 'inProgress',
-  DONE = 'done',
+  NEW = 'New',
+  COMMITTED = 'Committed',
+  DONE = 'Done',
 }
 
 const initialTasks: Tasks = {
-  todo: [],
-  inProgress: [],
-  done: [],
-  // { id: 4, text: 'Task 4' },
+  New: [],
+  Committed: [],
+  Done: [],
 };
 
 const KanbanBoard: React.FC = () => {
@@ -34,7 +33,7 @@ const KanbanBoard: React.FC = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [columnOrder, setColumnOrder] = useState<ColumnName[]>([ColumnName.TODO, ColumnName.IN_PROGRESS, ColumnName.DONE]);
+  const [columnOrder, setColumnOrder] = useState<ColumnName[]>([ColumnName.NEW, ColumnName.COMMITTED, ColumnName.DONE]);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   
   const [newTaskTexts, setNewTaskTexts] = useState<{[key: string]: string}>({
@@ -44,9 +43,9 @@ const KanbanBoard: React.FC = () => {
   });
 
   const [newTaskDescriptions, setNewTaskDescriptions] = useState<Record<ColumnName, string>>({
-    todo: '',
-    inProgress: '',
-    done: '',
+    "New" : '',
+    "Committed" : '',
+    "Done" : '',
   });
   
 
@@ -95,19 +94,17 @@ const KanbanBoard: React.FC = () => {
       }));
       setNewTaskDescriptions(prevDescriptions => ({
         ...prevDescriptions,
-        [columnName]: '', // Clear description after adding task
+        [columnName]: '',
       }));
     }
   };
-  
-  
 
   const handleTaskRename = (taskId: number, newTaskName: string) => {
     const updatedTasks = {
       ...tasks,
-      todo: tasks.todo.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-      inProgress: tasks.inProgress.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-      done: tasks.done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
     };
     setTasks(updatedTasks);
   };
@@ -119,26 +116,37 @@ const KanbanBoard: React.FC = () => {
     }));
   };
 
+
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
-  const sourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
-  const targetTask = tasks[sourceColumn].find(task => task.id === taskId);
+    const taskIndex = tasks[sourceColumn].findIndex(task => task.id === taskId);
 
-  if (!targetTask) {
-    return;
-  }
+    console.log(tasks[targetColumn]);
+  
+    if (taskIndex === -1) {
+      return;
+    }
+  
+    const taskToMove = tasks[sourceColumn][taskIndex];
+  
+    const updatedSourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
+  
+    const updatedTargetTasks = [...tasks[targetColumn], taskToMove];
 
-  const targetTasks = [...tasks[targetColumn], targetTask];
-
-  setTasks(prevTasks => ({
+    console.log(tasks[targetColumn]);
+  
+    setTasks(prevTasks => ({
       ...prevTasks,
-      [sourceColumn]: sourceTasks,
-      [targetColumn]: targetTasks,
+      [sourceColumn]: updatedSourceTasks,
+      [targetColumn]: updatedTargetTasks,
     }));
   };
+  
+  
+    
 
   const deleteTask = (taskId: number) => {
     const updatedTasks: Tasks = { ...tasks };
-    for (const column of [ColumnName.TODO, ColumnName.IN_PROGRESS, ColumnName.DONE]) {
+    for (const column of [ColumnName.NEW, ColumnName.COMMITTED, ColumnName.DONE]) {
       updatedTasks[column] = updatedTasks[column].filter(task => task.id !== taskId);
     }
     setTasks(updatedTasks);
@@ -202,9 +210,9 @@ const KanbanBoard: React.FC = () => {
   const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string) => {
     const updatedTasks = {
       ...tasks,
-      todo: tasks.todo.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
-      inProgress: tasks.inProgress.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
-      done: tasks.done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      todo: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      inProgress: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
     };
     setTasks(updatedTasks);
     closeModal();
@@ -294,10 +302,10 @@ const KanbanBoard: React.FC = () => {
         <TaskModal
         isOpen={isModalOpen}
         taskId={selectedTaskId || 0}
-        taskName={selectedTaskId ? tasks.todo.concat(tasks.inProgress, tasks.done).find(task => task.id === selectedTaskId)?.text || '' : ''}
-        taskDescription={selectedTaskId ? tasks.todo.concat(tasks.inProgress, tasks.done).find(task => task.id === selectedTaskId)?.description || '' : ''}
+        taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
+        taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
         onClose={closeModal}
-        onDelete={deleteTask} // Implement delete task functionality
+        onDelete={deleteTask}
         onSave={handleSaveTask}
         />
       )}

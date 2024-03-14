@@ -4,16 +4,16 @@ import { useDrag, DragSourceMonitor } from 'react-dnd';
 interface TaskProps {
   id: number;
   text: string;
-  sourceColumn: string; // Add sourceColumn prop
+  sourceColumn: string;
   draggable?: boolean;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
-  onClick?: () => void; // Add onClick prop
+  onClick?: () => void;
 }
 
 const Task: React.FC<TaskProps> = ({ id, text, sourceColumn, draggable = true, onDragStart, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'TASK',
-    item: { type: 'TASK', id, sourceColumn }, // Include sourceColumn information
+    item: { type: 'TASK', id, sourceColumn },
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: monitor.isDragging(),
     }),

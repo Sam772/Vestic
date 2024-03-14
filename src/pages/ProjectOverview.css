@@ -111,9 +111,13 @@
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
-    background-color: #008000;
+    background-color: #28a745;
     color: #fff;
     cursor: pointer;
+  }
+
+  .create-column-button:hover {
+    background-color: #218838;
   }
   
   .delete-column-button:hover {
