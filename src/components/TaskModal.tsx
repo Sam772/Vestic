@@ -63,7 +63,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         <div className="task-modal-footer">
           <button className="save-btn" onClick={handleSave}>Save</button>
           <button className="delete-btn" onClick={() => onDelete(taskId)}>Delete Task</button>
-          <button className="exit-btn" onClick={onClose}>Exit</button>
+          {/* <button className="exit-btn" onClick={onClose}>Exit</button> */}
         </div>
       </div>
     </div>

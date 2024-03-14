@@ -88,6 +88,12 @@
     color: white;
     border: none;
     cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .close-btn:hover {
+    background-color: #555;
   }
   
   .task-modal-content {

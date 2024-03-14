@@ -37,9 +37,9 @@ const KanbanBoard: React.FC = () => {
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   
   const [newTaskTexts, setNewTaskTexts] = useState<{[key: string]: string}>({
-    todo: '',
-    inProgress: '',
-    done: '',
+    New: '',
+    Committed: '',
+    Done: '',
   });
 
   const [newTaskDescriptions, setNewTaskDescriptions] = useState<Record<ColumnName, string>>({
@@ -140,9 +140,6 @@ const KanbanBoard: React.FC = () => {
       [targetColumn]: updatedTargetTasks,
     }));
   };
-  
-  
-    
 
   const deleteTask = (taskId: number) => {
     const updatedTasks: Tasks = { ...tasks };
@@ -210,9 +207,9 @@ const KanbanBoard: React.FC = () => {
   const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string) => {
     const updatedTasks = {
       ...tasks,
-      todo: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
-      inProgress: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
-      done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      Done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
     };
     setTasks(updatedTasks);
     closeModal();

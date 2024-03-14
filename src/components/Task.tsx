@@ -26,7 +26,7 @@ const Task: React.FC<TaskProps> = ({ id, text, sourceColumn, draggable = true, o
       draggable={draggable}
       onDragStart={onDragStart}
       onClick={onClick}
-      ref={drag} // Add drag ref
+      ref={drag}
     >
       {text}
     </div>
