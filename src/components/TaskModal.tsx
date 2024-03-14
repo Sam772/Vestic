@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ColumnName } from "../pages/ProjectOverview";
 import './TaskModal.css';
 
 interface TaskModalProps {
@@ -6,10 +7,15 @@ interface TaskModalProps {
   taskId: number;
   taskName: string;
   taskDescription: string;
+  comments: string[];
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[]) => void;
+  onPostComment: (columnName: ColumnName) => void;
+  newComment: Record<ColumnName, string>;
+  onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
 
 const TaskModal: React.FC<TaskModalProps> = ({
   isOpen,
@@ -22,10 +28,19 @@ const TaskModal: React.FC<TaskModalProps> = ({
 }) => {
   const [currentTaskName, setCurrentTaskName] = useState(taskName);
   const [currentTaskDescription, setCurrentTaskDescription] = useState(taskDescription);
+  const [comments, setComments] = useState('');
+  const [commentList, setCommentList] = useState<string[]>([]);
 
   const handleSave = () => {
-    onSave(taskId, currentTaskName, currentTaskDescription);
+    onSave(taskId, currentTaskName, currentTaskDescription, [comments]);
     onClose();
+  };
+
+  const handlePostComment = () => {
+    if (comments.trim() !== '') {
+      setCommentList(prevComments => [...prevComments, comments]);
+      setComments('');
+    }
   };
 
   useEffect(() => {
@@ -59,6 +74,24 @@ const TaskModal: React.FC<TaskModalProps> = ({
               onChange={(e) => setCurrentTaskDescription(e.target.value)}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="comments">Comments:</label>
+            <input
+              type="text"
+              id="comments"
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+            />
+            <button className='post-btn' onClick={handlePostComment}>Post</button>
+          </div>
+          <div className="comments-preview">
+            <strong>Comments:</strong>
+          </div>
+          <ul className='comments-list'>
+              {commentList.map((comment, index) => (
+                <li key={index}>{comment}</li>
+              ))}
+            </ul>
         </div>
         <div className="task-modal-footer">
           <button className="save-btn" onClick={handleSave}>Save</button>

@@ -4,19 +4,23 @@ import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
 import { useDrop } from 'react-dnd';
 
+// Defines an individual task
 interface Task {
   id: number;
   text: string;
   description: string;
+  comments: string[];
 }
 
+// Represents a collection of tasks for each column of different states
 interface Tasks {
   New: Task[];
   Committed: Task[];
   Done: Task[];
 }
 
-enum ColumnName {
+// The names of the columns
+export enum ColumnName {
   NEW = 'New',
   COMMITTED = 'Committed',
   DONE = 'Done',
@@ -47,7 +51,12 @@ const KanbanBoard: React.FC = () => {
     "Committed" : '',
     "Done" : '',
   });
-  
+
+  const [newComment, setNewComment] = useState<Record<ColumnName, string>>({
+    New: '',
+    Committed: '',
+    Done: '',
+  });
 
   const [filterText, setFilterText] = useState<string>('');
 
@@ -77,12 +86,14 @@ const KanbanBoard: React.FC = () => {
   const handleCreateNewTask = (columnName: ColumnName) => {
     const text = newTaskTexts[columnName];
     const description = newTaskDescriptions[columnName];
-  
+    const comment = newComment[columnName] || ''; // Ensure comment is a string
+    
     if (text.trim() !== '') {
       const newTask: Task = {
         id: Date.now(),
         text: text,
         description: description,
+        comments: [comment], // Wrap comment in an array or directly assign it to comments
       };
       setTasks(prevTasks => ({
         ...prevTasks,
@@ -96,8 +107,13 @@ const KanbanBoard: React.FC = () => {
         ...prevDescriptions,
         [columnName]: '',
       }));
+      setNewComment(prevComments => ({
+        ...prevComments,
+        [columnName]: '', // Reset comment to an empty string after creating the task
+      }));
     }
   };
+  
 
   const handleTaskRename = (taskId: number, newTaskName: string) => {
     const updatedTasks = {
@@ -116,6 +132,39 @@ const KanbanBoard: React.FC = () => {
     }));
   };
 
+  const handlePostComment = (columnName: ColumnName) => {
+    const comment = newComment[columnName];
+    if (comment && comment.length > 0) {
+      const updatedTasks = {
+        ...tasks,
+        [columnName]: tasks[columnName].map(task => ({
+          ...task,
+          comments: [...task.comments, comment],
+        })),
+      };
+      setTasks(updatedTasks);
+      setNewComment(prevComments => ({
+        ...prevComments,
+        [columnName]: '',
+      }));
+    }
+  };
+  
+  const updateComments = (tasksArray: Task[], comment: string): Task[] => {
+    return tasksArray.map(task => ({
+      ...task,
+      comments: [...task.comments, comment], // Add the new comment to the task's comments array
+    }));
+  };  
+
+  const handleNewCommentChange = (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setNewComment(prevComments => ({
+      ...prevComments,
+      [columnName]: value,
+    }));
+  };
+  
 
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
     const taskIndex = tasks[sourceColumn].findIndex(task => task.id === taskId);
@@ -225,13 +274,15 @@ const KanbanBoard: React.FC = () => {
 
   return (
     <div ref={drop} className="kanban-board">
-      <input
-        type="text"
-        className="filter-box"
-        value={filterText}
-        onChange={(e) => setFilterText(e.target.value)}
-        placeholder="Filter tasks by name"
-      />
+      <div className="filter-container">
+        <input
+          type="text"
+          className="filter-box"
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+          placeholder="Filter tasks by name"
+        />
+      </div>
       {columnOrder.map(columnName => (
         <div key={columnName} className="column">
           <h2>
@@ -301,9 +352,13 @@ const KanbanBoard: React.FC = () => {
         taskId={selectedTaskId || 0}
         taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
         taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
+        comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
         onClose={closeModal}
         onDelete={deleteTask}
         onSave={handleSaveTask}
+        onPostComment={handlePostComment}
+        newComment={newComment}
+        onNewCommentChange={handleNewCommentChange}
         />
       )}
     </div>
