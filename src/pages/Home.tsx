@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
+import './Home.css';
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <h1>Home Page</h1>
-      <Link to="/workspacecreation">Create Workspace</Link>
+    <div className="home-container">
+      <h1 className="home-heading">Home Page</h1>
+      <Link to="/workspacecreation" className="create-workspace-link">Create Workspace</Link>
     </div>
   );
 };

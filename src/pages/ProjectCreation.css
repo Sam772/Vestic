@@ -1,0 +1,47 @@
+.project-creation-page-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .project-creation-page-heading {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .workspace-details-container {
+    margin-bottom: 20px;
+  }
+  
+  .workspace-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  .workspace-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .project-list-container {
+    margin-top: 20px;
+  }
+  
+  .project-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .project-button:hover {
+    background-color: #0056b3;
+  }
+  

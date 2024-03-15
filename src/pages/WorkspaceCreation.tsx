@@ -1,7 +1,6 @@
-// WorkspaceCreation.tsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './WorkspaceCreation.css';
 
 const WorkspaceCreation: React.FC = () => {
   const [workspaceName, setWorkspaceName] = useState('');
@@ -23,17 +22,17 @@ const WorkspaceCreation: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="workspace-creation-container">
       <h1>Create Workspace</h1>
-      <div>
+      <div className="input-container">
         <label>Workspace Name:</label>
-        <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} />
+        <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} className="workspace-input" />
       </div>
-      <div>
+      <div className="input-container">
         <label>Workspace Description:</label>
-        <input type="text" value={workspaceDescription} onChange={handleWorkspaceDescriptionChange} />
+        <input type="text" value={workspaceDescription} onChange={handleWorkspaceDescriptionChange} className="workspace-input" />
       </div>
-      <button onClick={createWorkspace}>Create Workspace</button>
+      <button onClick={createWorkspace} className="create-workspace-button">Create Workspace</button>
     </div>
   );
 };

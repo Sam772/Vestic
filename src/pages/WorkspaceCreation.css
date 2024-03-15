@@ -1,0 +1,31 @@
+.workspace-creation-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .input-container {
+    margin-bottom: 20px;
+  }
+  
+  .workspace-input {
+    width: calc(100% - 40px);
+    max-width: 400px;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .create-workspace-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .create-workspace-button:hover {
+    background-color: #0056b3;
+  }
+  
