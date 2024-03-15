@@ -12,9 +12,9 @@ const Navbar: React.FC = () => {
         <li className="navbar-item">
           <Link to="/" className="navbar-link">Home</Link>
         </li>
-        <li className="navbar-item">
+        {/* <li className="navbar-item">
           <Link to="/projectcreation" className="navbar-link">Project Creation</Link>
-        </li>
+        </li> */}
         <li className="navbar-item">
           <Link to="/projectoverview" className="navbar-link">Project Overview</Link>
         </li>
