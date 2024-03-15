@@ -9,13 +9,24 @@
     margin-bottom: 20px;
   }
   
-  .create-workspace-link {
-    color: #007bff;
+  .create-workspace-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
     text-decoration: none;
+    cursor: pointer;
     font-size: 1.2rem;
+    text-decoration: none;
   }
   
-  .create-workspace-link:hover {
-    text-decoration: underline;
+  .create-workspace-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .create-workspace-link {
+    color: #fff;
+    text-decoration: none;
   }
   

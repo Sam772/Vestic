@@ -26,56 +26,76 @@ export enum ColumnName {
   DONE = 'Done',
 }
 
+// Initialised with initial columns and tasks
 const initialTasks: Tasks = {
   New: [],
   Committed: [],
   Done: [],
 };
 
+// Represents the page content
 const KanbanBoard: React.FC = () => {
+
+  // Represents the initial state of tasks
   const [tasks, setTasks] = useState<Tasks>(initialTasks);
+
+  // Represents the id of selected tasks, which doesn't exist initially hence null
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+
+  // Opens and closes the modal for a task
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Contains the initial columns and their order
   const [columnOrder, setColumnOrder] = useState<ColumnName[]>([ColumnName.NEW, ColumnName.COMMITTED, ColumnName.DONE]);
+
+  // Same as selected tasks but for columns
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   
+  // Stores the text of new tasks, initialised with empty strings for each column
   const [newTaskTexts, setNewTaskTexts] = useState<{[key: string]: string}>({
     New: '',
     Committed: '',
     Done: '',
   });
 
+  // Stores the descriptions of new tasks, initialised with empty strings for each column
   const [newTaskDescriptions, setNewTaskDescriptions] = useState<Record<ColumnName, string>>({
-    "New" : '',
-    "Committed" : '',
-    "Done" : '',
+    New : '',
+    Committed : '',
+    Done : '',
   });
 
+  // Stores new comments, initialised with empty strings for each column name
   const [newComment, setNewComment] = useState<Record<ColumnName, string>>({
     New: '',
     Committed: '',
     Done: '',
   });
 
+  // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
 
+
+  // Filters tasks by text input in the filter field and returns those tasks
   const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
     filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => task.text.toLowerCase().includes(filterText.toLowerCase()));
     return filtered;
   }, {} as Partial<Tasks>) as Tasks;
   
 
+  // Opens the task modal for the selected task
   const openModal = (taskId: number) => {
     setSelectedTaskId(taskId);
     setIsModalOpen(true);
   };
 
+  // Closes the task modal
   const closeModal = () => {
     setSelectedTaskId(null);
     setIsModalOpen(false);
   };
 
+  // Updates the task name of tasks
   const handleNewTaskTextChange = (columnName: ColumnName, newText: string) => {
     setNewTaskTexts(prevTexts => ({
       ...prevTexts,
@@ -83,17 +103,21 @@ const KanbanBoard: React.FC = () => {
     }));
   };
 
+  // Used for when a task is created
   const handleCreateNewTask = (columnName: ColumnName) => {
+
+    // These fields are initialised when the task is created
     const text = newTaskTexts[columnName];
     const description = newTaskDescriptions[columnName];
-    const comment = newComment[columnName] || ''; // Ensure comment is a string
+    const comment = newComment[columnName] || '';
     
+    // Prevents task from being created if there is no text
     if (text.trim() !== '') {
       const newTask: Task = {
         id: Date.now(),
         text: text,
         description: description,
-        comments: [comment], // Wrap comment in an array or directly assign it to comments
+        comments: [comment],
       };
       setTasks(prevTasks => ({
         ...prevTasks,
@@ -109,7 +133,7 @@ const KanbanBoard: React.FC = () => {
       }));
       setNewComment(prevComments => ({
         ...prevComments,
-        [columnName]: '', // Reset comment to an empty string after creating the task
+        [columnName]: '',
       }));
     }
   };
