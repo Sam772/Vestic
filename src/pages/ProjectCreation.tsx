@@ -1,50 +1,43 @@
 import React, { useState } from 'react';
-
-interface Link {
-  name: string;
-  url: string;
-}
-
-const Sidebar: React.FC<{ links: Link[], onSelect: (url: string) => void }> = ({ links, onSelect }) => {
-  return (
-    <div className="sidebar">
-      <ul>
-        {links.map(link => (
-          <li key={link.url}>
-            <button onClick={() => onSelect(link.url)}>{link.name}</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const ProjectCreation: React.FC = () => {
-  
-  const [selectedLink, setSelectedLink] = useState<string>('');
-  
-  const links: Link[] = [
-    { name: 'Workspace1', url: '/workspace1' },
-    { name: 'Workspace2', url: '/workspace2' },
-    { name: 'Workspace3', url: '/workspace3' }
-  ];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const workspaceName = searchParams.get('name') || '';
+  const workspaceDescription = searchParams.get('description') || '';
 
-  const handleLinkSelect = (url: string) => {
-    setSelectedLink(url);
+  const [showProjectList, setShowProjectList] = useState(false);
+
+  const handleWorkspaceButtonClick = () => {
+    setShowProjectList(true);
+  };
+
+  const handleProjectButtonClick = () => {
+    navigate('/projectoverview');
   };
 
   return (
     <div className="project-creation-page">
+      <h1>Project Creation Page</h1>
       <div>
-        <h1>Project Creation Page</h1>
+        <h2>Workspace Details</h2>
+        <p>Name: {workspaceName}</p>
+        <p>Description: {workspaceDescription}</p>
       </div>
-      <Sidebar links={links} onSelect={handleLinkSelect} />
-      <div className="content">
-        <h1>Selected Link: {selectedLink}</h1>
+      <div>
+        <button onClick={handleWorkspaceButtonClick}>{workspaceName}</button>
+        {showProjectList && (
+          <div>
+            <h2>Projects</h2>
+            <button onClick={handleProjectButtonClick}>Project 1</button>
+            <button onClick={handleProjectButtonClick}>Project 2</button>
+          </div>
+        )}
       </div>
     </div>
-    );
-
+  );
 };
 
 export default ProjectCreation;

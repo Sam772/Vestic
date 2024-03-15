@@ -1,0 +1,16 @@
+.sidebar {
+    float: left;
+    width: 20%;
+    height: 100%;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ddd; /* Add a border line */
+  }
+  
+  .main-content {
+    margin-left: 25%; /* Adjust margin to accommodate the sidebar */
+    padding: 20px;
+    background-color: #fff; /* Add a background color */
+    border-left: 1px solid #ddd; /* Add a border line */
+  }
+  
