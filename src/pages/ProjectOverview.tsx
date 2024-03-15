@@ -119,45 +119,36 @@ const KanbanBoard: React.FC = () => {
         description: description,
         comments: [comment],
       };
+      // Sets the initial state of tasks
       setTasks(prevTasks => ({
         ...prevTasks,
         [columnName]: [...prevTasks[columnName], newTask],
       }));
+      // Sets the initial task name
       setNewTaskTexts(prevTexts => ({
         ...prevTexts,
         [columnName]: '',
       }));
+      // Sets the initial task description
       setNewTaskDescriptions(prevDescriptions => ({
         ...prevDescriptions,
         [columnName]: '',
       }));
+      // Sets the initial task comments
       setNewComment(prevComments => ({
         ...prevComments,
         [columnName]: '',
       }));
     }
   };
-  
 
-  const handleTaskRename = (taskId: number, newTaskName: string) => {
-    const updatedTasks = {
-      ...tasks,
-      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-      done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-    };
-    setTasks(updatedTasks);
-  };
-
-  const handleDescriptionChange = (columnName: ColumnName, description: string) => {
-    setNewTaskDescriptions(prevDescriptions => ({
-      ...prevDescriptions,
-      [columnName]: description,
-    }));
-  };
-
+  // Used for when a comment has been posted
   const handlePostComment = (columnName: ColumnName) => {
+
+    // Gets the comment from the task
     const comment = newComment[columnName];
+
+    // Checks if the comment isn't empty
     if (comment && comment.length > 0) {
       const updatedTasks = {
         ...tasks,
@@ -166,23 +157,20 @@ const KanbanBoard: React.FC = () => {
           comments: [...task.comments, comment],
         })),
       };
+      // Updated the state of the task
       setTasks(updatedTasks);
+      // Sets the new comment
       setNewComment(prevComments => ({
         ...prevComments,
         [columnName]: '',
       }));
     }
   };
-  
-  const updateComments = (tasksArray: Task[], comment: string): Task[] => {
-    return tasksArray.map(task => ({
-      ...task,
-      comments: [...task.comments, comment], // Add the new comment to the task's comments array
-    }));
-  };  
 
+  // Updates the comment if it changes
   const handleNewCommentChange = (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    // Updates the state of the new comment
     setNewComment(prevComments => ({
       ...prevComments,
       [columnName]: value,
@@ -214,25 +202,23 @@ const KanbanBoard: React.FC = () => {
     }));
   };
 
+  // For deleting tasks
   const deleteTask = (taskId: number) => {
+
+    // Gets all tasks
     const updatedTasks: Tasks = { ...tasks };
+
+    // Iterates through all the tasks in each column
     for (const column of [ColumnName.NEW, ColumnName.COMMITTED, ColumnName.DONE]) {
       updatedTasks[column] = updatedTasks[column].filter(task => task.id !== taskId);
     }
+
+    // Updated the state of the current tasks
     setTasks(updatedTasks);
     closeModal();
   };
 
-  const getTaskName = (taskId: number): string => {
-    for (const column of Object.values(tasks)) {
-      const task = column.find((task : Task) => task.id === taskId);
-      if (task) {
-        return task.text;
-      }
-    }
-    return '';
-  };
-
+  // For creating a new column
   const handleCreateNewColumn = (columnName: ColumnName | null, newName: string) => {
     if (columnName !== null) {
       if (newName.trim() !== '') {
@@ -263,6 +249,7 @@ const KanbanBoard: React.FC = () => {
     }
   };
 
+  // For deleting a column
   const handleDeleteColumn = (columnName: ColumnName) => {
     setColumnOrder(prevOrder => prevOrder.filter(col => col !== columnName));
   
@@ -277,6 +264,7 @@ const KanbanBoard: React.FC = () => {
     }
   };
 
+  // For saving the updated data of a new task
   const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string) => {
     const updatedTasks = {
       ...tasks,
@@ -288,6 +276,7 @@ const KanbanBoard: React.FC = () => {
     closeModal();
   };
 
+  // Allows dropping and dragging of tasks
   const [, drop] = useDrop({
     accept: 'TASK',
     drop: (item: { id: number; sourceColumn: ColumnName }, monitor) => {
@@ -295,6 +284,42 @@ const KanbanBoard: React.FC = () => {
       moveTask(item.id, sourceColumn, selectedColumn as keyof Tasks);
     },
   });
+
+  //#region - Unused functions
+  const handleTaskRename = (taskId: number, newTaskName: string) => {
+    const updatedTasks = {
+      ...tasks,
+      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+      done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
+    };
+    setTasks(updatedTasks);
+  };
+
+  const handleDescriptionChange = (columnName: ColumnName, description: string) => {
+    setNewTaskDescriptions(prevDescriptions => ({
+      ...prevDescriptions,
+      [columnName]: description,
+    }));
+  };
+
+  const updateComments = (tasksArray: Task[], comment: string): Task[] => {
+    return tasksArray.map(task => ({
+      ...task,
+      comments: [...task.comments, comment], // Add the new comment to the task's comments array
+    }));
+  };
+
+  const getTaskName = (taskId: number): string => {
+    for (const column of Object.values(tasks)) {
+      const task = column.find((task : Task) => task.id === taskId);
+      if (task) {
+        return task.text;
+      }
+    }
+    return '';
+  };
+  //#endregion
 
   return (
     <div ref={drop} className="kanban-board">
