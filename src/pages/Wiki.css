@@ -1,0 +1,42 @@
+.wiki-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .wiki-heading {
+    text-align: center;
+  }
+  
+  .wiki-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .wiki-label {
+    margin-bottom: 10px;
+  }
+  
+  .wiki-input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .wiki-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .wiki-button:hover {
+    background-color: #0056b3;
+  }
+  
