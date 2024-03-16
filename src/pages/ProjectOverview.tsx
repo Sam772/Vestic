@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
-import { useDrop } from 'react-dnd';
+import { useDrop, DropTargetMonitor } from 'react-dnd';
 
 // Defines an individual task
 interface Task {
@@ -32,6 +32,10 @@ const initialTasks: Tasks = {
   Committed: [],
   Done: [],
 };
+
+interface DropResult {
+  columnName: ColumnName;
+}
 
 // Represents the page content
 const KanbanBoard: React.FC = () => {
@@ -199,13 +203,17 @@ const KanbanBoard: React.FC = () => {
     }));
   };
   
+  const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null) => {
+    // Handle the case where targetColumn is null
+    if (targetColumn === null) {
+        console.error('Target column is null.');
+        return;
+    }
 
-  const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks) => {
     const taskIndex = tasks[sourceColumn].findIndex(task => task.id === taskId);
-
-    console.log(tasks[targetColumn]);
   
     if (taskIndex === -1) {
+      console.error(`Task with ID ${taskId} not found in column ${sourceColumn}.`);
       return;
     }
   
@@ -213,9 +221,19 @@ const KanbanBoard: React.FC = () => {
   
     const updatedSourceTasks = tasks[sourceColumn].filter(task => task.id !== taskId);
   
-    const updatedTargetTasks = [...tasks[targetColumn], taskToMove];
+    // Check if targetColumn exists in tasks object
+    if (!tasks.hasOwnProperty(targetColumn)) {
+      // Handle the case where the targetColumn doesn't exist
+      console.error(`Column "${targetColumn}" does not exist.`);
+      return;
+    }
+  
+    // Get the current tasks in the target column
+    const currentTargetTasks = tasks[targetColumn] || [];
+  
+    const updatedTargetTasks = [...currentTargetTasks, taskToMove];
 
-    console.log(tasks[targetColumn]);
+    console.log(`Moving task with ID ${taskId} from column ${sourceColumn} to column ${targetColumn}.`);
   
     setTasks(prevTasks => ({
       ...prevTasks,
@@ -223,6 +241,7 @@ const KanbanBoard: React.FC = () => {
       [targetColumn]: updatedTargetTasks,
     }));
   };
+
 
   // For deleting tasks
   const deleteTask = (taskId: number) => {
@@ -239,6 +258,48 @@ const KanbanBoard: React.FC = () => {
     setTasks(updatedTasks);
     closeModal();
   };
+
+// Allows dropping and dragging of tasks
+const [, drop] = useDrop({
+  accept: 'TASK',
+  drop: (item: { id: number; sourceColumn: ColumnName }, monitor) => {
+    const sourceColumn = item.sourceColumn;
+
+    // Get the drop result
+    const dropResult = monitor.getDropResult<DropResult>();
+
+    // Check if dropResult exists and contains the columnName property
+    if (dropResult && 'columnName' in dropResult) {
+      // Extract the column name from the drop result
+      const targetColumn = dropResult.columnName;
+
+      // Move the task to the target column
+      moveTask(item.id, sourceColumn, targetColumn);
+    } else {
+      console.error('Drop result does not contain a valid column name.');
+    }
+  }
+});
+
+// Handle the onDrop event
+const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  // Prevent the default behavior
+  event.preventDefault();
+
+  // Retrieve the task data from the drag event
+  const taskId = event.dataTransfer.getData('taskId');
+  const sourceColumn = event.dataTransfer.getData('sourceColumn');
+
+  // If the task ID and source column are available, move the task
+  if (taskId && sourceColumn) {
+    // Move the task to the target column
+    moveTask(parseInt(taskId), sourceColumn as ColumnName, selectedColumn  as keyof Tasks || ColumnName.NEW);
+  }
+};
+
+const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  event.preventDefault();
+};
 
   // For creating a new column
   const handleCreateNewColumn = (columnName: ColumnName | null, newName: string) => {
@@ -298,15 +359,6 @@ const KanbanBoard: React.FC = () => {
     closeModal();
   };
 
-  // Allows dropping and dragging of tasks
-  const [, drop] = useDrop({
-    accept: 'TASK',
-    drop: (item: { id: number; sourceColumn: ColumnName }, monitor) => {
-      const sourceColumn = item.sourceColumn;
-      moveTask(item.id, sourceColumn, selectedColumn as keyof Tasks);
-    },
-  });
-
   // Calculate column height based on the number of tasks
   const calculateColumnHeight = (columnName: ColumnName): number => {
     
@@ -358,7 +410,7 @@ const KanbanBoard: React.FC = () => {
   //#endregion
 
   return (
-    <div ref={drop} className="kanban-board">
+    <div ref={drop} className="kanban-board" onDrop={handleDrop} onDragOver={handleDragOver}>
       <div className="filter-container">
         <input
           type="text"
@@ -369,7 +421,7 @@ const KanbanBoard: React.FC = () => {
         />
       </div>
       {columnOrder.map(columnName => (
-        <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }}>
+        <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName}>
           <h2>
             {selectedColumn === columnName ? (
               <div className="column">
