@@ -1,47 +1,65 @@
 .project-creation-page-container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .project-creation-page-heading {
-    color: #333;
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .workspace-details-container {
-    margin-bottom: 20px;
-  }
-  
-  .workspace-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
+  display: flex;
+}
 
-  .workspace-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .project-list-container {
-    margin-top: 20px;
-  }
-  
-  .project-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  
-  .project-button:hover {
-    background-color: #0056b3;
-  }
-  
+.sidebar {
+  flex: 0 0 20%;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.workspace-button {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.workspace-button:hover {
+  background-color: #0056b3;
+}
+
+.project-list-container {
+  margin-top: 20px;
+}
+
+.project-button {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.project-button:hover {
+  background-color: #0056b3;
+}
+
+.create-project-container {
+  text-align: right;
+}
+
+.create-project-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-project-button:hover {
+  background-color: #0056b3;
+}

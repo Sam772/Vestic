@@ -28,9 +28,9 @@ const App: React.FC = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/projectcreation" element={<ProjectCreation />} />
+            <Route path="/:name" element={<ProjectCreation />} />
             <Route path="/workspacecreation" element={<WorkspaceCreation />} />
-            <Route path="/projectoverview" element={<KanbanBoard />} />
+            <Route path="/:workspace/:projectName" element={<KanbanBoard />} />
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/testing" element={<Testing />} />

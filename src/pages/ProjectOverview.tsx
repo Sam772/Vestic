@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
@@ -39,6 +40,10 @@ interface DropResult {
 
 // Represents the page content
 const KanbanBoard: React.FC = () => {
+
+  const location = useLocation();
+  const projectName = location.state?.projectName || '';
+  const projectDescription = location.state?.projectDescription || '';
 
   // Represents the initial state of tasks
   const [tasks, setTasks] = useState<Tasks>(initialTasks);

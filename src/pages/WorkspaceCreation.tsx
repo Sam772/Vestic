@@ -24,7 +24,8 @@ const WorkspaceCreation: React.FC = () => {
 
     const workspace = { name: workspaceName, description: workspaceDescription };
     localStorage.setItem('workspace', JSON.stringify(workspace));
-    navigate(`/projectcreation?name=${encodeURIComponent(workspaceName)}&description=${encodeURIComponent(workspaceDescription)}`);
+    //navigate(`/projectcreation?name=${encodeURIComponent(workspaceName)}&description=${encodeURIComponent(workspaceDescription)}`);
+    navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
   };
 
   return (
