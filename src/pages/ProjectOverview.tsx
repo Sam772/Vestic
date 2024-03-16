@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
@@ -38,6 +38,28 @@ const KanbanBoard: React.FC = () => {
 
   // Represents the initial state of tasks
   const [tasks, setTasks] = useState<Tasks>(initialTasks);
+
+  // Has the count of initial tasks
+  const [initialTaskCounts, setInitialTaskCounts] = useState<Record<ColumnName, number>>({
+    New: 0,
+    Committed: 0,
+    Done: 0,
+  });
+
+  // useEffect hook to set initial task counts when component mounts
+  useEffect(() => {
+    // Calculate initial task counts
+    const newTaskCount = initialTasks.New.length;
+    const committedTaskCount = initialTasks.Committed.length;
+    const doneTaskCount = initialTasks.Done.length;
+
+    // Set initial task counts
+    setInitialTaskCounts({
+      New: newTaskCount,
+      Committed: committedTaskCount,
+      Done: doneTaskCount,
+    });
+  }, []);
 
   // Represents the id of selected tasks, which doesn't exist initially hence null
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
@@ -285,6 +307,20 @@ const KanbanBoard: React.FC = () => {
     },
   });
 
+  // Calculate column height based on the number of tasks
+  const calculateColumnHeight = (columnName: ColumnName): number => {
+    
+    // Get the number of tasks in the column
+    const numTasks = filteredTasks[columnName].length;
+
+    const minHeight = 120;
+    const maxHeightPerTask = 50;
+    const shouldAdjustHeight = numTasks > initialTaskCounts[columnName];
+    const calculatedHeight = shouldAdjustHeight ? minHeight + (numTasks - initialTaskCounts[columnName]) * maxHeightPerTask : minHeight;
+
+    return calculatedHeight;
+  };
+
   //#region - Unused functions
   const handleTaskRename = (taskId: number, newTaskName: string) => {
     const updatedTasks = {
@@ -333,7 +369,7 @@ const KanbanBoard: React.FC = () => {
         />
       </div>
       {columnOrder.map(columnName => (
-        <div key={columnName} className="column">
+        <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }}>
           <h2>
             {selectedColumn === columnName ? (
               <div className="column">
