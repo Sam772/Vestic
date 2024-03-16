@@ -110,8 +110,8 @@
     /* Add any other styles you want */
   }
   
-  #taskName,
-  #taskDescription {
+  #projectName,
+  #projectDescription {
     font-family: inherit; /* Inherit font-family from the parent */
     /* Add any other styles you want */
   }

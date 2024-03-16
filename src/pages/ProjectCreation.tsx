@@ -41,6 +41,7 @@ const ProjectCreation: React.FC = () => {
     <div className="project-creation-page-container">
       <div className="sidebar">
         <button onClick={handleWorkspaceButtonClick} className="workspace-button">{name}</button>
+        <button onClick={() => navigate('/workspacecreation')} className="workspace-button">Create a Workspace</button>
       </div>
       <div className="main-content">
         <h1 className="project-creation-page-heading">Project Creation Page</h1>
