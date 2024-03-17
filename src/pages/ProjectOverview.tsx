@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
-import { useDrop, DropTargetMonitor } from 'react-dnd';
+import { useDrop, useDrag, DropTargetMonitor } from 'react-dnd';
 
 // Defines an individual task
 interface Task {
@@ -105,6 +105,24 @@ const KanbanBoard: React.FC = () => {
 
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
+
+  // Define state variables for the new column name
+  const [newColumnName, setNewColumnName] = useState<ColumnName | "">('');
+
+  // Function to handle renaming a column
+  const handleRenameColumn = (oldColumnName: ColumnName, newColumnName: ColumnName) => {
+    if (newColumnName.trim() !== '') {
+      setColumnOrder(prevOrder => prevOrder.map(col => col === oldColumnName ? newColumnName : col));
+      setTasks(prevTasks => {
+        const updatedTasks = { ...prevTasks };
+        updatedTasks[newColumnName] = updatedTasks[oldColumnName];
+        delete updatedTasks[oldColumnName];
+        return updatedTasks;
+      });
+      setSelectedColumn(null);
+      setNewColumnName(''); // Reset the newColumnName state after renaming
+    }
+  };
 
 
   // Filters tasks by text input in the filter field and returns those tasks
@@ -428,19 +446,23 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
       {columnOrder.map(columnName => (
         <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName}>
           <h2>
-            {selectedColumn === columnName ? (
-              <div className="column">
-                <input
-                  type="text"
-                  className="input-field"
-                  value={columnName}
-                  onChange={(e) => handleCreateNewColumn(columnName as ColumnName, e.target.value)}
-                />
-                <button onClick={() => setSelectedColumn(null)}>Save</button>
-              </div>
-            ) : (
-              <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
-            )}
+      {selectedColumn === columnName ? (
+        <div className="column">
+          <input
+            type="text"
+            className="input-field"
+            value={newColumnName || columnName}
+            onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
+          />
+          {newColumnName ? (
+            <button onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</button>
+          ) : (
+            <button disabled>Save</button>
+          )}
+        </div>
+      ) : (
+        <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
+      )}
           </h2>
           {filteredTasks[columnName].map(task => (
             <Task
@@ -476,17 +498,22 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         </div>
       ))}
       <div>
-        <input
-          type="text"
-          className="input-field"
-          value={""}
-          onChange={(e) => setSelectedColumn(e.target.value)}
-          placeholder="Enter new column name"
-        />
-        <button
-          className="create-column-button"
-          onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
-        </button>
+      <input
+        type="text"
+        className="input-field"
+        value={selectedColumn === null ? "" : selectedColumn}
+        onChange={(e) => setSelectedColumn(e.target.value)}
+        placeholder="Enter new column name"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleCreateNewColumn(null, selectedColumn!);
+          }
+        }}
+      />
+      <button
+        className="create-column-button"
+        onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
+      </button>
       </div>
       {isModalOpen && (
         <TaskModal
