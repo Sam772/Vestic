@@ -284,24 +284,11 @@ const KanbanBoard: React.FC = () => {
 
 // Allows dropping and dragging of tasks
 const [, drop] = useDrop({
-  accept: 'TASK',
-  drop: (item: { id: number; sourceColumn: ColumnName }, monitor) => {
-    const sourceColumn = item.sourceColumn;
-
-    // Get the drop result
-    const dropResult = monitor.getDropResult<DropResult>();
-
-    // Check if dropResult exists and contains the columnName property
-    if (dropResult && 'columnName' in dropResult) {
-      // Extract the column name from the drop result
-      const targetColumn = dropResult.columnName;
-
-      // Move the task to the target column
-      moveTask(item.id, sourceColumn, targetColumn);
-    } else {
-      console.error('Drop result does not contain a valid column name.');
-    }
-  }
+  accept: 'TASK', // Accept dropped items of type 'TASK'
+  drop: (item: { id: number; sourceColumn: string }) => {
+    // Handle dropping the task into the respective column
+    moveTask(item.id, item.sourceColumn as ColumnName, selectedColumn as ColumnName);
+  },
 });
 
 // Handle the onDrop event
@@ -312,11 +299,12 @@ const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
   // Retrieve the task data from the drag event
   const taskId = event.dataTransfer.getData('taskId');
   const sourceColumn = event.dataTransfer.getData('sourceColumn');
+  const targetColumn = event.currentTarget.id as ColumnName; // Extract the column name from the drop target
 
   // If the task ID and source column are available, move the task
   if (taskId && sourceColumn) {
     // Move the task to the target column
-    moveTask(parseInt(taskId), sourceColumn as ColumnName, selectedColumn  as keyof Tasks || ColumnName.NEW);
+    moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn);
   }
 };
 
@@ -444,26 +432,26 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         />
       </div>
       {columnOrder.map(columnName => (
-        <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName}>
+        <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName} onDrop={handleDrop} onDragOver={handleDragOver}>
           <h2>
-      {selectedColumn === columnName ? (
-        <div className="column">
-          <input
-            type="text"
-            className="input-field"
-            value={newColumnName || columnName}
-            onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
-          />
-          {newColumnName ? (
-            <button onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</button>
-          ) : (
-            <button disabled>Save</button>
-          )}
-        </div>
-      ) : (
-        <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
-      )}
-          </h2>
+            {selectedColumn === columnName ? (
+              <div className="column">
+                <input
+                  type="text"
+                  className="input-field"
+                  value={newColumnName || columnName}
+                  onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
+                />
+                {newColumnName ? (
+                  <button onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</button>
+                ) : (
+                  <button disabled>Save</button>
+                )}
+              </div>
+                ) : (
+                  <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
+                )}
+            </h2>
           {filteredTasks[columnName].map(task => (
             <Task
               key={task.id}
@@ -498,23 +486,24 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         </div>
       ))}
       <div>
-      <input
-        type="text"
-        className="input-field"
-        value={selectedColumn === null ? "" : selectedColumn}
-        onChange={(e) => setSelectedColumn(e.target.value)}
-        placeholder="Enter new column name"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleCreateNewColumn(null, selectedColumn!);
-          }
-        }}
-      />
-      <button
-        className="create-column-button"
-        onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
-      </button>
+        <input
+          type="text"
+          className="input-field"
+          value={selectedColumn === null ? "" : selectedColumn}
+          onChange={(e) => setSelectedColumn(e.target.value)}
+          placeholder="Enter new column name"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleCreateNewColumn(null, selectedColumn!);
+            }
+          }}
+        />
+        <button
+          className="create-column-button"
+          onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
+        </button>
       </div>
+
       {isModalOpen && (
         <TaskModal
         isOpen={isModalOpen}
