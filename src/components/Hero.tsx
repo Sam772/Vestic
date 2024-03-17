@@ -42,7 +42,7 @@ export default function Hero() {
               textAlign: 'center',
             }}
           >
-            Our latest&nbsp;
+            Vestic&nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -51,15 +51,14 @@ export default function Hero() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              products
+              provides
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            Explore our cutting-edge dashboard, delivering high-quality solutions
-            tailored to your needs. <br />
-            Elevate your experience with top-tier features and services.
+            a provide management solution like no other. <br />
+            Combining the best features of Trello, DevOps and Jira to create a new idea.
           </Typography>
-          <Stack
+          {/* <Stack
             direction={{ xs: 'column', sm: 'row' }}
             alignSelf="center"
             spacing={1}
@@ -88,7 +87,7 @@ export default function Hero() {
               Terms & Conditions
             </Link>
             .
-          </Typography>
+          </Typography> */}
         </Stack>
         <Box
           id="image"

@@ -11,6 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
+import { Link } from 'react-router-dom';
+import './AppAppBar.css';
 
 const logoStyle = {
   width: '140px',
@@ -87,20 +89,20 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 px: 0,
               }}
             >
-              <img
+              {/* <img
                 src={
                   'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
                 }
                 style={logoStyle}
                 alt="logo of sitemark"
-              />
+              /> */}
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
                   onClick={() => scrollToSection('features')}
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Features
+                  <Link to="/" className="appappbar-link">Home</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -108,7 +110,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Testimonials
+                  <Link to="/projectoverview" className="appappbar-link">Project Overview</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -116,7 +118,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Highlights
+                  <Link to="/wiki" className="appappbar-link">Wiki</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -124,7 +126,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    Pricing
+                  <Link to="/analytics" className="appappbar-link">Analytics</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -132,7 +134,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                    FAQ
+                  <Link to="/testing" className="appappbar-link">Testing</Link>
                   </Typography>
                 </MenuItem>
               </Box>
@@ -145,7 +147,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button
+              {/* <Button
                 color="primary"
                 variant="text"
                 size="small"
@@ -164,7 +166,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 target="_blank"
               >
                 Sign up
-              </Button>
+              </Button> */}
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <Button

@@ -1,24 +1,25 @@
-.navbar {
+.appappbar {
     background-color: #333;
   }
   
-  .navbar-links {
+  .appappbar-links {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
   }
   
-  .navbar-item {
+  .appappbar-item {
     margin-right: 20px;
   }
   
-  .navbar-link {
-    color: white;
+  .appappbar-link {
+    color: black;
     text-decoration: none;
+    font-family: Arial, sans-serif;
   }
   
-  .navbar-link:hover {
+  .appappbar-link:hover {
     text-decoration: underline;
   }
   
