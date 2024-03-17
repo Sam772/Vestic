@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Navbar from './components/Navbar';
+import LandingPage from './pages/LandingPage';
 import KanbanBoard from './pages/ProjectOverview';
-import Home from './pages/Home';
 import ProjectCreation from './pages/ProjectCreation';
 import WorkspaceCreation from './pages/WorkspaceCreation';
 import Wiki from './pages/Wiki';
@@ -27,7 +27,7 @@ const App: React.FC = () => {
         <div>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<LandingPage/>} />
             <Route path="/:name" element={<ProjectCreation />} />
             <Route path="/workspacecreation" element={<WorkspaceCreation />} />
             <Route path="/:workspace/:projectName" element={<KanbanBoard />} />

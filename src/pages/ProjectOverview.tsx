@@ -503,7 +503,6 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
           onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
         </button>
       </div>
-
       {isModalOpen && (
         <TaskModal
         isOpen={isModalOpen}
