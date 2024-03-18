@@ -108,8 +108,7 @@ const ProjectCreation: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Hero />
-      <Box sx={{ bgcolor: 'background.default' }}>
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className="project-creation-page-container">
           <div className="sidebar">
             <button onClick={handleWorkspaceButtonClick} className="workspace-button">{name}</button>

@@ -91,7 +91,7 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default' }}>
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
         <div className="wiki-container">
           <h1 className="wiki-heading">Wiki Page</h1>
           <form className="wiki-form" onSubmit={handleSubmit}>

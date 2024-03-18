@@ -99,8 +99,7 @@ const WorkspaceCreation: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-    <Hero />
-      <Box sx={{ bgcolor: 'background.default' }}>
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className="workspace-creation-container">
           <h1>Create Workspace</h1>
           <div className="input-container">
