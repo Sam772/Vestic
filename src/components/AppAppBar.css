@@ -14,12 +14,16 @@
   }
   
   .appappbar-link {
-    color: black;
+    outline: none;
     text-decoration: none;
     font-family: Arial, sans-serif;
   }
   
   .appappbar-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
+  }
+
+  .appappbar-link:visited {
+    color: inherit;
   }
   

@@ -2,8 +2,75 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './ProjectCreation.css';
 import ProjectModal from '../components/ProjectModal';
+import { PaletteMode } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
+import AppAppBar from '../components/AppAppBar';
+import Hero from '../components/Hero';
+import getLPTheme from '../getLPTheme';
+
+interface ToggleCustomThemeProps {
+  showCustomTheme: Boolean;
+  toggleCustomTheme: () => void;
+}
+
+function ToggleCustomTheme({
+  showCustomTheme,
+  toggleCustomTheme,
+}: ToggleCustomThemeProps) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100dvw',
+        position: 'fixed',
+        bottom: 24,
+      }}
+    >
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        value={showCustomTheme}
+        onChange={toggleCustomTheme}
+        aria-label="Platform"
+        sx={{
+          backgroundColor: 'background.default',
+          '& .Mui-selected': {
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        <ToggleButton value>
+          <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
+          Custom theme
+        </ToggleButton>
+        <ToggleButton value={false}>Material Design 2</ToggleButton>
+      </ToggleButtonGroup>
+    </Box>
+  );
+}
 
 const ProjectCreation: React.FC = () => {
+
+  const [mode, setMode] = React.useState<PaletteMode>('light');
+  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  const LPtheme = createTheme(getLPTheme(mode));
+  const defaultTheme = createTheme({ palette: { mode } });
+
+  const toggleColorMode = () => {
+    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  const toggleCustomTheme = () => {
+    setShowCustomTheme((prev) => !prev);
+  };
+
   const location = useLocation();
   const navigate = useNavigate();
   const { name } = useParams<{ name: string }>();
@@ -38,39 +105,50 @@ const ProjectCreation: React.FC = () => {
   };
 
   return (
-    <div className="project-creation-page-container">
-      <div className="sidebar">
-        <button onClick={handleWorkspaceButtonClick} className="workspace-button">{name}</button>
-        <button onClick={() => navigate('/workspacecreation')} className="workspace-button">Create a Workspace</button>
-      </div>
-      <div className="main-content">
-        <h1 className="project-creation-page-heading">Project Creation Page</h1>
-        <div className="workspace-details-container">
-          <h2>Workspace Details</h2>
-          <p>Name: {name}</p>
-          <p>Description: {workspaceDescription}</p>
-        </div>
-        {showProjectList && (
-          <div className="project-list-container">
-            <h2>Projects</h2>
-            <button onClick={handleProjectButtonClick} className="project-button">Project 1</button>
-            <button onClick={handleProjectButtonClick} className="project-button">Project 2</button>
+    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+      <CssBaseline />
+      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <Hero />
+      <Box sx={{ bgcolor: 'background.default' }}>
+        <div className="project-creation-page-container">
+          <div className="sidebar">
+            <button onClick={handleWorkspaceButtonClick} className="workspace-button">{name}</button>
+            <button onClick={() => navigate('/workspacecreation')} className="workspace-button">Create a Workspace</button>
           </div>
-        )}
-        <div className="create-project-container">
-          <button onClick={handleCreateProjectClick} className="create-project-button">Create New Project</button>
+          <div className="main-content">
+            <h1 className="project-creation-page-heading">Project Creation Page</h1>
+            <div className="workspace-details-container">
+              <h2>Workspace Details</h2>
+              <p>Name: {name}</p>
+              <p>Description: {workspaceDescription}</p>
+            </div>
+            {showProjectList && (
+              <div className="project-list-container">
+                <h2>Projects</h2>
+                <button onClick={handleProjectButtonClick} className="project-button">Project 1</button>
+                <button onClick={handleProjectButtonClick} className="project-button">Project 2</button>
+              </div>
+            )}
+            <div className="create-project-container">
+              <button onClick={handleCreateProjectClick} className="create-project-button">Create New Project</button>
+            </div>
+          </div>
+          {isModalOpen && (
+            <ProjectModal
+              isOpen={isModalOpen}
+              projectName=""
+              projectDescription=""
+              onClose={closeModal}
+              onProjectCreate={handleProjectCreate}
+            />
+          )}
         </div>
-      </div>
-      {isModalOpen && (
-        <ProjectModal
-          isOpen={isModalOpen}
-          projectName=""
-          projectDescription=""
-          onClose={closeModal}
-          onProjectCreate={handleProjectCreate}
-        />
-      )}
-    </div>
+      </Box>
+    <ToggleCustomTheme
+        showCustomTheme={showCustomTheme}
+        toggleCustomTheme={toggleCustomTheme}
+      />
+    </ThemeProvider>
   );
 };
 

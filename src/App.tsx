@@ -18,21 +18,14 @@ import { Link } from './components/Types';
 const App: React.FC = () => {
   const [wikiPages, setWikiPages] = useState<string[]>([]);
 
-  const [mode, setMode] = React.useState<PaletteMode>('light');
-
   const createWikiPage = (pageName: string) => {
     setWikiPages([...wikiPages, pageName]);
-  };
-
-  const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   return (
     <Router>
       <DndProvider backend={HTML5Backend}>
         <div>
-        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
           <Routes>
             <Route path="/" element={<LandingPage/>} />
             <Route path="/:name" element={<ProjectCreation />} />

@@ -102,7 +102,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                  <Link to="/" className="appappbar-link">Home</Link>
+                    <Link to="/" className="appappbar-link">Home</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -110,7 +110,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                  <Link to="/projectoverview" className="appappbar-link">Project Overview</Link>
+                    <Link to="/projectoverview" className="appappbar-link">Project Overview</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -118,7 +118,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                  <Link to="/wiki" className="appappbar-link">Wiki</Link>
+                    <Link to="/wiki" className="appappbar-link">Wiki</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -126,7 +126,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                  <Link to="/analytics" className="appappbar-link">Analytics</Link>
+                    <Link to="/analytics" className="appappbar-link">Analytics</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -134,7 +134,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   sx={{ py: '6px', px: '12px' }}
                 >
                   <Typography variant="body2" color="text.primary">
-                  <Link to="/testing" className="appappbar-link">Testing</Link>
+                    <Link to="/testing" className="appappbar-link">Testing</Link>
                   </Typography>
                 </MenuItem>
               </Box>
