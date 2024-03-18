@@ -7,6 +7,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { Link as Link2 } from 'react-router-dom';
 
 export default function Hero() {
   return (
@@ -55,8 +56,13 @@ export default function Hero() {
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            provides a project management solution like no other. <br />
+            provides a project management solution like no other.<br />
             Combining the best features of Trello, DevOps and Jira to create a new and improved idea.
+            <div className="landing-page-container">
+              <button className="create-workspace-button">
+                <Link2 to="/workspacecreation" className="create-workspace-link">Start Now</Link2>
+              </button>
+            </div>
           </Typography>
           {/* <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -89,7 +95,7 @@ export default function Hero() {
             .
           </Typography> */}
         </Stack>
-        <Box
+        {/* <Box
           id="image"
           sx={(theme) => ({
             mt: { xs: 8, sm: 10 },
@@ -112,7 +118,7 @@ export default function Hero() {
                 ? `0 0 12px 8px ${alpha('#9CCCFC', 0.2)}`
                 : `0 0 24px 12px ${alpha('#033363', 0.2)}`,
           })}
-        />
+        /> */}
       </Container>
     </Box>
   );

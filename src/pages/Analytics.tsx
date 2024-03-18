@@ -9,6 +9,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import './Analytics.css';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -72,8 +73,8 @@ const Analytics: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default' }}>
-        <div>
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+        <div className='analytics-container'>
           <h1>Analytics Page</h1>
         </div>
       </Box>

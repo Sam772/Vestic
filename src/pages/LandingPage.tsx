@@ -82,13 +82,6 @@ export default function LandingPage() {
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Hero />
-
-      <div className="landing-page-container">
-        <button className="create-workspace-button">
-          <Link to="/workspacecreation" className="create-workspace-link">Create Workspace</Link>
-        </button>
-      </div>
-
       <Box sx={{ bgcolor: 'background.default' }}>
         <LogoCollection />
         <Features />
