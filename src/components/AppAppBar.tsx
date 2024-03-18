@@ -97,7 +97,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 alt="logo of sitemark"
               /> */}
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <MenuItem
+                <MenuItem
                   
                   sx={{ py: '6px', px: '12px' }}
                 >
@@ -105,46 +105,61 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                    <div className='appappbar-link'>Vestic</div> 
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('features')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    <Link to="/" className="appappbar-link">Home</Link>
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('testimonials')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    <Link to="/projectoverview" className="appappbar-link">Project Overview</Link>
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('highlights')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    <Link to="/wiki" className="appappbar-link">Wiki</Link>
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('pricing')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    <Link to="/analytics" className="appappbar-link">Analytics</Link>
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => scrollToSection('faq')}
-                  sx={{ py: '6px', px: '12px' }}
-                >
-                  <Typography variant="body2" color="text.primary">
-                    <Link to="/testing" className="appappbar-link">Testing</Link>
-                  </Typography>
-                </MenuItem>
+
+                <Link to="/">
+                  <MenuItem
+                    // onClick={() => scrollToSection('features')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      <div className='appappbar-link'>Home</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
+
+                <Link to="/projectoverview">
+                  <MenuItem
+                    // onClick={() => scrollToSection('testimonials')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      <div className='appappbar-link'>Project Overview</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
+
+                <Link to="/wiki">
+                  <MenuItem
+                    // onClick={() => scrollToSection('highlights')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      <div className='appappbar-link'>Wiki</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
+
+                <Link to="/analytics">
+                  <MenuItem
+                    // onClick={() => scrollToSection('pricing')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      <div className='appappbar-link'>Analytics</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
+
+                <Link to="/testing">
+                  <MenuItem
+                    // onClick={() => scrollToSection('faq')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                    <div className='appappbar-link'>Testing</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
               </Box>
             </Box>
             <Box
