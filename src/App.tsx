@@ -12,6 +12,7 @@ import Wiki from './pages/Wiki';
 import Analytics from './pages/Analytics';
 import Testing from './pages/Testing';
 import Sidebar from './components/Sidebar';
+import WikiCreate from './pages/WikiCreate';
 import { PaletteMode } from '@mui/material';
 import { Link } from './components/Types';
 
@@ -34,10 +35,11 @@ const App: React.FC = () => {
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/testing" element={<Testing />} />
+            <Route path="/wikicreate" element={<WikiCreate createWikiPage={createWikiPage} />} />
             {wikiPages.map(pageName => (
-              <Route key={pageName} path={`/wiki/${pageName}`} element={<Sidebar pageName={pageName} />} />
+              <Route key={pageName} path={`/wiki/wikis/${pageName}`} element={<Sidebar pageName={pageName} />} />
             ))}
-            {wikiPages.length > 0 && <Route path="/wiki" element={<Navigate to={`/wiki/${wikiPages[0]}`} />} />}
+            {wikiPages.length > 0 && <Route path="/wiki/wikis" element={<Navigate to={`/wiki/wikis/${wikiPages[0]}`} />} />}
           </Routes>
         </div>
       </DndProvider>

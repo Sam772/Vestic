@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Wiki.css';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -53,7 +55,11 @@ function ToggleCustomTheme({
   );
 }
 
-const PageContent: React.FC = () => {
+interface WikiProps {
+  createWikiPage: (pageName: string) => void;
+}
+
+const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -68,15 +74,38 @@ const PageContent: React.FC = () => {
     setShowCustomTheme((prev) => !prev);
   };
 
+  const [pageName, setPageName] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    createWikiPage(pageName);
+    navigate(`/wiki/wikis/${pageName}`);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPageName(event.target.value);
+  };
+
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-    <CssBaseline />
-    <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
-        <div className="main-content">
-          <h2>Main Content</h2>
-          <p>This is the main content of the page.</p>
-          <p>You can add your content here.</p>
+      <CssBaseline />
+      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
+        <div className="wiki-container">
+          <h1 className="wiki-heading">Wiki Page</h1>
+          <form className="wiki-form" onSubmit={handleSubmit}>
+            <label htmlFor="pageName" className="wiki-label">Enter Page Name:</label>
+            <input
+              type="text"
+              id="pageName"
+              value={pageName}
+              onChange={handleChange}
+              className="wiki-input"
+              required
+            />
+            <button type="submit" className="wiki-button">Create</button>
+          </form>
         </div>
       </Box>
     <ToggleCustomTheme
@@ -87,4 +116,4 @@ const PageContent: React.FC = () => {
   );
 };
 
-export default PageContent;
+export default Wiki;

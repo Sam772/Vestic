@@ -11,6 +11,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import { Link } from 'react-router-dom';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -95,16 +96,9 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
         <div className="wiki-container">
           <h1 className="wiki-heading">Wiki Page</h1>
           <form className="wiki-form" onSubmit={handleSubmit}>
-            <label htmlFor="pageName" className="wiki-label">Enter Page Name:</label>
-            <input
-              type="text"
-              id="pageName"
-              value={pageName}
-              onChange={handleChange}
-              className="wiki-input"
-              required
-            />
-            <button type="submit" className="wiki-button">Post</button>
+            <Link to="/wikicreate" className="create-workspace-link">Start Now
+              <button className="wiki-button">Start Now</button>
+            </Link>
           </form>
         </div>
       </Box>
