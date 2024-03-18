@@ -72,7 +72,7 @@ const PageContent: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px', flex: '1', padding: '80px', textAlign: 'center' }}>
         <div className="main-content">
           <h2>Main Content</h2>
           <p>This is the main content of the page.</p>

@@ -1,25 +1,33 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PageContent from './PageContent';
+import './Sidebar.css'
 
 interface SidebarProps {
   pageName: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ pageName }) => {
-  const pageNames = ['Page 1', 'Page 2', 'Page 3'];
+  const pageNames = [pageName, 'Page 2', 'Page 3']; // Replace with your actual wiki pages
 
   return (
-    <div>
-      <div className="sidebar">
-        <h2>Sidebar</h2>
-        <ul>
-          {pageNames.map(page => (
-            <li key={page}>{page}</li>
-          ))}
-        </ul>
-        <p>Current Page: {pageName}</p>
+    <div className="sidebar">
+      <h2>Wiki Pages</h2>
+      <div>
+        {pageNames.map(page => (
+          <div key={page}>
+            <Link to={`/wiki/wikis/${page}`}>
+              <button className='sidebar-button'>{page}</button>
+            </Link>
+          </div>
+        ))}
       </div>
+      <div>
+        <Link to="/wikicreate">
+          <button className='sidebar-button'>Create New Wiki Page</button>
+        </Link>
+      </div>
+      <p>Current Page: {pageName}</p>
       <PageContent />
     </div>
   );
