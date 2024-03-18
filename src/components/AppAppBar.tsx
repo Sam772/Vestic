@@ -117,7 +117,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   </MenuItem>
                 </Link>
 
-                <Link to="/projectoverview">
+                <Link to="/projectoverview/project">
                   <MenuItem
                     // onClick={() => scrollToSection('testimonials')}
                     sx={{ py: '6px', px: '12px' }}

@@ -93,9 +93,9 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
         <div className="wiki-container">
-          <h1 className="wiki-heading">Wiki Page</h1>
+          <h1 className="wiki-heading">Create a Wiki</h1>
           <form className="wiki-form" onSubmit={handleSubmit}>
-            <label htmlFor="pageName" className="wiki-label">Enter Page Name:</label>
+            <label htmlFor="pageName" className="wiki-label">Enter Wiki Name:</label>
             <input
               type="text"
               id="pageName"
@@ -104,7 +104,7 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
               className="wiki-input"
               required
             />
-            <button type="submit" className="wiki-button">Create</button>
+            <button type="submit" className="wiki-button">Create Wiki</button>
           </form>
         </div>
       </Box>

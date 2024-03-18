@@ -7,7 +7,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
-import Hero from '../components/Hero';
+import HeroAnalytics from '../components/HeroAnalytics';
 import getLPTheme from '../getLPTheme';
 import './Analytics.css';
 
@@ -73,9 +73,10 @@ const Analytics: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+    <HeroAnalytics />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className='analytics-container'>
-          <h1>Analytics Page</h1>
+          {/* <h1>Analytics Page</h1> */}
         </div>
       </Box>
       <ToggleCustomTheme

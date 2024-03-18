@@ -7,7 +7,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
-import Hero from '../components/Hero';
+import HeroTesting from '../components/HeroTesting';
 import getLPTheme from '../getLPTheme';
 import './Testing.css';
 
@@ -73,9 +73,10 @@ const Testing: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+    <HeroTesting />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className='testing-container'>
-          <h1>Testing Page</h1>
+          {/* <h1>Testing Page</h1> */}
         </div>
       </Box>
       <ToggleCustomTheme

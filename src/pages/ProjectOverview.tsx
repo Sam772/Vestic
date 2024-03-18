@@ -12,7 +12,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
-import Hero from '../components/Hero';
+import HeroProjectOverview from '../components/HeroProjectOverview';
 import getLPTheme from '../getLPTheme';
 
 interface ToggleCustomThemeProps {
@@ -490,7 +490,8 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+    <HeroProjectOverview />
+      <Box sx={{ bgcolor: 'background.default'}}>
         <div ref={drop} className="kanban-board" onDrop={handleDrop} onDragOver={handleDragOver}>
           <div className="filter-container">
             <input

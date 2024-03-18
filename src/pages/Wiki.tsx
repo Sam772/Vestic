@@ -9,7 +9,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
-import Hero from '../components/Hero';
+import HeroWiki from '../components/HeroWiki';
 import getLPTheme from '../getLPTheme';
 import { Link } from 'react-router-dom';
 
@@ -92,15 +92,8 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <HeroWiki />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
-        <div className="wiki-container">
-          <h1 className="wiki-heading">Wiki Page</h1>
-          <form className="wiki-form" onSubmit={handleSubmit}>
-            <Link to="/wikicreate" className="create-workspace-link">Start Now
-              <button className="wiki-button">Start Now</button>
-            </Link>
-          </form>
-        </div>
       </Box>
     <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
