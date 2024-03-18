@@ -55,13 +55,13 @@ function ToggleCustomTheme({
 
 const Testing: React.FC = () => {
 
-  const [mode, setMode] = React.useState<PaletteMode>('light');
+  const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
 
   const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const toggleCustomTheme = () => {
