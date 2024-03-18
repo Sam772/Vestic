@@ -97,6 +97,14 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 alt="logo of sitemark"
               /> */}
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <MenuItem
+                  
+                  sx={{ py: '6px', px: '12px' }}
+                >
+                  <Typography variant="body2" color="text.primary">
+                   <div className='appappbar-link'>Vestic</div> 
+                  </Typography>
+                </MenuItem>
                 <MenuItem
                   onClick={() => scrollToSection('features')}
                   sx={{ py: '6px', px: '12px' }}

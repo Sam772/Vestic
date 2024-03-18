@@ -4,6 +4,59 @@ import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
 import { useDrop, useDrag, DropTargetMonitor } from 'react-dnd';
+import { PaletteMode } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
+import AppAppBar from '../components/AppAppBar';
+import Hero from '../components/Hero';
+import getLPTheme from '../getLPTheme';
+
+interface ToggleCustomThemeProps {
+  showCustomTheme: Boolean;
+  toggleCustomTheme: () => void;
+}
+
+function ToggleCustomTheme({
+  showCustomTheme,
+  toggleCustomTheme,
+}: ToggleCustomThemeProps) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100dvw',
+        position: 'fixed',
+        bottom: 24,
+      }}
+    >
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        value={showCustomTheme}
+        onChange={toggleCustomTheme}
+        aria-label="Platform"
+        sx={{
+          backgroundColor: 'background.default',
+          '& .Mui-selected': {
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        <ToggleButton value>
+          <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
+          Custom theme
+        </ToggleButton>
+        <ToggleButton value={false}>Material Design 2</ToggleButton>
+      </ToggleButtonGroup>
+    </Box>
+  );
+}
 
 // Defines an individual task
 interface Task {
@@ -40,6 +93,19 @@ interface DropResult {
 
 // Represents the page content
 const KanbanBoard: React.FC = () => {
+
+  const [mode, setMode] = React.useState<PaletteMode>('light');
+  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  const LPtheme = createTheme(getLPTheme(mode));
+  const defaultTheme = createTheme({ palette: { mode } });
+
+  const toggleColorMode = () => {
+    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  const toggleCustomTheme = () => {
+    setShowCustomTheme((prev) => !prev);
+  };
 
   const location = useLocation();
   const projectName = location.state?.projectName || '';
@@ -421,104 +487,114 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
   //#endregion
 
   return (
-    <div ref={drop} className="kanban-board" onDrop={handleDrop} onDragOver={handleDragOver}>
-      <div className="filter-container">
-        <input
-          type="text"
-          className="filter-box"
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-          placeholder="Filter tasks by name"
-        />
-      </div>
-      {columnOrder.map(columnName => (
-        <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName} onDrop={handleDrop} onDragOver={handleDragOver}>
-          <h2>
-            {selectedColumn === columnName ? (
-              <div className="column">
+    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+    <CssBaseline />
+    <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+        <div ref={drop} className="kanban-board" onDrop={handleDrop} onDragOver={handleDragOver}>
+          <div className="filter-container">
+            <input
+              type="text"
+              className="filter-box"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              placeholder="Filter tasks by name"
+            />
+          </div>
+          {columnOrder.map(columnName => (
+            <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName} onDrop={handleDrop} onDragOver={handleDragOver}>
+              <h2>
+                {selectedColumn === columnName ? (
+                  <div className="column">
+                    <input
+                      type="text"
+                      className="input-field"
+                      value={newColumnName || columnName}
+                      onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
+                    />
+                    {newColumnName ? (
+                      <button onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</button>
+                    ) : (
+                      <button disabled>Save</button>
+                    )}
+                  </div>
+                    ) : (
+                      <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
+                    )}
+                </h2>
+              {filteredTasks[columnName].map(task => (
+                <Task
+                  key={task.id}
+                  id={task.id}
+                  text={task.text}
+                  sourceColumn={columnName}
+                  onClick={() => openModal(task.id)}
+                  draggable={true}
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData('taskId', String(task.id));
+                    e.dataTransfer.setData('sourceColumn', columnName);
+                  }}
+                />
+              ))}
+              <div>
                 <input
                   type="text"
                   className="input-field"
-                  value={newColumnName || columnName}
-                  onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
+                  value={newTaskTexts[columnName]}
+                  onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
+                  placeholder="Enter task name"
                 />
-                {newColumnName ? (
-                  <button onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</button>
-                ) : (
-                  <button disabled>Save</button>
-                )}
+                <button 
+                  className="create-task-button"
+                  onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
+                </button>
+                <button 
+                  className="delete-column-button"
+                  onClick={() => handleDeleteColumn(columnName)}>Delete Column  
+                </button>
               </div>
-                ) : (
-                  <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
-                )}
-            </h2>
-          {filteredTasks[columnName].map(task => (
-            <Task
-              key={task.id}
-              id={task.id}
-              text={task.text}
-              sourceColumn={columnName}
-              onClick={() => openModal(task.id)}
-              draggable={true}
-              onDragStart={(e) => {
-                e.dataTransfer.setData('taskId', String(task.id));
-                e.dataTransfer.setData('sourceColumn', columnName);
-              }}
-            />
+            </div>
           ))}
           <div>
             <input
               type="text"
               className="input-field"
-              value={newTaskTexts[columnName]}
-              onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
-              placeholder="Enter task name"
+              value={selectedColumn === null ? "" : selectedColumn}
+              onChange={(e) => setSelectedColumn(e.target.value)}
+              placeholder="Enter new column name"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleCreateNewColumn(null, selectedColumn!);
+                }
+              }}
             />
-            <button 
-              className="create-task-button"
-              onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
-            </button>
-            <button 
-              className="delete-column-button"
-              onClick={() => handleDeleteColumn(columnName)}>Delete Column  
+            <button
+              className="create-column-button"
+              onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
             </button>
           </div>
+          {isModalOpen && (
+            <TaskModal
+            isOpen={isModalOpen}
+            taskId={selectedTaskId || 0}
+            taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
+            taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
+            comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
+            onClose={closeModal}
+            onDelete={deleteTask}
+            onSave={handleSaveTask}
+            onPostComment={handlePostComment}
+            newComment={newComment}
+            onNewCommentChange={handleNewCommentChange}
+            />
+          )}
         </div>
-      ))}
-      <div>
-        <input
-          type="text"
-          className="input-field"
-          value={selectedColumn === null ? "" : selectedColumn}
-          onChange={(e) => setSelectedColumn(e.target.value)}
-          placeholder="Enter new column name"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleCreateNewColumn(null, selectedColumn!);
-            }
-          }}
-        />
-        <button
-          className="create-column-button"
-          onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
-        </button>
-      </div>
-      {isModalOpen && (
-        <TaskModal
-        isOpen={isModalOpen}
-        taskId={selectedTaskId || 0}
-        taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
-        taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
-        comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
-        onClose={closeModal}
-        onDelete={deleteTask}
-        onSave={handleSaveTask}
-        onPostComment={handlePostComment}
-        newComment={newComment}
-        onNewCommentChange={handleNewCommentChange}
-        />
-      )}
-    </div>
+      </Box>
+      <ToggleCustomTheme
+        showCustomTheme={showCustomTheme}
+        toggleCustomTheme={toggleCustomTheme}
+      />
+    </ThemeProvider>
   );
 };
 
