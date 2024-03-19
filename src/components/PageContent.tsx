@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -68,6 +68,18 @@ const PageContent: React.FC = () => {
     setShowCustomTheme((prev) => !prev);
   };
 
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+  const handleSave = () => {
+    // Here you can handle the logic to save the input value
+    console.log('Input value:', inputValue);
+    // Clear the input after saving
+    setInputValue('');
+  }
+
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
@@ -75,8 +87,15 @@ const PageContent: React.FC = () => {
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px', flex: '1', padding: '80px', textAlign: 'center' }}>
         <div className="main-content">
           <h2>Main Content</h2>
-          <p>This is the main content of the page.</p>
-          <p>You can add your content here.</p>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Enter text..."
+            style={{ width: '80%', padding: '10px', fontSize: '16px', marginBottom: '20px' }}
+            />
+            <br />
+          <button onClick={handleSave}>Save</button>
         </div>
       </Box>
     <ToggleCustomTheme
