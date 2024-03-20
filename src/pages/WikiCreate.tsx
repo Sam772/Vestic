@@ -105,7 +105,7 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
               className="wiki-input"
               required
             />
-            <button type="submit" className="new-button"><MUIButton>Create Wiki</MUIButton></button>
+            <button type="submit" className="new-button"><MUIButton variant='outlined'>Create Wiki</MUIButton></button>
           </form>
         </div>
       </Box>

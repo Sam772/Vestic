@@ -64,7 +64,7 @@ export default function HeroAnalytics() {
               <button className='new-button'>
                 <ListItem>
                   {/* <Link2 to="/workspacecreation" className="create-workspace-link"> */}
-                    <MUIButton>Start Now</MUIButton>
+                    <MUIButton variant='outlined'>Start Now</MUIButton>
                   {/* </Link2> */}
                 </ListItem>
               </button>

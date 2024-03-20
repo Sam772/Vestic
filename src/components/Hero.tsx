@@ -65,7 +65,7 @@ export default function Hero() {
                 <button className='new-workspace-button'>
                   <ListItem>
                     <Link2 to="/workspacecreation" className="create-workspace-link">
-                      <MUIButton>Start Now</MUIButton>
+                      <MUIButton variant='outlined'>Start Now</MUIButton>
                     </Link2>
                   </ListItem>
                 </button>

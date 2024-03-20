@@ -112,25 +112,25 @@ const ProjectCreation: React.FC = () => {
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className="project-creation-page-container">
           <div className="sidebar">
-            <button onClick={handleWorkspaceButtonClick} className="new-button"><MUIButton>{name}</MUIButton></button>
-            <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton>Create a Workspace</MUIButton></button>
+            <button onClick={handleWorkspaceButtonClick} className="new-button"><MUIButton variant='outlined'>{name}</MUIButton></button>
+            <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton variant='outlined'>Create a Workspace</MUIButton></button>
           </div>
           <div className="main-content">
             <h1 className="project-creation-page-heading">Project Creation Page</h1>
             <div className="workspace-details-container">
-              <h2>Workspace Details</h2>
+              <h2>Current Workspace Details</h2>
               <p>Name: {name}</p>
               <p>Description: {workspaceDescription}</p>
             </div>
             {showProjectList && (
               <div className="project-list-container">
                 <h2>Projects</h2>
-                <button onClick={handleProjectButtonClick} className="project-button">Project 1</button>
-                <button onClick={handleProjectButtonClick} className="project-button">Project 2</button>
+                <button onClick={handleProjectButtonClick} className="new-button"><MUIButton variant='outlined'>Project 1</MUIButton></button>
+                <button onClick={handleProjectButtonClick} className="new-button"><MUIButton variant='outlined'>Project 2</MUIButton></button>
               </div>
             )}
             <div className="create-project-container">
-              <button onClick={handleCreateProjectClick} className="new-button"><MUIButton>Create New Project</MUIButton></button>
+              <button onClick={handleCreateProjectClick} className="new-button"><MUIButton variant='outlined'>Create New Project</MUIButton></button>
             </div>
           </div>
           {isModalOpen && (

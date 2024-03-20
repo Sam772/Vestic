@@ -39,11 +39,11 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
             <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
               <ListItemText primary={page} />
             </ListItemButton>
-            <Button onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
+            <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
           </ListItem>
         ))}
       </List>
-      <Button onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
+      <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
       <PageContent pageName={currentPageName} />
     </div>
   );

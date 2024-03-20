@@ -112,7 +112,7 @@ const WorkspaceCreation: React.FC = () => {
           </div>
           {error && <p className="error-message">{error}</p>}
           <List>
-            <button onClick={createWorkspace} className="new-workspace-button"><MUIButton>Create Workspace</MUIButton></button>
+            <button onClick={createWorkspace} className="new-workspace-button"><MUIButton variant='outlined'>Create Workspace</MUIButton></button>
           </List>
         </div>
     </Box>
