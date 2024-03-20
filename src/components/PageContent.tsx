@@ -53,12 +53,24 @@ function ToggleCustomTheme({
   );
 }
 
-const PageContent: React.FC = () => {
+interface PageContentProps {
+  pageName: string;
+}
 
+const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    // Load input value from localStorage when pageName changes
+    console.log('Loading input value for page:', pageName);
+    const savedValue = localStorage.getItem(pageName);
+    console.log('Saved value:', savedValue);
+    setInputValue(savedValue || '');
+  }, [pageName]);
 
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -68,22 +80,19 @@ const PageContent: React.FC = () => {
     setShowCustomTheme((prev) => !prev);
   };
 
-  const [inputValue, setInputValue] = useState('');
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
+
   const handleSave = () => {
     // Here you can handle the logic to save the input value
-    console.log('Input value:', inputValue);
-    // Clear the input after saving
-    setInputValue('');
+    localStorage.setItem(pageName, inputValue);
   }
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-    <CssBaseline />
-    <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <CssBaseline />
+      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px', flex: '1', padding: '80px', textAlign: 'center' }}>
         <div className="main-content">
           <h2>Main Content</h2>
@@ -92,13 +101,19 @@ const PageContent: React.FC = () => {
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Enter text..."
-            style={{ width: '80%', padding: '10px', fontSize: '16px', marginBottom: '20px' }}
-            />
-            <br />
+            style={{
+              width: '80%',
+              padding: '10px',
+              fontSize: '16px',
+              marginBottom: '20px',
+              height: '200px',
+            }}
+          />
+          <br />
           <button onClick={handleSave}>Save</button>
         </div>
       </Box>
-    <ToggleCustomTheme
+      <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
       />

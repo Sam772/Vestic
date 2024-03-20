@@ -18,9 +18,19 @@ import { Link } from './components/Types';
 
 const App: React.FC = () => {
   const [wikiPages, setWikiPages] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState<string>('');
 
   const createWikiPage = (pageName: string) => {
     setWikiPages([...wikiPages, pageName]);
+    setCurrentPage(pageName);
+  };
+
+  const deleteWikiPage = (pageName: string) => {
+    const updatedPages = wikiPages.filter(page => page !== pageName);
+    setWikiPages(updatedPages);
+    if (currentPage === pageName) {
+      setCurrentPage(updatedPages[0] || ''); // Set the first page in the list as current page, or empty string if no pages left
+    }
   };
 
   return (
@@ -37,7 +47,18 @@ const App: React.FC = () => {
             <Route path="/testing" element={<Testing />} />
             <Route path="/wikicreate" element={<WikiCreate createWikiPage={createWikiPage} />} />
             {wikiPages.map(pageName => (
-              <Route key={pageName} path={`/wiki/wikis/${pageName}`} element={<Sidebar pageName={pageName} />} />
+              <Route
+              key={pageName}
+              path={`/wiki/wikis/${pageName}`}
+              element={
+                <Sidebar
+                  pageNames={wikiPages}
+                  createWikiPage={createWikiPage}
+                  deleteWikiPage={deleteWikiPage}
+                  currentPageName={currentPage}
+                />
+              }
+              />
             ))}
             {wikiPages.length > 0 && <Route path="/wiki/wikis" element={<Navigate to={`/wiki/wikis/${wikiPages[0]}`} />} />}
           </Routes>

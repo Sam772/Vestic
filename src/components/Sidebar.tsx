@@ -1,33 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import PageContent from './PageContent';
-import './Sidebar.css'
-import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
 interface SidebarProps {
-  pageName: string;
+  pageNames: string[];
+  createWikiPage: (pageName: string) => void;
+  deleteWikiPage: (pageName: string) => void;
+  currentPageName: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ pageName }) => {
-  const pageNames = [pageName]; // Replace with your actual wiki pages
+const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWikiPage, currentPageName }) => {
+
+  const handleCreateWikiPage = () => {
+    const pageName = prompt('Enter the name for the new Wiki Page:');
+    if (pageName) {
+      createWikiPage(pageName);
+    }
+  };
+
+  const handleDeleteWikiPage = (pageName: string) => {
+    if (window.confirm(`Are you sure you want to delete the Wiki Page "${pageName}"?`)) {
+      deleteWikiPage(pageName);
+    }
+  };
 
   return (
     <div className="sidebar">
       <h2>Your Wiki Pages</h2>
-      <div>
+      <List>
         {pageNames.map(page => (
-          <div key={page}>
-            <ProSidebar>
-              <Menu>
-                <Link to={`/wiki/wikis/${page}`}> <MenuItem> {pageName} </MenuItem> </Link>
-                <MenuItem> Page 2 </MenuItem>
-                <Link to="/wikicreate"> <MenuItem> Create New Wiki Page </MenuItem> </Link>
-              </Menu>
-            </ProSidebar>
-          </div>
+          <ListItem key={page}>
+            <ListItemButton component={Link} to={`/wiki/wikis/${page}`}>
+              <ListItemText primary={page} />
+            </ListItemButton>
+            <Button onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
+          </ListItem>
         ))}
-      </div>
-      <PageContent />
+      </List>
+      <Button onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
+      <PageContent pageName={currentPageName} />
     </div>
   );
 };
