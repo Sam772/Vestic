@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Link as Link2 } from 'react-router-dom';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import '../pages/LandingPage.css'
 
 export default function Hero() {
   return (
@@ -59,9 +61,15 @@ export default function Hero() {
             provides a project management solution like no other.<br />
             Combining the best features of Trello, DevOps and Jira to create a new and improved idea.
             <div className="landing-page-container">
-              <button className="create-workspace-button">
-                <Link2 to="/workspacecreation" className="create-workspace-link">Start Now</Link2>
-              </button>
+              <List>
+                <button className='new-workspace-button'>
+                  <ListItem>
+                    <Link2 to="/workspacecreation" className="create-workspace-link">
+                      <MUIButton>Start Now</MUIButton>
+                    </Link2>
+                  </ListItem>
+                </button>
+              </List>
             </div>
           </Typography>
           {/* <Stack

@@ -11,6 +11,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -111,7 +112,9 @@ const WorkspaceCreation: React.FC = () => {
             <input type="text" value={workspaceDescription} onChange={handleWorkspaceDescriptionChange} className="workspace-input" />
           </div>
           {error && <p className="error-message">{error}</p>}
-          <button onClick={createWorkspace} className="create-workspace-button">Create Workspace</button>
+          <List>
+            <button onClick={createWorkspace} className="new-workspace-button"><MUIButton>Create Workspace</MUIButton></button>
+          </List>
         </div>
     </Box>
       <ToggleCustomTheme
