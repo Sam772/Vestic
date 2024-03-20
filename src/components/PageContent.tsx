@@ -9,6 +9,8 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import '../pages/Analytics'
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -110,7 +112,7 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
             }}
           />
           <br />
-          <button onClick={handleSave}>Save</button>
+          <button className='new-button' onClick={handleSave}><MUIButton variant='outlined'>Save</MUIButton></button>
         </div>
       </Box>
       <ToggleCustomTheme
