@@ -56,6 +56,7 @@ const App: React.FC = () => {
                   createWikiPage={createWikiPage}
                   deleteWikiPage={deleteWikiPage}
                   currentPageName={currentPage}
+                  setPageName={setCurrentPage}
                 />
               }
               />

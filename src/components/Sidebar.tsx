@@ -8,9 +8,10 @@ interface SidebarProps {
   createWikiPage: (pageName: string) => void;
   deleteWikiPage: (pageName: string) => void;
   currentPageName: string;
+  setPageName: (pageName: string) => void; // Add setPageName prop
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWikiPage, currentPageName }) => {
+const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWikiPage, currentPageName, setPageName }) => {
 
   const handleCreateWikiPage = () => {
     const pageName = prompt('Enter the name for the new Wiki Page:');
@@ -25,13 +26,17 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
     }
   };
 
+  const handleSelectWikiPage = (pageName: string) => {
+    setPageName(pageName); // Set the selected page name
+  };
+
   return (
     <div className="sidebar">
       <h2>Your Wiki Pages</h2>
       <List>
         {pageNames.map(page => (
           <ListItem key={page}>
-            <ListItemButton component={Link} to={`/wiki/wikis/${page}`}>
+            <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
               <ListItemText primary={page} />
             </ListItemButton>
             <Button onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
