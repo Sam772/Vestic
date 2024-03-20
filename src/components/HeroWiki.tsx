@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Link as Link2 } from 'react-router-dom';
+import '../pages/Wiki';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 export default function HeroWiki() {
   return (
@@ -58,11 +60,15 @@ export default function HeroWiki() {
           <Typography variant="body1" textAlign="center" color="text.secondary">
             provides a wiki feature to create new pages to document your projects.<br />
             Get started with Wikis now.
-            <div className="landing-page-container">
-              <button className="create-workspace-button">
-                <Link2 to="/wikicreate" className="create-workspace-link">Start Now</Link2>
+            <List>
+              <button className='new-button'>
+                <ListItem>
+                  <Link2 to="/wikicreate" className="create-workspace-link">
+                    <MUIButton>Start Now</MUIButton>
+                  </Link2>
+                </ListItem>
               </button>
-            </div>
+            </List>
           </Typography>
           {/* <Stack
             direction={{ xs: 'column', sm: 'row' }}

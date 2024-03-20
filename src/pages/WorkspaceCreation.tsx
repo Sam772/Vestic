@@ -9,7 +9,6 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
-import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 

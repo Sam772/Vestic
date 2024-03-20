@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Link as Link2 } from 'react-router-dom';
+import '../pages/Analytics';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 export default function HeroAnalytics() {
   return (
@@ -58,6 +60,15 @@ export default function HeroAnalytics() {
           <Typography variant="body1" textAlign="center" color="text.secondary">
             provides project analytics to give insights into project statistics.<br />
             Get started with Analytics now.
+            <List>
+              <button className='new-button'>
+                <ListItem>
+                  {/* <Link2 to="/workspacecreation" className="create-workspace-link"> */}
+                    <MUIButton>Start Now</MUIButton>
+                  {/* </Link2> */}
+                </ListItem>
+              </button>
+            </List>
           </Typography>
           {/* <Stack
             direction={{ xs: 'column', sm: 'row' }}

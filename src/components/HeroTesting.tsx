@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Link as Link2 } from 'react-router-dom';
+import '../pages/Testing.css';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 export default function HeroTesting() {
   return (
@@ -58,6 +60,15 @@ export default function HeroTesting() {
           <Typography variant="body1" textAlign="center" color="text.secondary">
             provides testing features to add flexibility to your project.<br />
             Get started with Testing features now.
+            <List>
+              <button className='new-button'>
+                <ListItem>
+                  {/* <Link2 to="/workspacecreation" className="create-workspace-link"> */}
+                    <MUIButton>Start Now</MUIButton>
+                  {/* </Link2> */}
+                </ListItem>
+              </button>
+            </List>
           </Typography>
           {/* <Stack
             direction={{ xs: 'column', sm: 'row' }}

@@ -11,6 +11,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -104,7 +105,7 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
               className="wiki-input"
               required
             />
-            <button type="submit" className="wiki-button">Create Wiki</button>
+            <button type="submit" className="new-button"><MUIButton>Create Wiki</MUIButton></button>
           </form>
         </div>
       </Box>

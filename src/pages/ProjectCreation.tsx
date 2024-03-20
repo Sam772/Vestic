@@ -12,6 +12,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -111,8 +112,8 @@ const ProjectCreation: React.FC = () => {
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className="project-creation-page-container">
           <div className="sidebar">
-            <button onClick={handleWorkspaceButtonClick} className="workspace-button">{name}</button>
-            <button onClick={() => navigate('/workspacecreation')} className="workspace-button">Create a Workspace</button>
+            <button onClick={handleWorkspaceButtonClick} className="new-button"><MUIButton>{name}</MUIButton></button>
+            <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton>Create a Workspace</MUIButton></button>
           </div>
           <div className="main-content">
             <h1 className="project-creation-page-heading">Project Creation Page</h1>
@@ -129,7 +130,7 @@ const ProjectCreation: React.FC = () => {
               </div>
             )}
             <div className="create-project-container">
-              <button onClick={handleCreateProjectClick} className="create-project-button">Create New Project</button>
+              <button onClick={handleCreateProjectClick} className="new-button"><MUIButton>Create New Project</MUIButton></button>
             </div>
           </div>
           {isModalOpen && (
