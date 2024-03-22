@@ -10,6 +10,13 @@ import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import AddLinkIcon from '@mui/icons-material/AddLink';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
 import '../pages/Analytics'
 
 interface ToggleCustomThemeProps {
@@ -87,9 +94,23 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      setInputValue(prevValue => prevValue + '\n');
+  
+      const input = event.target as HTMLTextAreaElement;
+      const cursorPosition = input.selectionStart;
+  
+      // Get the text before and after the cursor position
+      const prefix = inputValue.substring(0, cursorPosition);
+      const suffix = inputValue.substring(cursorPosition);
+  
+      // Insert a new line at the cursor position
+      const newText = `${prefix}\n${suffix}`;
+      setInputValue(newText);
+  
+      // Move the cursor to the end of the inserted new line
+      input.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
     }
   };
+  
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
@@ -99,6 +120,27 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
     // Here you can handle the logic to save the input value
     localStorage.setItem(pageName, inputValue);
   }
+
+  //#region - formatting features
+
+  // Insert a bullet point
+  const handleInsertBullet = () => {
+    const input = inputRef.current;
+  
+    if (input) {
+      const selectionStart = input.selectionStart;
+      const prefix = inputValue.substring(0, selectionStart);
+      const suffix = inputValue.substring(selectionStart);
+  
+      const newText = `${prefix}\n• ${suffix}`;
+      setInputValue(newText);
+  
+      // Move cursor to the end of the inserted text
+      input.setSelectionRange(selectionStart + 3, selectionStart + 3);
+    } else {
+      console.log('Input element is null.');
+    }
+  };
 
   // Function to apply formatting to the selected text
   const applyFormat = (format: string, inputValue: string) => {
@@ -147,7 +189,8 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
       console.log('Input element is null.');
     }
   };
-  
+
+  //#endregion
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
@@ -155,6 +198,14 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px', flex: '1', padding: '80px', textAlign: 'center' }}>
         <div className="main-content">
+          <button className='new-button' onClick={() => applyFormat('bold', inputValue)}><MUIButton><FormatBoldIcon/></MUIButton></button>
+          <button className='new-button' onClick={() => applyFormat('italic', inputValue)}><MUIButton><FormatItalicIcon/></MUIButton></button>
+          <button className='new-button' onClick={() => applyFormat('underline', inputValue)}><MUIButton><FormatUnderlinedIcon/></MUIButton></button>
+          <button className='new-button' onClick={handleInsertBullet}><MUIButton><FormatListBulletedIcon/></MUIButton></button>
+          <button className='new-button'><MUIButton><FormatListNumberedIcon/></MUIButton></button>
+          <button className='new-button'><MUIButton><AddLinkIcon/></MUIButton></button>
+          <button className='new-button'><MUIButton><BackupTableIcon/></MUIButton></button>
+
           <textarea
               ref={inputRef}
               value={inputValue}
@@ -165,14 +216,11 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
                 width: '100%',
                 padding: '10px',
                 fontSize: '16px',
-                marginBottom: '20px',
+                marginBottom: '6px',
                 minHeight: '200px',
               }}
             />
           <br />
-          <button className='new-button' onClick={() => applyFormat('bold', inputValue)}><MUIButton>Bold</MUIButton></button>
-          <button className='new-button' onClick={() => applyFormat('italic', inputValue)}><MUIButton>Italic</MUIButton></button>
-          <button className='new-button' onClick={() => applyFormat('underline', inputValue)}><MUIButton>Underline</MUIButton></button>
           <button className='new-button' onClick={handleSave}><MUIButton variant='outlined'>Save</MUIButton></button>
         </div>
         <div style={{ flex: 1, marginLeft: '20px', whiteSpace: 'pre-wrap' }}>
