@@ -95,10 +95,10 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
       <HeroWiki />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
       </Box>
-    <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      />
+      {/* <ToggleCustomTheme
+          showCustomTheme={showCustomTheme}
+          toggleCustomTheme={toggleCustomTheme}
+        /> */}
     </ThemeProvider>
   );
 };

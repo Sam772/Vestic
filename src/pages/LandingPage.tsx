@@ -96,10 +96,10 @@ export default function LandingPage() {
         <Divider />
         <Footer />
       </Box>
-      <ToggleCustomTheme
+      {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 }

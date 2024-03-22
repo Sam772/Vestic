@@ -591,10 +591,10 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
           )}
         </div>
       </Box>
-      <ToggleCustomTheme
+      {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 };

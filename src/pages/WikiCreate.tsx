@@ -109,10 +109,10 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
           </form>
         </div>
       </Box>
-    <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      />
+      {/* <ToggleCustomTheme
+          showCustomTheme={showCustomTheme}
+          toggleCustomTheme={toggleCustomTheme}
+        /> */}
     </ThemeProvider>
   );
 };

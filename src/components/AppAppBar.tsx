@@ -221,22 +221,54 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   >
                     <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                   </Box>
-                  <MenuItem onClick={() => scrollToSection('features')}>
-                    Features
-                  </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('testimonials')}>
-                    Testimonials
-                  </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('highlights')}>
-                    Highlights
-                  </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('pricing')}>
-                    Pricing
-                  </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
+                  <Link to="/">
+                    <MenuItem 
+                    // onClick={() => scrollToSection('features')}
+                    >
+                      <Typography variant="body2" color="text.primary">
+                        <div className='appappbar-link'>Home</div>
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/project/projectoverview">
+                    <MenuItem 
+                    // onClick={() => scrollToSection('testimonials')}
+                    >
+                      <Typography variant="body2" color="text.primary">
+                        <div className='appappbar-link'>Project Overview</div>
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/wiki">
+                    <MenuItem
+                    // onClick={() => scrollToSection('highlights')}
+                    >
+                      <Typography variant="body2" color="text.primary">
+                        <div className='appappbar-link'>Wiki</div>
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/analytics">
+                    <MenuItem
+                    // onClick={() => scrollToSection('pricing')}
+                    >
+                      <Typography variant="body2" color="text.primary">
+                        <div className='appappbar-link'>Analytics</div>
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/testing">
+                    <MenuItem
+                    // onClick={() => scrollToSection('faq')}
+                    >
+                      <Typography variant="body2" color="text.primary">
+                        <div className='appappbar-link'>Testing</div>
+                      </Typography>
+                    </MenuItem>
+                  </Link>
                   <Divider />
                   <MenuItem>
-                    <Button
+                    {/* <Button
                       color="primary"
                       variant="contained"
                       component="a"
@@ -245,10 +277,10 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       sx={{ width: '100%' }}
                     >
                       Sign up
-                    </Button>
+                    </Button> */}
                   </MenuItem>
                   <MenuItem>
-                    <Button
+                    {/* <Button
                       color="primary"
                       variant="outlined"
                       component="a"
@@ -257,7 +289,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       sx={{ width: '100%' }}
                     >
                       Sign in
-                    </Button>
+                    </Button> */}
                   </MenuItem>
                 </Box>
               </Drawer>

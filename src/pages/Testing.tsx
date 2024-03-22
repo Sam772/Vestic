@@ -79,10 +79,10 @@ const Testing: React.FC = () => {
           {/* <h1>Testing Page</h1> */}
         </div>
       </Box>
-      <ToggleCustomTheme
+      {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 };

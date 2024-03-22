@@ -79,10 +79,10 @@ const Analytics: React.FC = () => {
           {/* <h1>Analytics Page</h1> */}
         </div>
       </Box>
-      <ToggleCustomTheme
+      {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 };

@@ -144,10 +144,10 @@ const ProjectCreation: React.FC = () => {
           )}
         </div>
       </Box>
-    <ToggleCustomTheme
+    {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 };

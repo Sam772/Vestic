@@ -116,10 +116,10 @@ const WorkspaceCreation: React.FC = () => {
           </List>
         </div>
     </Box>
-      <ToggleCustomTheme
+      {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 };
