@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -64,7 +64,9 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
+
   const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Load input value from localStorage when pageName changes
@@ -91,6 +93,55 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
     localStorage.setItem(pageName, inputValue);
   }
 
+  // Function to apply formatting to the selected text
+  const applyFormat = (format: string, inputValue: string) => {
+    const input = inputRef.current;
+  
+    if (input) {
+      const selectionStart = input.selectionStart;
+      const selectionEnd = input.selectionEnd;
+  
+      console.log('Input:', input);
+      console.log('Selection Start:', selectionStart);
+      console.log('Selection End:', selectionEnd);
+  
+      if (selectionStart !== null && selectionEnd !== null) {
+        const selectedText = inputValue.substring(selectionStart, selectionEnd);
+        const prefix = inputValue.substring(0, selectionStart);
+        const suffix = inputValue.substring(selectionEnd);
+  
+        let formattedText = '';
+  
+        switch (format) {
+          case 'bold':
+            formattedText = `<strong>${selectedText}</strong>`;
+            break;
+          case 'italic':
+            formattedText = `<em>${selectedText}</em>`;
+            break;
+          case 'underline':
+            formattedText = `<u>${selectedText}</u>`;
+            break;
+          default:
+            break;
+        }
+  
+        const newText = `${prefix}${formattedText}${suffix}`;
+  
+        console.log('New Text:', newText);
+        setInputValue(newText);
+  
+        // Move cursor to the end of the inserted text
+        input.setSelectionRange(selectionStart + formattedText.length, selectionStart + formattedText.length);
+      } else {
+        console.log('No text selected.');
+      }
+    } else {
+      console.log('Input element is null.');
+    }
+  };
+  
+
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
@@ -99,6 +150,7 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
         <div className="main-content">
           <h2>Main Content</h2>
           <input
+            ref={inputRef}
             type="text"
             value={inputValue}
             onChange={handleInputChange}
@@ -112,8 +164,12 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
             }}
           />
           <br />
+          <button className='new-button' onClick={() => applyFormat('bold', inputValue)}><MUIButton>Bold</MUIButton></button>
+          <button className='new-button' onClick={() => applyFormat('italic', inputValue)}><MUIButton>Italic</MUIButton></button>
+          <button className='new-button' onClick={() => applyFormat('underline', inputValue)}><MUIButton>Underline</MUIButton></button>
           <button className='new-button' onClick={handleSave}><MUIButton variant='outlined'>Save</MUIButton></button>
         </div>
+        <p dangerouslySetInnerHTML={{ __html: inputValue }}></p>
       </Box>
       <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
