@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import PageContent from './PageContent';
+import Box from '@mui/material/Box';
 
 interface SidebarProps {
   pageNames: string[];
@@ -31,20 +32,26 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
   };
 
   return (
-    <div className="sidebar">
-      <h2>Your Wiki Pages</h2>
-      <List>
-        {pageNames.map(page => (
-          <ListItem key={page}>
-            <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
-              <ListItemText primary={page} />
-            </ListItemButton>
-            <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
-          </ListItem>
-        ))}
-      </List>
-      <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
-      <PageContent pageName={currentPageName} />
+    <div className='sidebar'>
+      <Box display="flex">
+        <Box flex="1">
+          <h2>Your Wiki Pages</h2>
+          <List>
+            {pageNames.map(page => (
+              <ListItem key={page}>
+                <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
+                  <ListItemText primary={page} />
+                </ListItemButton>
+                <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
+              </ListItem>
+            ))}
+          </List>
+          <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
+        </Box>
+        <Box flex="2">
+          <PageContent pageName={currentPageName} />
+        </Box>
+      </Box>
     </div>
   );
 };

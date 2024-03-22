@@ -66,7 +66,7 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
   const defaultTheme = createTheme({ palette: { mode } });
 
   const [inputValue, setInputValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     // Load input value from localStorage when pageName changes
@@ -84,7 +84,14 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
     setShowCustomTheme((prev) => !prev);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setInputValue(prevValue => prevValue + '\n');
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
 
@@ -148,28 +155,29 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px', flex: '1', padding: '80px', textAlign: 'center' }}>
         <div className="main-content">
-          <h2>Main Content</h2>
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Enter text..."
-            style={{
-              width: '80%',
-              padding: '10px',
-              fontSize: '16px',
-              marginBottom: '20px',
-              height: '200px',
-            }}
-          />
+          <textarea
+              ref={inputRef}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter text..."
+              style={{
+                width: '100%',
+                padding: '10px',
+                fontSize: '16px',
+                marginBottom: '20px',
+                minHeight: '200px',
+              }}
+            />
           <br />
           <button className='new-button' onClick={() => applyFormat('bold', inputValue)}><MUIButton>Bold</MUIButton></button>
           <button className='new-button' onClick={() => applyFormat('italic', inputValue)}><MUIButton>Italic</MUIButton></button>
           <button className='new-button' onClick={() => applyFormat('underline', inputValue)}><MUIButton>Underline</MUIButton></button>
           <button className='new-button' onClick={handleSave}><MUIButton variant='outlined'>Save</MUIButton></button>
         </div>
-        <p dangerouslySetInnerHTML={{ __html: inputValue }}></p>
+        <div style={{ flex: 1, marginLeft: '20px', whiteSpace: 'pre-wrap' }}>
+          <p dangerouslySetInnerHTML={{ __html: inputValue }}></p>
+        </div>
       </Box>
       <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
