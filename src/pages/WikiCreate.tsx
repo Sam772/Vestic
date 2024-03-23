@@ -11,6 +11,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
+import TextField from '@mui/material/TextField';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface ToggleCustomThemeProps {
@@ -97,14 +98,24 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
           <h1 className="wiki-heading">Create a Wiki</h1>
           <form className="wiki-form" onSubmit={handleSubmit}>
             <label htmlFor="pageName" className="wiki-label">Enter Wiki Name:</label>
-            <input
+            <TextField
+              type="text"
+              multiline
+              variant="outlined"
+              placeholder='Enter text...'
+              className="wiki-input"
+              required
+              value={pageName}
+              onChange={handleChange}
+            />
+            {/* <input
               type="text"
               id="pageName"
               value={pageName}
               onChange={handleChange}
               className="wiki-input"
               required
-            />
+            /> */}
             <button type="submit" className="new-button"><MUIButton variant='outlined'>Create Wiki</MUIButton></button>
           </form>
         </div>

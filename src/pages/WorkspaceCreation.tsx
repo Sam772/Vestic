@@ -10,6 +10,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import getLPTheme from '../getLPTheme';
+import TextField from '@mui/material/TextField';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface ToggleCustomThemeProps {
@@ -104,11 +105,29 @@ const WorkspaceCreation: React.FC = () => {
           <h1>Create Workspace</h1>
           <div className="input-container">
             <label>Workspace Name:</label>
-            <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} className="workspace-input" />
+            <TextField
+              type="text"
+              multiline
+              variant="outlined"
+              placeholder='Enter text...'
+              className="workspace-input"
+              value={workspaceName}
+              onChange={handleWorkspaceNameChange}
+              />
+            {/* <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} className="workspace-input" /> */}
           </div>
           <div className="input-container">
             <label>Workspace Description:</label>
-            <input type="text" value={workspaceDescription} onChange={handleWorkspaceDescriptionChange} className="workspace-input" />
+            <TextField
+              type="text"
+              multiline
+              variant="outlined"
+              placeholder='Enter text...'
+              className="workspace-input"
+              value={workspaceDescription}
+              onChange={handleWorkspaceDescriptionChange}
+              />
+            {/* <input type="text" value={workspaceDescription} onChange={handleWorkspaceDescriptionChange} className="workspace-input" /> */}
           </div>
           {error && <p className="error-message">{error}</p>}
           <List>

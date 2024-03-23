@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, KeyboardEventHandler } from 'react';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -17,6 +17,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
+import TextField from '@mui/material/TextField';
 import '../pages/Analytics'
 
 interface ToggleCustomThemeProps {
@@ -91,7 +92,27 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
     setShowCustomTheme((prev) => !prev);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  // const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  
+  //     const input = event.target as HTMLTextAreaElement;
+  //     const cursorPosition = input.selectionStart;
+  
+  //     // Get the text before and after the cursor position
+  //     const prefix = inputValue.substring(0, cursorPosition);
+  //     const suffix = inputValue.substring(cursorPosition);
+  
+  //     // Insert a new line at the cursor position
+  //     const newText = `${prefix}\n${suffix}`;
+  //     setInputValue(newText);
+  
+  //     // Move the cursor to the end of the inserted new line
+  //     input.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+  //   }
+  // };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
   
@@ -206,7 +227,24 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
           <button className='new-button'><MUIButton><AddLinkIcon/></MUIButton></button>
           <button className='new-button'><MUIButton><BackupTableIcon/></MUIButton></button>
 
-          <textarea
+          <TextField
+            multiline
+            rows={15}
+            variant="outlined"
+            placeholder='Enter text...'
+            inputRef={inputRef}
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            style={{
+              width: '100%',
+              padding: '10px',
+              fontSize: '16px',
+              marginBottom: '6px'
+            }}
+          />
+
+          {/* <textarea
               ref={inputRef}
               value={inputValue}
               onChange={handleInputChange}
@@ -217,9 +255,10 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
                 padding: '10px',
                 fontSize: '16px',
                 marginBottom: '6px',
-                minHeight: '200px',
+                minHeight: '300px',
               }}
-            />
+            /> */}
+
           <br />
           <button className='new-button' onClick={handleSave}><MUIButton variant='outlined'>Save</MUIButton></button>
         </div>
@@ -227,10 +266,10 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
           <p dangerouslySetInnerHTML={{ __html: inputValue }}></p>
         </div>
       </Box>
-      <ToggleCustomTheme
+      {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
     </ThemeProvider>
   );
 };
