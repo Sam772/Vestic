@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import PageContent from './PageContent';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
 interface SidebarProps {
@@ -14,6 +15,9 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWikiPage, currentPageName, setPageName }) => {
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const handleCreateWikiPage = () => {
     const pageName = prompt('Enter the name for the new Wiki Page:');
     if (pageName) {
@@ -23,9 +27,23 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
 
   const handleDeleteWikiPage = (pageName: string) => {
     if (window.confirm(`Are you sure you want to delete the Wiki Page "${pageName}"?`)) {
-      deleteWikiPage(pageName);
+      if (pageNames.length === 1) {
+        // If there's only one wiki page left, navigate to ../../wiki
+        navigate('../../wiki');
+        setPageName('');
+      } else if (pageName === currentPageName) {
+        // If deleting the current wiki page, navigate to the first wiki page in the list
+        deleteWikiPage(pageName);
+        const firstPageName = pageNames[0];
+        navigate(`../../wiki/wikis/${firstPageName}`);
+        setPageName(firstPageName);
+      } else {
+        // Otherwise, proceed with deleting the wiki page
+        deleteWikiPage(pageName);
+      }
     }
   };
+  
 
   const handleSelectWikiPage = (pageName: string) => {
     setPageName(pageName); // Set the selected page name
