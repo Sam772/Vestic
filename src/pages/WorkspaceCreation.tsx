@@ -108,7 +108,7 @@ const WorkspaceCreation: React.FC = () => {
         <div className="workspace-creation-container">
         <ThemeProvider theme={theme}>
           <Typography variant="h6">
-            <h1>Create Workspace</h1>
+            <h1>Create A Workspace</h1>
           </Typography>
         </ThemeProvider>
           <div className="input-container">

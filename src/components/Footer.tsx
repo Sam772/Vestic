@@ -56,7 +56,7 @@ export default function Footer() {
           }}
         >
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
-            <Box sx={{ ml: '-15px' }}>
+            {/* <Box sx={{ ml: '-15px' }}>
               <img
                 src={
                   'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
@@ -64,8 +64,8 @@ export default function Footer() {
                 style={logoStyle}
                 alt="logo of sitemark"
               />
-            </Box>
-            <Typography variant="body2" fontWeight={600} gutterBottom>
+            </Box> */}
+            {/* <Typography variant="body2" fontWeight={600} gutterBottom>
               Newsletter
             </Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
@@ -88,7 +88,7 @@ export default function Footer() {
               <Button variant="contained" color="primary" sx={{ flexShrink: 0 }}>
                 Subscribe
               </Button>
-            </Stack>
+            </Stack> */}
           </Box>
         </Box>
         <Box
@@ -99,25 +99,25 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" fontWeight={600}>
-            Product
+            Vestic
           </Typography>
-          <Link color="text.secondary" href="#">
-            Features
+          <Link color="text.secondary" href="/">
+            Home
           </Link>
-          <Link color="text.secondary" href="#">
-            Testimonials
+          <Link color="text.secondary" href="/project/projectoverview">
+            Project Overview
           </Link>
-          <Link color="text.secondary" href="#">
-            Highlights
+          <Link color="text.secondary" href="/wiki">
+            Wiki
           </Link>
-          <Link color="text.secondary" href="#">
-            Pricing
+          <Link color="text.secondary" href="/analytics">
+            Analytics
           </Link>
-          <Link color="text.secondary" href="#">
-            FAQs
+          <Link color="text.secondary" href="/testing">
+            Testing
           </Link>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             display: { xs: 'none', sm: 'flex' },
             flexDirection: 'column',
@@ -136,8 +136,8 @@ export default function Footer() {
           <Link color="text.secondary" href="#">
             Press
           </Link>
-        </Box>
-        <Box
+        </Box> */}
+        {/* <Box
           sx={{
             display: { xs: 'none', sm: 'flex' },
             flexDirection: 'column',
@@ -156,7 +156,7 @@ export default function Footer() {
           <Link color="text.secondary" href="#">
             Contact
           </Link>
-        </Box>
+        </Box> */}
       </Box>
       <Box
         sx={{
@@ -169,7 +169,7 @@ export default function Footer() {
         }}
       >
         <div>
-          <Link color="text.secondary" href="#">
+          {/* <Link color="text.secondary" href="#">
             Privacy Policy
           </Link>
           <Typography display="inline" sx={{ mx: 0.5, opacity: 0.5 }}>
@@ -177,8 +177,8 @@ export default function Footer() {
           </Typography>
           <Link color="text.secondary" href="#">
             Terms of Service
-          </Link>
-          <Copyright />
+          </Link> */}
+          {/* <Copyright /> */}
         </div>
         <Stack
           direction="row"
@@ -189,7 +189,7 @@ export default function Footer() {
             color: 'text.secondary',
           }}
         >
-          <IconButton
+          {/* <IconButton
             color="inherit"
             href="https://github.com/mui"
             aria-label="GitHub"
@@ -212,7 +212,7 @@ export default function Footer() {
             sx={{ alignSelf: 'center' }}
           >
             <LinkedInIcon />
-          </IconButton>
+          </IconButton> */}
         </Stack>
       </Box>
     </Container>

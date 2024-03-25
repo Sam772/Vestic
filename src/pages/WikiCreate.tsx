@@ -106,7 +106,7 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
           </ThemeProvider>
           <form className="wiki-form" onSubmit={handleSubmit}>
             <ThemeProvider theme={theme}>
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" sx={{ textAlign: 'center'}}>
                 <label htmlFor="pageName" className="wiki-label">Enter Wiki Name</label>
               </Typography>
             </ThemeProvider>

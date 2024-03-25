@@ -61,18 +61,18 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
       <ThemeProvider theme={theme}>
         <Box display="flex">
           <Box flex="1" sx={{ paddingTop: '80px' }}>
-          <Typography variant="h5">Your Wiki Pages</Typography>
+          <Typography variant="h5">Your Wikis</Typography>
             <List>
               {pageNames.map(page => (
                 <ListItem key={page}>
                   <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
                     <ListItemText primary={page} />
                   </ListItemButton>
-                  <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
+                  <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete Wiki</Button>
                 </ListItem>
               ))}
             </List>
-            <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
+            <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki</Button>
           </Box>
           <Box flex="2">
             <PageContent pageName={currentPageName} />

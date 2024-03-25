@@ -116,19 +116,28 @@ const ProjectCreation: React.FC = () => {
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className="project-creation-page-container">
           <div className="sidebar">
-            <button onClick={handleWorkspaceButtonClick} className="new-button"><MUIButton variant='outlined'>{name}</MUIButton></button>
-            <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton variant='outlined'>Create a Workspace</MUIButton></button>
+            <ThemeProvider theme={theme}>
+              <Typography variant="h5">Your Workspaces</Typography>
+            </ThemeProvider>
+            <List>
+              <button onClick={handleWorkspaceButtonClick} className="new-button"><MUIButton variant='outlined'>{name}</MUIButton></button>
+              <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton variant='outlined'>Create a Workspace</MUIButton></button>
+            </List>
           </div>
           <div className="main-content">
           <ThemeProvider theme={theme}>
             <Typography variant="h6">
               <h1 className="project-creation-page-heading">Project Creation Page</h1>
-              <div className="workspace-details-container">
-                <h2>Workspace Details</h2>
-                <p>Name: {name}</p>
-                <p>Description: {workspaceDescription}</p>
-              </div>
             </Typography>
+          </ThemeProvider>
+          <ThemeProvider theme={theme}>
+              <Typography variant="subtitle1">
+                <div className="workspace-details-container">
+                  <h2>Workspace Details</h2>
+                  <p>Name: {name}</p>
+                  <p>Description: {workspaceDescription}</p>
+                </div>
+              </Typography>
           </ThemeProvider>
             {showProjectList && (
               <div className="project-list-container">
