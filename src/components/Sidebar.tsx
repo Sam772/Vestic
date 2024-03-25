@@ -4,6 +4,8 @@ import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/mater
 import PageContent from './PageContent';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 interface SidebarProps {
   pageNames: string[];
@@ -17,6 +19,9 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
 
   const handleCreateWikiPage = () => {
     const pageName = prompt('Enter the name for the new Wiki Page:');
@@ -53,25 +58,27 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
 
   return (
     <div className='sidebar'>
-      <Box display="flex">
-        <Box flex="1">
-          <h2>Your Wiki Pages</h2>
-          <List>
-            {pageNames.map(page => (
-              <ListItem key={page}>
-                <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
-                  <ListItemText primary={page} />
-                </ListItemButton>
-                <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
-              </ListItem>
-            ))}
-          </List>
-          <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
+      <ThemeProvider theme={theme}>
+        <Box display="flex">
+          <Box flex="1" sx={{ paddingTop: '80px' }}>
+          <Typography variant="h5">Your Wiki Pages</Typography>
+            <List>
+              {pageNames.map(page => (
+                <ListItem key={page}>
+                  <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
+                    <ListItemText primary={page} />
+                  </ListItemButton>
+                  <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete</Button>
+                </ListItem>
+              ))}
+            </List>
+            <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki Page</Button>
+          </Box>
+          <Box flex="2">
+            <PageContent pageName={currentPageName} />
+          </Box>
         </Box>
-        <Box flex="2">
-          <PageContent pageName={currentPageName} />
-        </Box>
-      </Box>
+      </ThemeProvider>
     </div>
   );
 };

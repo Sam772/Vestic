@@ -4,7 +4,7 @@ import './Wiki.css';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
@@ -13,6 +13,7 @@ import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
 import TextField from '@mui/material/TextField';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -68,6 +69,9 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
 
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
+
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
@@ -95,9 +99,17 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
         <div className="wiki-container">
-          <h1 className="wiki-heading">Create a Wiki</h1>
+          <ThemeProvider theme={theme}>
+            <Typography variant="h6">
+              <h1 className="wiki-heading">Create a Wiki</h1>
+            </Typography>
+          </ThemeProvider>
           <form className="wiki-form" onSubmit={handleSubmit}>
-            <label htmlFor="pageName" className="wiki-label">Enter Wiki Name:</label>
+            <ThemeProvider theme={theme}>
+              <Typography variant="subtitle1">
+                <label htmlFor="pageName" className="wiki-label">Enter Wiki Name</label>
+              </Typography>
+            </ThemeProvider>
             <TextField
               type="text"
               multiline

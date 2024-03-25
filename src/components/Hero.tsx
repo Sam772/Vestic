@@ -7,11 +7,16 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { Link as Link2 } from 'react-router-dom';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import '../pages/LandingPage.css'
 
 export default function Hero() {
+
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
+
   return (
     <Box
       id="hero"

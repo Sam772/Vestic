@@ -5,7 +5,7 @@ import ProjectModal from '../components/ProjectModal';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
@@ -13,6 +13,7 @@ import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -63,6 +64,9 @@ const ProjectCreation: React.FC = () => {
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
+
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
 
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -116,12 +120,16 @@ const ProjectCreation: React.FC = () => {
             <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton variant='outlined'>Create a Workspace</MUIButton></button>
           </div>
           <div className="main-content">
-            <h1 className="project-creation-page-heading">Project Creation Page</h1>
-            <div className="workspace-details-container">
-              <h2>Current Workspace Details</h2>
-              <p>Name: {name}</p>
-              <p>Description: {workspaceDescription}</p>
-            </div>
+          <ThemeProvider theme={theme}>
+            <Typography variant="h6">
+              <h1 className="project-creation-page-heading">Project Creation Page</h1>
+              <div className="workspace-details-container">
+                <h2>Workspace Details</h2>
+                <p>Name: {name}</p>
+                <p>Description: {workspaceDescription}</p>
+              </div>
+            </Typography>
+          </ThemeProvider>
             {showProjectList && (
               <div className="project-list-container">
                 <h2>Projects</h2>

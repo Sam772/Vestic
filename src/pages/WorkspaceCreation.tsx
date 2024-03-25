@@ -4,7 +4,7 @@ import './WorkspaceCreation.css';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
@@ -12,6 +12,7 @@ import AppAppBar from '../components/AppAppBar';
 import getLPTheme from '../getLPTheme';
 import TextField from '@mui/material/TextField';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -63,6 +64,9 @@ const WorkspaceCreation: React.FC = () => {
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
 
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
+
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
@@ -102,22 +106,34 @@ const WorkspaceCreation: React.FC = () => {
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
         <div className="workspace-creation-container">
-          <h1>Create Workspace</h1>
+        <ThemeProvider theme={theme}>
+          <Typography variant="h6">
+            <h1>Create Workspace</h1>
+          </Typography>
+        </ThemeProvider>
           <div className="input-container">
-            <label>Workspace Name:</label>
-            <TextField
-              type="text"
-              multiline
-              variant="outlined"
-              placeholder='Enter text...'
-              className="workspace-input"
-              value={workspaceName}
-              onChange={handleWorkspaceNameChange}
-              />
-            {/* <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} className="workspace-input" /> */}
+            <ThemeProvider theme={theme}>
+              <Typography variant="subtitle1">
+                <label>Enter Workspace Name</label>
+              </Typography>
+            </ThemeProvider>
+              <TextField
+                type="text"
+                multiline
+                variant="outlined"
+                placeholder='Enter text...'
+                className="workspace-input"
+                value={workspaceName}
+                onChange={handleWorkspaceNameChange}
+                />
+              {/* <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} className="workspace-input" /> */}
           </div>
           <div className="input-container">
-            <label>Workspace Description:</label>
+            <ThemeProvider theme={theme}>
+                <Typography variant="subtitle1">
+                  <label>Enter Workspace Description</label>
+                </Typography>
+            </ThemeProvider>
             <TextField
               type="text"
               multiline
