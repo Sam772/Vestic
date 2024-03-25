@@ -22,6 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
     const pageName = prompt('Enter the name for the new Wiki Page:');
     if (pageName) {
       createWikiPage(pageName);
+      navigate(`/wiki/wikis/${pageName}`);
     }
   };
 
@@ -34,7 +35,8 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
       } else if (pageName === currentPageName) {
         // If deleting the current wiki page, navigate to the first wiki page in the list
         deleteWikiPage(pageName);
-        const firstPageName = pageNames[0];
+        const remainingPages = pageNames.filter(page => page !== pageName);
+        const firstPageName = remainingPages[0];
         navigate(`../../wiki/wikis/${firstPageName}`);
         setPageName(firstPageName);
       } else {
