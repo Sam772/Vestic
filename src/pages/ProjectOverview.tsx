@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
-import { useDrop, useDrag, DropTargetMonitor } from 'react-dnd';
+import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from 'react-dnd';
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -89,6 +89,10 @@ const initialTasks: Tasks = {
 
 interface DropResult {
   columnName: ColumnName;
+}
+
+interface DraggableColumnProps {
+  columnName: string; // Define the type of columnName
 }
 
 // Represents the page content
@@ -348,37 +352,75 @@ const KanbanBoard: React.FC = () => {
     closeModal();
   };
 
-// Allows dropping and dragging of tasks
-const [, drop] = useDrop({
-  accept: 'TASK', // Accept dropped items of type 'TASK'
-  drop: (item: { id: number; sourceColumn: string }) => {
-    // Handle dropping the task into the respective column
-    moveTask(item.id, item.sourceColumn as ColumnName, selectedColumn as ColumnName);
-  },
-});
+  // Allows dropping and dragging of tasks
+  const [, drop] = useDrop({
+    accept: 'TASK', // Accept dropped items of type 'TASK'
+    drop: (item: { id: number; sourceColumn: string }) => {
+      // Handle dropping the task into the respective column
+      moveTask(item.id, item.sourceColumn as ColumnName, selectedColumn as ColumnName);
+    },
+  });
 
-// Handle the onDrop event
-const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-  // Prevent the default behavior
-  event.preventDefault();
+  // const DraggableColumn: React.FC<DraggableColumnProps> = ({ columnName }) => {
+  //   // Define drag functionality for columns
+  //   const [, columnDrag] = useDrag({
+  //     type: 'COLUMN',
+  //     item: { type: 'COLUMN' },
+  //     collect: (monitor) => ({
+  //       isDragging: monitor.isDragging(),
+  //     })
+  //   });
+  // }
 
-  // Retrieve the task data from the drag event
-  const taskId = event.dataTransfer.getData('taskId');
-  const sourceColumn = event.dataTransfer.getData('sourceColumn');
-  const targetColumn = event.currentTarget.id as ColumnName; // Extract the column name from the drop target
+  // Allows dropping and dragging of columns
+  const [, columnDrop] = useDrop({
+    accept: 'COLUMN', // Accept dropped items of type 'COLUMN'
+    drop: (item: { columnName: ColumnName }) => {
+      // Handle dropping the column
+      moveColumn(item.columnName, selectedColumn as ColumnName);
+    },
+  });
 
-  // If the task ID and source column are available, move the task
-  if (taskId && sourceColumn) {
-    // Move the task to the target column
-    if (targetColumn !== null && targetColumn !== sourceColumn) {
-      moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn);
+  const moveColumn = (dragColumnName: ColumnName, hoverColumnName: ColumnName) => {
+    // Find the indices of the columns being dragged and hovered over
+    const dragIndex = columnOrder.indexOf(dragColumnName);
+    const hoverIndex = columnOrder.indexOf(hoverColumnName);
+  
+    // Make a copy of the column order array
+    const newColumnOrder = [...columnOrder];
+  
+    // Remove the dragged column from its original position
+    const [draggedColumn] = newColumnOrder.splice(dragIndex, 1);
+  
+    // Insert the dragged column at the position of the hovered column
+    newColumnOrder.splice(hoverIndex, 0, draggedColumn);
+  
+    // Update the state with the new column order
+    setColumnOrder(newColumnOrder);
+  };
+
+  // Handle the onDrop event
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    // Prevent the default behavior
+    event.preventDefault();
+
+    // Retrieve the task data from the drag event
+    const taskId = event.dataTransfer.getData('taskId');
+    const sourceColumn = event.dataTransfer.getData('sourceColumn');
+    const targetColumn = event.currentTarget.id as ColumnName; // Extract the column name from the drop target
+
+    // If the task ID and source column are available, move the task
+    if (taskId && sourceColumn) {
+      // Move the task to the target column
+      if (targetColumn !== null && targetColumn !== sourceColumn) {
+        moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn);
+      }
     }
-  }
-};
+  };
 
-const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-  event.preventDefault();
-};
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
 
   // For creating a new column
   const handleCreateNewColumn = (columnName: ColumnName | null, newName: string) => {
@@ -505,7 +547,15 @@ const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
             />
           </div>
           {columnOrder.map(columnName => (
-            <div key={columnName} className="column" style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }} id={columnName} onDrop={handleDrop} onDragOver={handleDragOver}>
+            <div 
+              key={columnName}
+              className="column"
+              style={{ maxHeight: `${calculateColumnHeight(columnName)}px` }}
+              id={columnName}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              //ref={columnDrag}
+            >
               <h2>
                 {selectedColumn === columnName ? (
                   <div className="column">
