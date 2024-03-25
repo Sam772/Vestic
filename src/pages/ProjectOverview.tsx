@@ -370,7 +370,9 @@ const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
   // If the task ID and source column are available, move the task
   if (taskId && sourceColumn) {
     // Move the task to the target column
-    moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn);
+    if (targetColumn !== null && targetColumn !== sourceColumn) {
+      moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn);
+    }
   }
 };
 
