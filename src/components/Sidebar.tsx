@@ -35,6 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
     if (window.confirm(`Are you sure you want to delete the Wiki Page "${pageName}"?`)) {
       if (pageNames.length === 1) {
         // If there's only one wiki page left, navigate to ../../wiki
+        deleteWikiPage(pageName);
         navigate('../../wiki');
         setPageName('');
       } else if (pageName === currentPageName) {
@@ -50,7 +51,6 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
       }
     }
   };
-  
 
   const handleSelectWikiPage = (pageName: string) => {
     setPageName(pageName); // Set the selected page name

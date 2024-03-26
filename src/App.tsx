@@ -42,7 +42,7 @@ const App: React.FC = () => {
             <Route path="/:name" element={<ProjectCreation />} />
             <Route path="/workspacecreation" element={<WorkspaceCreation />} />
             <Route path="/:workspace/:projectName" element={<KanbanBoard />} />
-            <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} />} />
+            <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} wikiPages={wikiPages} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/testing" element={<Testing />} />
             <Route path="/wikicreate" element={<WikiCreate createWikiPage={createWikiPage} />} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './ProjectCreation.css';
 import ProjectModal from '../components/ProjectModal';
@@ -12,7 +12,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
-import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 interface ToggleCustomThemeProps {
@@ -82,6 +82,18 @@ const ProjectCreation: React.FC = () => {
 
   const workspaceDescription = new URLSearchParams(location.search).get('description') || '';
 
+  // State to store the list of workspaces
+  const [workspaces, setWorkspaces] = useState<string[]>(() => {
+    // Retrieve workspaces from local storage when component mounts
+    const storedWorkspaces = localStorage.getItem('workspaces');
+    return storedWorkspaces ? JSON.parse(storedWorkspaces) : [];
+  });
+
+  useEffect(() => {
+    // Update local storage when workspaces state changes
+    localStorage.setItem('workspaces', JSON.stringify(workspaces));
+  }, [workspaces]);
+
   const [showProjectList, setShowProjectList] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -95,6 +107,12 @@ const ProjectCreation: React.FC = () => {
 
   const handleCreateProjectClick = () => {
     setIsModalOpen(true);
+  };
+
+  const handleWorkspaceCreate = (workspaceName: string) => {
+    // Close modal and add the new workspace to the list
+    setIsModalOpen(false);
+    setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspaceName]);
   };
 
   const handleProjectCreate = (projectName: string, projectDescription: string) => {
@@ -120,8 +138,12 @@ const ProjectCreation: React.FC = () => {
               <Typography variant="h5">Your Workspaces</Typography>
             </ThemeProvider>
             <List>
-              <button onClick={handleWorkspaceButtonClick} className="new-button"><MUIButton variant='outlined'>{name}</MUIButton></button>
-              <button onClick={() => navigate('/workspacecreation')} className="new-button"><MUIButton variant='outlined'>Create a Workspace</MUIButton></button>
+              <ListItemButton onClick={handleWorkspaceButtonClick}>
+                <Button variant='outlined'>{name}</Button>
+              </ListItemButton >
+              <ListItemButton onClick={() => navigate('/workspacecreation')}>
+                <Button variant='outlined'>Create a Workspace</Button>
+              </ListItemButton>
             </List>
           </div>
           <div className="main-content">
@@ -142,12 +164,12 @@ const ProjectCreation: React.FC = () => {
             {showProjectList && (
               <div className="project-list-container">
                 <h2>Projects</h2>
-                <button onClick={handleProjectButtonClick} className="new-button"><MUIButton variant='outlined'>Project 1</MUIButton></button>
-                <button onClick={handleProjectButtonClick} className="new-button"><MUIButton variant='outlined'>Project 2</MUIButton></button>
+                <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 1</Button></button>
+                <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 2</Button></button>
               </div>
             )}
             <div className="create-project-container">
-              <button onClick={handleCreateProjectClick} className="new-button"><MUIButton variant='outlined'>Create New Project</MUIButton></button>
+              <button onClick={handleCreateProjectClick} className="new-button"><Button variant='outlined'>Create New Project</Button></button>
             </div>
           </div>
           {isModalOpen && (

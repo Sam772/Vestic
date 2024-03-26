@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Wiki.css';
 import { PaletteMode } from '@mui/material';
@@ -58,9 +58,10 @@ function ToggleCustomTheme({
 
 interface WikiProps {
   createWikiPage: (pageName: string) => void;
+  wikiPages: string[];
 }
 
-const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
+const Wiki: React.FC<WikiProps> = ({ createWikiPage, wikiPages }) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -78,10 +79,18 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
   const [pageName, setPageName] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Redirect to the first wiki page if already exist
+    if (wikiPages.length > 0) {
+      const firstPage = wikiPages[0];
+      navigate(`/wiki/wikis/${firstPage}`);
+    }
+  }, [navigate, wikiPages]);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     createWikiPage(pageName);
-    navigate(`/wiki/${pageName}`);
+    navigate(`/wiki/wikis/${pageName}`);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
