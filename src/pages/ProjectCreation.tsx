@@ -101,7 +101,8 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
   const [showProjectList, setShowProjectList] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleWorkspaceButtonClick = () => {
+  const handleWorkspaceButtonClick = (workspaceName: string) => {
+    navigate(`/${workspaceName}`);
     setShowProjectList(true);
   };
 
@@ -143,7 +144,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
             <List>
               {workspaces.map((workspace, index) => (
                 <ListItem key={index}>
-                  <ListItemButton onClick={handleWorkspaceButtonClick}>
+                  <ListItemButton onClick={() => handleWorkspaceButtonClick(workspace.name)}>
                     <Button variant='outlined'>{workspace.name}</Button>
                   </ListItemButton>
                   <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)}>Delete Workspace</Button>
