@@ -14,10 +14,16 @@ import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import WorkspaceCreation from './WorkspaceCreation';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
   toggleCustomTheme: () => void;
+}
+
+interface Workspace {
+  name: string;
+  description: string;
 }
 
 function ToggleCustomTheme({
@@ -58,7 +64,7 @@ function ToggleCustomTheme({
   );
 }
 
-const ProjectCreation: React.FC = () => {
+const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = () => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -83,8 +89,7 @@ const ProjectCreation: React.FC = () => {
   const workspaceDescription = new URLSearchParams(location.search).get('description') || '';
 
   // State to store the list of workspaces
-  const [workspaces, setWorkspaces] = useState<string[]>(() => {
-    // Retrieve workspaces from local storage when component mounts
+  const [workspaces, setWorkspaces] = useState<Workspace[]>(() => {
     const storedWorkspaces = localStorage.getItem('workspaces');
     return storedWorkspaces ? JSON.parse(storedWorkspaces) : [];
   });
@@ -109,10 +114,8 @@ const ProjectCreation: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleWorkspaceCreate = (workspaceName: string) => {
-    // Close modal and add the new workspace to the list
-    setIsModalOpen(false);
-    setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspaceName]);
+  const handleWorkspaceCreate = (workspace: Workspace) => {
+    setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspace]);
   };
 
   const handleProjectCreate = (projectName: string, projectDescription: string) => {
@@ -127,6 +130,7 @@ const ProjectCreation: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  {console.log(workspaces)}
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
@@ -138,9 +142,17 @@ const ProjectCreation: React.FC = () => {
               <Typography variant="h5">Your Workspaces</Typography>
             </ThemeProvider>
             <List>
+              {workspaces.map((workspace, index) => (
+                <ListItem key={index}>
+                  <ListItemButton onClick={handleWorkspaceButtonClick}>
+                    <Button variant='outlined'>{workspace.name}</Button>
+                  </ListItemButton>
+                  {workspace.name}
+                </ListItem>
+              ))}
               <ListItemButton onClick={handleWorkspaceButtonClick}>
                 <Button variant='outlined'>{name}</Button>
-              </ListItemButton >
+              </ListItemButton>
               <ListItemButton onClick={() => navigate('/workspacecreation')}>
                 <Button variant='outlined'>Create a Workspace</Button>
               </ListItemButton>

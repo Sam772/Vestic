@@ -19,6 +19,15 @@ interface ToggleCustomThemeProps {
   toggleCustomTheme: () => void;
 }
 
+export interface Workspace {
+  name: string;
+  description: string;
+}
+
+interface WorkspaceCreationProps {
+  handleWorkspaceCreate: (workspace: Workspace) => void;
+}
+
 function ToggleCustomTheme({
   showCustomTheme,
   toggleCustomTheme,
@@ -57,7 +66,7 @@ function ToggleCustomTheme({
   );
 }
 
-const WorkspaceCreation: React.FC = () => {
+const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCreate }) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -75,6 +84,7 @@ const WorkspaceCreation: React.FC = () => {
     setShowCustomTheme((prev) => !prev);
   };
 
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [workspaceName, setWorkspaceName] = useState('');
   const [workspaceDescription, setWorkspaceDescription] = useState('');
   const [error, setError] = useState('');
@@ -94,10 +104,31 @@ const WorkspaceCreation: React.FC = () => {
       return;
     }
 
-    const workspace = { name: workspaceName, description: workspaceDescription };
-    localStorage.setItem('workspace', JSON.stringify(workspace));
+    // Update the list of workspaces
+    setWorkspaces((prevWorkspaces: Workspace[]) => [
+      ...prevWorkspaces,
+      { name: workspaceName, description: workspaceDescription },
+    ]);
+
+    // Create workspace object
+    const newWorkspace: Workspace = {
+      name: workspaceName,
+      description: workspaceDescription,
+    };
+
+    // Call handleWorkspaceCreate function to update workspaces state
+    handleWorkspaceCreate(newWorkspace);
+
+    setWorkspaceName('');
+    setWorkspaceDescription('');
+    setError('');
+
+    // const workspace = { name: workspaceName, description: workspaceDescription };
+    // localStorage.setItem('workspace', JSON.stringify(workspace));
+
+    navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`, { state: { workspaces } });
+
     //navigate(`/projectcreation?name=${encodeURIComponent(workspaceName)}&description=${encodeURIComponent(workspaceDescription)}`);
-    navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
   };
 
   return (

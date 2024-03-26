@@ -8,6 +8,7 @@ import LandingPage from './pages/LandingPage';
 import KanbanBoard from './pages/ProjectOverview';
 import ProjectCreation from './pages/ProjectCreation';
 import WorkspaceCreation from './pages/WorkspaceCreation';
+import { Workspace } from './pages/WorkspaceCreation';
 import Wiki from './pages/Wiki';
 import Analytics from './pages/Analytics';
 import Testing from './pages/Testing';
@@ -19,6 +20,7 @@ import { Link } from './components/Types';
 const App: React.FC = () => {
   const [wikiPages, setWikiPages] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<string>('');
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   const createWikiPage = (pageName: string) => {
     setWikiPages([...wikiPages, pageName]);
@@ -33,14 +35,18 @@ const App: React.FC = () => {
     }
   };
 
+  const handleWorkspaceCreate = (workspace: Workspace) => {
+    setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspace]);
+  };
+
   return (
     <Router>
       <DndProvider backend={HTML5Backend}>
         <div>
           <Routes>
             <Route path="/" element={<LandingPage/>} />
-            <Route path="/:name" element={<ProjectCreation />} />
-            <Route path="/workspacecreation" element={<WorkspaceCreation />} />
+            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} />} />
+            <Route path="/workspacecreation" element={<WorkspaceCreation handleWorkspaceCreate={handleWorkspaceCreate}/>} />
             <Route path="/:workspace/:projectName" element={<KanbanBoard />} />
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} wikiPages={wikiPages} />} />
             <Route path="/analytics" element={<Analytics />} />
