@@ -64,7 +64,7 @@ function ToggleCustomTheme({
   );
 }
 
-const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = () => {
+const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = ( { workspaces } ) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -87,13 +87,7 @@ const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = () => {
   const { name } = useParams<{ name: string }>();
 
   const workspaceDescription = new URLSearchParams(location.search).get('description') || '';
-
-  // State to store the list of workspaces
-  const [workspaces, setWorkspaces] = useState<Workspace[]>(() => {
-    const storedWorkspaces = localStorage.getItem('workspaces');
-    return storedWorkspaces ? JSON.parse(storedWorkspaces) : [];
-  });
-
+  
   useEffect(() => {
     // Update local storage when workspaces state changes
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
@@ -112,10 +106,6 @@ const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = () => {
 
   const handleCreateProjectClick = () => {
     setIsModalOpen(true);
-  };
-
-  const handleWorkspaceCreate = (workspace: Workspace) => {
-    setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspace]);
   };
 
   const handleProjectCreate = (projectName: string, projectDescription: string) => {

@@ -103,33 +103,25 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
       setError('Please fill in both workspace name and description.');
       return;
     }
-
-    // Update the list of workspaces
-    setWorkspaces((prevWorkspaces: Workspace[]) => [
-      ...prevWorkspaces,
-      { name: workspaceName, description: workspaceDescription },
-    ]);
-
+  
     // Create workspace object
     const newWorkspace: Workspace = {
       name: workspaceName,
       description: workspaceDescription,
     };
-
+  
     // Call handleWorkspaceCreate function to update workspaces state
     handleWorkspaceCreate(newWorkspace);
+  
+    console.log(newWorkspace)
 
     setWorkspaceName('');
     setWorkspaceDescription('');
     setError('');
-
-    // const workspace = { name: workspaceName, description: workspaceDescription };
-    // localStorage.setItem('workspace', JSON.stringify(workspace));
-
+  
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`, { state: { workspaces } });
-
-    //navigate(`/projectcreation?name=${encodeURIComponent(workspaceName)}&description=${encodeURIComponent(workspaceDescription)}`);
   };
+  
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
