@@ -26,6 +26,11 @@ interface Workspace {
   description: string;
 }
 
+interface ProjectCreationProps {
+  workspaces: Workspace[];
+  deleteWorkspace: (workspaceName: string) => void;
+}
+
 function ToggleCustomTheme({
   showCustomTheme,
   toggleCustomTheme,
@@ -64,7 +69,7 @@ function ToggleCustomTheme({
   );
 }
 
-const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = ( { workspaces } ) => {
+const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWorkspace } ) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -87,7 +92,7 @@ const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = ( { workspaces } 
   const { name } = useParams<{ name: string }>();
 
   const workspaceDescription = new URLSearchParams(location.search).get('description') || '';
-  
+
   useEffect(() => {
     // Update local storage when workspaces state changes
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
@@ -115,12 +120,16 @@ const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = ( { workspaces } 
     navigate(`/${projectLink}`, { state: { projectName, projectDescription } });
   };
   
+  // Function to delete a workspace
+  const handleDeleteWorkspace = (workspaceName: string) => {
+    deleteWorkspace(workspaceName);
+    // Optionally, you can navigate to a different page or show a confirmation message after deletion
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  {console.log(workspaces)}
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
@@ -137,12 +146,9 @@ const ProjectCreation: React.FC<{ workspaces: Workspace[] }> = ( { workspaces } 
                   <ListItemButton onClick={handleWorkspaceButtonClick}>
                     <Button variant='outlined'>{workspace.name}</Button>
                   </ListItemButton>
-                  {workspace.name}
+                  <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)}>Delete Workspace</Button>
                 </ListItem>
               ))}
-              <ListItemButton onClick={handleWorkspaceButtonClick}>
-                <Button variant='outlined'>{name}</Button>
-              </ListItemButton>
               <ListItemButton onClick={() => navigate('/workspacecreation')}>
                 <Button variant='outlined'>Create a Workspace</Button>
               </ListItemButton>

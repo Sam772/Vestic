@@ -39,13 +39,20 @@ const App: React.FC = () => {
     setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspace]);
   };
 
+  const deleteWorkspace = (workspaceName: string) => {
+    const updatedWorkspaces = workspaces.filter(workspace => workspace.name !== workspaceName);
+    setWorkspaces(updatedWorkspaces);
+    // Optionally, you can also update local storage if needed
+    localStorage.setItem('workspaces', JSON.stringify(updatedWorkspaces));
+  };
+
   return (
     <Router>
       <DndProvider backend={HTML5Backend}>
         <div>
           <Routes>
             <Route path="/" element={<LandingPage/>} />
-            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} />} />
+            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} deleteWorkspace={deleteWorkspace}/>} />
             <Route path="/workspacecreation" element={<WorkspaceCreation handleWorkspaceCreate={handleWorkspaceCreate}/>} />
             <Route path="/:workspace/:projectName" element={<KanbanBoard />} />
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} wikiPages={wikiPages} />} />
