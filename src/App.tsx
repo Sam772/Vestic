@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
@@ -7,6 +7,7 @@ import AppAppBar from './components/AppAppBar';
 import LandingPage from './pages/LandingPage';
 import KanbanBoard from './pages/ProjectOverview';
 import ProjectCreation from './pages/ProjectCreation';
+import { Project } from './pages/ProjectCreation';
 import WorkspaceCreation from './pages/WorkspaceCreation';
 import { Workspace } from './pages/WorkspaceCreation';
 import Wiki from './pages/Wiki';
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const [wikiPages, setWikiPages] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<string>('');
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const createWikiPage = (pageName: string) => {
     setWikiPages([...wikiPages, pageName]);
@@ -46,13 +48,22 @@ const App: React.FC = () => {
     localStorage.setItem('workspaces', JSON.stringify(updatedWorkspaces));
   };
 
+  // In the parent component where ProjectCreation is used
+  useEffect(() => {
+    // Retrieve projects from local storage when ProjectCreation is initialized
+    const storedProjects = localStorage.getItem('projects');
+    if (storedProjects) {
+      setProjects(JSON.parse(storedProjects));
+    }
+  }, []);
+
   return (
     <Router>
       <DndProvider backend={HTML5Backend}>
         <div>
           <Routes>
             <Route path="/" element={<LandingPage/>} />
-            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} deleteWorkspace={deleteWorkspace}/>} />
+            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} deleteWorkspace={deleteWorkspace} projects={projects} setProjects={setProjects}/>} />
             <Route path="/workspacecreation" element={<WorkspaceCreation handleWorkspaceCreate={handleWorkspaceCreate}/>} />
             <Route path="/:workspace/:projectName" element={<KanbanBoard />} />
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} wikiPages={wikiPages} />} />

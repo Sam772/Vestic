@@ -28,10 +28,12 @@ interface Workspace {
 
 interface ProjectCreationProps {
   workspaces: Workspace[];
+  projects: Project[];
   deleteWorkspace: (workspaceName: string) => void;
+  setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
 }
 
-interface Project {
+export interface Project {
   name: string;
   description: string;
 }
@@ -74,7 +76,7 @@ function ToggleCustomTheme({
   );
 }
 
-const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWorkspace } ) => {
+const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWorkspace, projects, setProjects } ) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -103,8 +105,13 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
   }, [workspaces]);
 
+  // In ProjectCreation component
+  useEffect(() => {
+    // Save projects to local storage whenever it changes
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }, [projects]);
+
   const [selectedWorkspace, setSelectedWorkspace] = useState<string>('');
-  const [projects, setProjects] = useState<Project[]>([]);
 
   const [showProjectList, setShowProjectList] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -116,8 +123,8 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
     setProjects([]);
   };
 
-  const handleProjectButtonClick = () => {
-    navigate('/projectoverview');
+  const handleProjectButtonClick = (projectName: string) => {
+    navigate(`/${encodeURIComponent(projectName)}/projectoverview`);
   };
 
   const handleCreateProjectClick = () => {
@@ -131,8 +138,8 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
     // navigate(`/${projectLink}`, { state: { projectName, projectDescription } });
 
     const newProject: Project = {
-      name: `New Project ${projects.length + 1}`,
-      description: 'New description'
+      name: projectName,
+      description: projectDescription
       // Add other properties as needed
     };
 
@@ -194,9 +201,9 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
                 <h2>Projects</h2>
                 {selectedWorkspace && (
                 <div>
-                  {projects.map((project, index) => (
-                    <div key={index} className="project-item">
-                      <Button variant='outlined'>{project.name}</Button>
+                  {projects.map(project => (
+                    <div key={project.name} className="project-item">
+                      <Button variant='outlined' onClick={() => handleProjectButtonClick(project.name)}>{project.name}</Button>
                     </div>
                   ))}
                 </div>
