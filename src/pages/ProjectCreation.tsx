@@ -31,6 +31,11 @@ interface ProjectCreationProps {
   deleteWorkspace: (workspaceName: string) => void;
 }
 
+interface Project {
+  name: string;
+  description: string;
+}
+
 function ToggleCustomTheme({
   showCustomTheme,
   toggleCustomTheme,
@@ -98,12 +103,17 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
   }, [workspaces]);
 
+  const [selectedWorkspace, setSelectedWorkspace] = useState<string>('');
+  const [projects, setProjects] = useState<Project[]>([]);
+
   const [showProjectList, setShowProjectList] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleWorkspaceButtonClick = (workspaceName: string) => {
     navigate(`/${workspaceName}`);
     setShowProjectList(true);
+    setSelectedWorkspace(workspaceName);
+    setProjects([]);
   };
 
   const handleProjectButtonClick = () => {
@@ -117,8 +127,17 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
   const handleProjectCreate = (projectName: string, projectDescription: string) => {
     setIsModalOpen(false);
     // You can handle the project creation logic here
-    const projectLink = `${name}/${projectName}`;
-    navigate(`/${projectLink}`, { state: { projectName, projectDescription } });
+    // const projectLink = `${name}/${projectName}`;
+    // navigate(`/${projectLink}`, { state: { projectName, projectDescription } });
+
+    const newProject: Project = {
+      name: `New Project ${projects.length + 1}`,
+      description: 'New description'
+      // Add other properties as needed
+    };
+
+    // Add the new project to the list of projects for the selected workspace
+    setProjects((prevProjects) => [...prevProjects, newProject]);
   };
   
   // Function to delete a workspace
@@ -173,8 +192,17 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
             {showProjectList && (
               <div className="project-list-container">
                 <h2>Projects</h2>
-                <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 1</Button></button>
-                <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 2</Button></button>
+                {selectedWorkspace && (
+                <div>
+                  {projects.map((project, index) => (
+                    <div key={index} className="project-item">
+                      <Button variant='outlined'>{project.name}</Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+                {/* <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 1</Button></button>
+                <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 2</Button></button> */}
               </div>
             )}
             <div className="create-project-container">
