@@ -213,7 +213,9 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
               </div>
             )}
             <div className="create-project-container">
-              <button onClick={handleCreateProjectClick} className="new-button"><Button variant='outlined'>Create New Project</Button></button>
+              <button onClick={handleCreateProjectClick} className="new-button">
+                <Button variant='outlined'>Create New Project</Button>
+              </button>
             </div>
           </div>
           {isModalOpen && (
@@ -227,10 +229,10 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
           )}
         </div>
       </Box>
-    {/* <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      /> */}
+        {/* <ToggleCustomTheme
+            showCustomTheme={showCustomTheme}
+            toggleCustomTheme={toggleCustomTheme}
+          /> */}
     </ThemeProvider>
   );
 };

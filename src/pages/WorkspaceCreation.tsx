@@ -131,7 +131,7 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
         <div className="workspace-creation-container">
         <ThemeProvider theme={theme}>
           <Typography variant="h6">
-            <h1>Create A Workspace</h1>
+            <h1>Let's create A Workspace</h1>
           </Typography>
         </ThemeProvider>
           <div className="input-container">
@@ -144,7 +144,7 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
                 type="text"
                 multiline
                 variant="outlined"
-                placeholder='Enter text...'
+                placeholder='Enter workspace name...'
                 className="workspace-input"
                 value={workspaceName}
                 onChange={handleWorkspaceNameChange}
@@ -161,7 +161,7 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
               type="text"
               multiline
               variant="outlined"
-              placeholder='Enter text...'
+              placeholder='Enter workspace description...'
               className="workspace-input"
               value={workspaceDescription}
               onChange={handleWorkspaceDescriptionChange}
