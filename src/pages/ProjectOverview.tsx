@@ -14,6 +14,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import HeroProjectOverview from '../components/HeroProjectOverview';
 import getLPTheme from '../getLPTheme';
+import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -361,25 +362,25 @@ const KanbanBoard: React.FC = () => {
     },
   });
 
-  // const DraggableColumn: React.FC<DraggableColumnProps> = ({ columnName }) => {
-  //   // Define drag functionality for columns
-  //   const [, columnDrag] = useDrag({
-  //     type: 'COLUMN',
-  //     item: { type: 'COLUMN' },
-  //     collect: (monitor) => ({
-  //       isDragging: monitor.isDragging(),
-  //     })
-  //   });
-  // }
+  const moveColumnLeft = (index: number) => {
+    if (index > 0) {
+      const newColumnOrder = [...columnOrder];
+      const temp = newColumnOrder[index];
+      newColumnOrder[index] = newColumnOrder[index - 1];
+      newColumnOrder[index - 1] = temp;
+      setColumnOrder(newColumnOrder);
+    }
+  };
 
-  // Allows dropping and dragging of columns
-  const [, columnDrop] = useDrop({
-    accept: 'COLUMN', // Accept dropped items of type 'COLUMN'
-    drop: (item: { columnName: ColumnName }) => {
-      // Handle dropping the column
-      moveColumn(item.columnName, selectedColumn as ColumnName);
-    },
-  });
+  const moveColumnRight = (index: number) => {
+    if (index < columnOrder.length - 1) {
+      const newColumnOrder = [...columnOrder];
+      const temp = newColumnOrder[index];
+      newColumnOrder[index] = newColumnOrder[index + 1];
+      newColumnOrder[index + 1] = temp;
+      setColumnOrder(newColumnOrder);
+    }
+  };
 
   const moveColumn = (dragColumnName: ColumnName, hoverColumnName: ColumnName) => {
     // Find the indices of the columns being dragged and hovered over
@@ -546,7 +547,7 @@ const KanbanBoard: React.FC = () => {
               placeholder="Filter tasks by name"
             />
           </div>
-          {columnOrder.map(columnName => (
+          {columnOrder.map((columnName, index) => (
             <div 
               key={columnName}
               className="column"
@@ -575,6 +576,8 @@ const KanbanBoard: React.FC = () => {
                       <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
                     )}
                 </h2>
+                  <Button onClick={() => moveColumnLeft(index)}>Move Left</Button>
+                  <Button onClick={() => moveColumnRight(index)}>Move Right</Button>
               {filteredTasks[columnName].map(task => (
                 <Task
                   key={task.id}
