@@ -37,6 +37,10 @@ const App: React.FC = () => {
     }
   };
 
+  const renameWikiPage = (oldName: string, newName: string) => {
+    setWikiPages(wikiPages.map((page) => (page === oldName ? newName : page)));
+  };
+
   const handleWorkspaceCreate = (workspace: Workspace) => {
     setWorkspaces(prevWorkspaces => [...prevWorkspaces, workspace]);
   };
@@ -81,6 +85,7 @@ const App: React.FC = () => {
                   deleteWikiPage={deleteWikiPage}
                   currentPageName={currentPage}
                   setPageName={setCurrentPage}
+                  renameWikiPage={renameWikiPage}
                 />
               }
               />
