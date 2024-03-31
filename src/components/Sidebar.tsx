@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
       <ThemeProvider theme={theme}>
         <Box display="flex">
           <Box flex="1" sx={{ paddingTop: '80px' }}>
-          <Typography variant="h5">Your Wikis</Typography>
+            <Typography variant="h5">Your Wikis</Typography>
             <List>
               {pageNames.map((page, index) => (
                 <ListItem key={page}>
@@ -90,18 +90,19 @@ const Sidebar: React.FC<SidebarProps> = ({ pageNames, createWikiPage, deleteWiki
                       onKeyDown={(e) => e.key === 'Enter' && handleRenameWikiPage(page, newWikiName)}
                       onBlur={() => handleRenameWikiPage(page, newWikiName)}
                       autoFocus
-                      sx={{ input: { color: 'white' } }}
+                      sx={
+                        { input: { color: 'white' } }
+                      }
                     />
                   ) : (
                   <ListItemButton component={Link} to={`/wiki/wikis/${page}`} onClick={() => handleSelectWikiPage(page)}>
                     <ListItemText primary={page} />
                   </ListItemButton>
-                                  )}
+                  )}
                   <Button variant='outlined' onClick={() => handleDeleteWikiPage(page)}>Delete Wiki</Button>
                 </ListItem>
               ))}
             </List>
-            
             <Button variant='outlined' onClick={handleCreateWikiPage}>Create New Wiki</Button>
           </Box>
           <Box flex="2">

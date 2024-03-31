@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, KeyboardEventHandler } from 'react'
 import { PaletteMode } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
@@ -75,6 +75,9 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
 
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
 
   useEffect(() => {
     // Load input value from localStorage when pageName changes
@@ -260,7 +263,9 @@ const PageContent: React.FC<PageContentProps> = ({ pageName }) => {
             /> */}
 
           <br />
-          <button className='new-button' onClick={handleSave}><MUIButton variant='outlined'>Save</MUIButton></button>
+          <button className='new-button' onClick={handleSave}>
+            <MUIButton variant='outlined'>Save</MUIButton>
+          </button>
         </div>
         <div style={{ flex: 1, marginLeft: '20px', whiteSpace: 'pre-wrap' }}>
           <p dangerouslySetInnerHTML={{ __html: inputValue }}></p>
