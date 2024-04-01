@@ -545,15 +545,16 @@ const KanbanBoard: React.FC = () => {
   };
 
   // For saving the updated data of a new task
-  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string) => {
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[]) => {
     const updatedTasks = {
       ...tasks,
-      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
-      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
-      Done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription } : task),
+      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription, comments: [...comments] } : task),
+      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription, comments: [...comments] } : task),
+      Done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription, comments: [...comments] } : task),
     };
     setTasks(updatedTasks);
     closeModal();
+    console.log("comments: ", comments);
   };
 
   // Calculate column height based on the number of tasks
@@ -711,17 +712,17 @@ const KanbanBoard: React.FC = () => {
           </div>
           {isModalOpen && (
             <TaskModal
-            isOpen={isModalOpen}
-            taskId={selectedTaskId || 0}
-            taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
-            taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
-            comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
-            onClose={closeModal}
-            onDelete={deleteTask}
-            onSave={handleSaveTask}
-            onPostComment={handlePostComment}
-            newComment={newComment}
-            onNewCommentChange={handleNewCommentChange}
+              isOpen={isModalOpen}
+              taskId={selectedTaskId || 0}
+              taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
+              taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
+              comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
+              onClose={closeModal}
+              onDelete={deleteTask}
+              onSave={handleSaveTask}
+              onPostComment={handlePostComment}
+              newComment={newComment}
+              onNewCommentChange={handleNewCommentChange}
             />
           )}
         </div>

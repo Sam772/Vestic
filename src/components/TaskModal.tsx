@@ -19,37 +19,65 @@ interface TaskModalProps {
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-
 const TaskModal: React.FC<TaskModalProps> = ({
   isOpen,
   taskId,
   taskName,
   taskDescription,
+  comments: initialComments = [],
   onClose,
   onDelete,
   onSave,
 }) => {
   const [currentTaskName, setCurrentTaskName] = useState(taskName);
   const [currentTaskDescription, setCurrentTaskDescription] = useState(taskDescription);
-  const [comments, setComments] = useState('');
-  const [commentList, setCommentList] = useState<string[]>([]);
+  const [comments, setComments] = useState<string[]>([]);
+  const [commentInput, setCommentInput] = useState('');
+  const [commentList, setCommentList] = useState<string[]>([]); // Initialize with initial comments
+  const [initialized, setInitialized] = useState(false);
 
   const handleSave = () => {
-    onSave(taskId, currentTaskName, currentTaskDescription, [comments]);
+    console.log('Saving task...');
+    console.log('comments: ', comments);
+    onSave(taskId, currentTaskName, currentTaskDescription, commentList);
     onClose();
   };
 
   const handlePostComment = () => {
-    if (comments.trim() !== '') {
-      setCommentList(prevComments => [...prevComments, comments]);
-      setComments('');
+    if (commentInput.trim() !== '') {
+      const updatedCommentList = [...commentList, commentInput];
+      setCommentList(updatedCommentList);
+      setComments(updatedCommentList); // Update the comments state
+      setCommentInput('');
     }
+  };
+  
+  
+  const handleNewCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(e.target.value);
   };
 
   useEffect(() => {
     setCurrentTaskName(taskName);
     setCurrentTaskDescription(taskDescription);
-  }, [taskName, taskDescription]);
+    console.log('Task name:', currentTaskName);
+    console.log('Task description:', currentTaskDescription);
+    console.log('Comments:', commentList);
+  }, [taskName, taskDescription, commentList]);
+
+  useEffect(() => {
+    if (!initialized) {
+      setCommentList(initialComments);
+      setInitialized(true);
+    }
+  }, [initialized, initialComments]);
+  
+  useEffect(() => {
+    if (initialComments.length > 0) {
+      setCommentList(initialComments);
+    }
+  }, [initialComments]);
+  
 
   if (!isOpen) return null;
   return (
@@ -63,16 +91,25 @@ const TaskModal: React.FC<TaskModalProps> = ({
         </div>
         <div className="">
           <div className="form-group">
-            <label htmlFor="taskName">Task Name:</label>
+            <strong>
+              <label htmlFor="taskName">Name</label>
+            </strong>
             <TextField
               type="text"
               id="taskName"
               value={currentTaskName}
               onChange={(e) => setCurrentTaskName(e.target.value)}
+              style={{
+                width: '100%',
+                fontSize: '16px',
+                marginBottom: '6px'
+              }}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="taskDescription">Task Description:</label>
+            <strong>
+              <label htmlFor="taskDescription">Description</label>
+            </strong>
             <TextField
               multiline
               rows={4}
@@ -88,18 +125,30 @@ const TaskModal: React.FC<TaskModalProps> = ({
             />
           </div>
           <div className="form-group">
-            <label htmlFor="comments">Comments:</label>
+            <strong>
+              <label htmlFor="comments">Activity</label>
+            </strong>
             <br/>
             <TextField
+              multiline
+              rows={2}
               type="text"
               id="comments"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
+              placeholder='Write a comment...'
+              value={commentInput}
+              onChange={handleNewCommentChange}
+              style={{
+                width: '100%',
+                fontSize: '16px',
+                marginBottom: '6px'
+              }}
             />
           </div>
-          <Button variant='outlined' className='post-btn' onClick={handlePostComment}>Save</Button>
+          <div>
+            <Button variant='outlined' className='post-btn' onClick={handlePostComment}>Save</Button>
+          </div>
           <div className="comments-preview">
-            <strong>Comments:</strong>
+            <strong>Activity</strong>
           </div>
           <div className='comments-list'>
               {commentList.map((comment, index) => (
@@ -111,12 +160,17 @@ const TaskModal: React.FC<TaskModalProps> = ({
                     InputProps={{
                       readOnly: true,
                     }}
+                    style={{
+                      width: '100%',
+                      fontSize: '16px',
+                      marginBottom: '6px'
+                    }}
                   />
                 </div>
               ))}
             </div>
         </div>
-        <div className="task-modal-footer">
+        <div>
           <Button variant='outlined' className="save-btn" onClick={handleSave}>Save</Button>
           <Button variant='outlined' className="delete-btn" onClick={() => onDelete(taskId)}>Delete Task</Button>
           {/* <button className="exit-btn" onClick={onClose}>Exit</button> */}
