@@ -117,7 +117,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleWorkspaceButtonClick = (workspaceName: string) => {
-    navigate(`/${workspaceName}`);
+    navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
     setShowProjectList(true);
     setSelectedWorkspace(workspaceName);
     setProjects([]);

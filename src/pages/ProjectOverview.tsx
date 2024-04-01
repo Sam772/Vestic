@@ -297,7 +297,7 @@ const KanbanBoard: React.FC = () => {
     }));
   };
   
-  const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null) => {
+  const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null, dropPosition: number | null ) => {
     // Handle the case where targetColumn is null
     if (targetColumn === null) {
         console.error('Target column is null.');
@@ -324,15 +324,25 @@ const KanbanBoard: React.FC = () => {
   
     // Get the current tasks in the target column
     const currentTargetTasks = tasks[targetColumn] || [];
-  
-    const updatedTargetTasks = [...currentTargetTasks, taskToMove];
 
-    console.log(`Moving task with ID ${taskId} from column ${sourceColumn} to column ${targetColumn}.`);
-  
-    setTasks(prevTasks => ({
-      ...prevTasks,
-      [sourceColumn]: updatedSourceTasks,
-      [targetColumn]: updatedTargetTasks,
+
+    // Determine the index where the task should be inserted based on drop position
+    let insertIndex = currentTargetTasks.length; // By default, insert at the end
+    if (dropPosition !== null) {
+      insertIndex = dropPosition; // Use the dropPosition as the insertIndex
+    }
+
+    // Insert the task at the determined index
+    const updatedTargetTasks = [...currentTargetTasks.slice(0, insertIndex), taskToMove, ...currentTargetTasks.slice(insertIndex)];
+
+      console.log(`Moving task with ID ${taskId} from column ${sourceColumn} to column ${targetColumn}.`);
+      console.log('Drop Position:', dropPosition);
+      console.log('Insert Index:', insertIndex);
+    
+      setTasks(prevTasks => ({
+        ...prevTasks,
+        [sourceColumn]: updatedSourceTasks,
+        [targetColumn]: updatedTargetTasks,
     }));
   };
 
@@ -356,9 +366,10 @@ const KanbanBoard: React.FC = () => {
   // Allows dropping and dragging of tasks
   const [, drop] = useDrop({
     accept: 'TASK', // Accept dropped items of type 'TASK'
-    drop: (item: { id: number; sourceColumn: string }) => {
+    drop: (item: { id: number; sourceColumn: string }, monitor) => {
+      const dropPosition = monitor.getClientOffset()?.y ?? null;
       // Handle dropping the task into the respective column
-      moveTask(item.id, item.sourceColumn as ColumnName, selectedColumn as ColumnName);
+      moveTask(item.id, item.sourceColumn as ColumnName, selectedColumn as ColumnName, dropPosition);
     },
   });
 
@@ -404,20 +415,58 @@ const KanbanBoard: React.FC = () => {
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     // Prevent the default behavior
     event.preventDefault();
-
+  
     // Retrieve the task data from the drag event
     const taskId = event.dataTransfer.getData('taskId');
     const sourceColumn = event.dataTransfer.getData('sourceColumn');
     const targetColumn = event.currentTarget.id as ColumnName; // Extract the column name from the drop target
+  
+    // Get the drop position relative to existing tasks
+    const dropPosition = calculateDropPosition(event.clientY, event.currentTarget);
+
+    console.log('Drop Position: (handleDrop)', dropPosition);
+
+    const totalTasksInTargetColumn = tasks[targetColumn]?.length || 0;
+
+    console.log('totaltasks: ', totalTasksInTargetColumn);
+
+    // Pass dropPosition as null if it's not a number
+    //const updatedDropPosition = dropPosition === 'start' ? 0 : totalTasksInTargetColumn;
+
+    //console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
+
+        // Calculate the updated drop position based on the drop position
+        let updatedDropPosition: number;
+        if (dropPosition === 'start') {
+            updatedDropPosition = 0;
+        } else {
+            updatedDropPosition = totalTasksInTargetColumn;
+        }
+    
+        console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
 
     // If the task ID and source column are available, move the task
     if (taskId && sourceColumn) {
-      // Move the task to the target column
+      // Move the task to the target column and position
       if (targetColumn !== null && targetColumn !== sourceColumn) {
-        moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn);
+        // Always pass updatedDropPosition, which could be null
+        moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn, updatedDropPosition);
       }
     }
   };
+
+  // Function to calculate the drop position relative to existing tasks
+  const calculateDropPosition = (clientY: number, dropTarget: HTMLDivElement) => {
+    const { top, bottom, height } = dropTarget.getBoundingClientRect();
+    const offsetY = clientY - top;
+    console.log('OffsetY:', offsetY);
+    const relativeY = offsetY / height;
+    console.log('RelativeY:', relativeY);
+
+    // If the relativeY is less than 0.5, drop at the beginning, otherwise drop at the end
+    return relativeY < 0.5 ? 'start' : 'end';
+};
+
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -537,7 +586,7 @@ const KanbanBoard: React.FC = () => {
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
     <HeroProjectOverview />
       <Box sx={{ bgcolor: 'background.default'}}>
-        <div ref={drop} className="kanban-board" onDrop={handleDrop} onDragOver={handleDragOver}>
+        <div ref={drop} className="kanban-board" /*onDrop={handleDrop}*/ onDragOver={handleDragOver}>
           <div className="filter-container">
             <input
               type="text"
