@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnName } from "../pages/ProjectOverview";
 import './TaskModal.css';
+import CloseIcon from '@mui/icons-material/Close';
+import TextField from '@mui/material/TextField';
+import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -54,12 +57,14 @@ const TaskModal: React.FC<TaskModalProps> = ({
       <div className="task-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="task-modal-header">
           <h2>Edit Task</h2>
-          <button className="close-btn" onClick={onClose}>X</button>
+          <Button className="close-btn" onClick={onClose}>
+            <CloseIcon></CloseIcon>
+          </Button>
         </div>
-        <div className="task-modal-body">
+        <div className="">
           <div className="form-group">
             <label htmlFor="taskName">Task Name:</label>
-            <input
+            <TextField
               type="text"
               id="taskName"
               value={currentTaskName}
@@ -68,34 +73,52 @@ const TaskModal: React.FC<TaskModalProps> = ({
           </div>
           <div className="form-group">
             <label htmlFor="taskDescription">Task Description:</label>
-            <textarea
+            <TextField
+              multiline
+              rows={4}
+              variant='outlined'
               id="taskDescription"
               value={currentTaskDescription}
               onChange={(e) => setCurrentTaskDescription(e.target.value)}
+              style={{
+                width: '100%',
+                fontSize: '16px',
+                marginBottom: '6px'
+              }}
             />
           </div>
           <div className="form-group">
             <label htmlFor="comments">Comments:</label>
-            <input
+            <br/>
+            <TextField
               type="text"
               id="comments"
               value={comments}
               onChange={(e) => setComments(e.target.value)}
             />
-            <button className='post-btn' onClick={handlePostComment}>Post</button>
           </div>
+          <Button variant='outlined' className='post-btn' onClick={handlePostComment}>Save</Button>
           <div className="comments-preview">
             <strong>Comments:</strong>
           </div>
-          <ul className='comments-list'>
+          <div className='comments-list'>
               {commentList.map((comment, index) => (
-                <li key={index}>{comment}</li>
+                <div key={index} className='comment-box'>
+                  <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    defaultValue={comment}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </div>
               ))}
-            </ul>
+            </div>
         </div>
         <div className="task-modal-footer">
-          <button className="save-btn" onClick={handleSave}>Save</button>
-          <button className="delete-btn" onClick={() => onDelete(taskId)}>Delete Task</button>
+          <Button variant='outlined' className="save-btn" onClick={handleSave}>Save</Button>
+          <Button variant='outlined' className="delete-btn" onClick={() => onDelete(taskId)}>Delete Task</Button>
           {/* <button className="exit-btn" onClick={onClose}>Exit</button> */}
         </div>
       </div>

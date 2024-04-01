@@ -15,6 +15,7 @@ import AppAppBar from '../components/AppAppBar';
 import HeroProjectOverview from '../components/HeroProjectOverview';
 import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import TextField from '@mui/material/TextField'
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -613,7 +614,7 @@ const KanbanBoard: React.FC = () => {
       <Box sx={{ bgcolor: 'background.default'}}>
         <div ref={drop} className="kanban-board" /*onDrop={handleDrop}*/ onDragOver={handleDragOver}>
           <div className="filter-container">
-            <input
+            <TextField
               type="text"
               className="filter-box"
               value={filterText}
@@ -634,24 +635,28 @@ const KanbanBoard: React.FC = () => {
               <h2>
                 {selectedColumn === columnName ? (
                   <div className="column">
-                    <input
+                    <TextField
                       type="text"
                       className="input-field"
                       value={newColumnName || columnName}
                       onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
                     />
                     {newColumnName ? (
-                      <button onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</button>
+                      <Button variant='outlined' onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</Button>
                     ) : (
-                      <button disabled>Save</button>
+                      <Button disabled>Save</Button>
                     )}
                   </div>
                     ) : (
                       <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
                     )}
                 </h2>
-                  <Button onClick={() => moveColumnLeft(index)}>Move Left</Button>
-                  <Button onClick={() => moveColumnRight(index)}>Move Right</Button>
+                {index > 0 && (
+                  <Button variant='outlined' onClick={() => moveColumnLeft(index)}>Move Left</Button>
+                )}
+                {index < columnOrder.length - 1 && (
+                  <Button variant='outlined' onClick={() => moveColumnRight(index)}>Move Right</Button>
+                )}
               {filteredTasks[columnName].map(task => (
                 <Task
                   key={task.id}
@@ -667,26 +672,27 @@ const KanbanBoard: React.FC = () => {
                 />
               ))}
               <div>
-                <input
+                <TextField
                   type="text"
                   className="input-field"
                   value={newTaskTexts[columnName]}
                   onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
                   placeholder="Enter task name"
                 />
-                <button 
+                <Button
+                  variant='outlined'
                   className="create-task-button"
                   onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
-                </button>
-                <button 
+                </Button>
+                <Button variant='outlined' 
                   className="delete-column-button"
                   onClick={() => handleDeleteColumn(columnName)}>Delete Column  
-                </button>
+                </Button>
               </div>
             </div>
           ))}
           <div>
-            <input
+            <TextField
               type="text"
               className="input-field"
               value={selectedColumn === null ? "" : selectedColumn}
@@ -698,10 +704,10 @@ const KanbanBoard: React.FC = () => {
                 }
               }}
             />
-            <button
+            <Button variant='outlined'
               className="create-column-button"
               onClick={() => handleCreateNewColumn(null, selectedColumn!)}>Add New Column
-            </button>
+            </Button>
           </div>
           {isModalOpen && (
             <TaskModal
