@@ -177,24 +177,6 @@ const KanbanBoard: React.FC = () => {
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
 
-  // Define state variables for the new column name
-  const [newColumnName, setNewColumnName] = useState<ColumnName | "">('');
-
-  // Function to handle renaming a column
-  const handleRenameColumn = (oldColumnName: ColumnName, newColumnName: ColumnName) => {
-    if (newColumnName.trim() !== '') {
-      setColumnOrder(prevOrder => prevOrder.map(col => col === oldColumnName ? newColumnName : col));
-      setTasks(prevTasks => {
-        const updatedTasks = { ...prevTasks };
-        updatedTasks[newColumnName] = updatedTasks[oldColumnName];
-        delete updatedTasks[oldColumnName];
-        return updatedTasks;
-      });
-      setSelectedColumn(null);
-      setNewColumnName(''); // Reset the newColumnName state after renaming
-    }
-  };
-
 
   // Filters tasks by text input in the filter field and returns those tasks
   const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
@@ -459,44 +441,60 @@ const KanbanBoard: React.FC = () => {
     }
   };
 
-// Function to calculate the drop position relative to existing tasks
-const calculateDropPosition = (clientY: number, dropTarget: HTMLDivElement, tasks: Task[]): number => {
-  const { top, bottom, height } = dropTarget.getBoundingClientRect();
-  const offsetY = clientY - top;
-  console.log('OffsetY:', offsetY);
-  const relativeY = offsetY / height;
-  console.log('RelativeY:', relativeY);
+  // Function to calculate the drop position relative to existing tasks
+  const calculateDropPosition = (clientY: number, dropTarget: HTMLDivElement, tasks: Task[]): number => {
+    const { top, bottom, height } = dropTarget.getBoundingClientRect();
+    const offsetY = clientY - top;
+    console.log('OffsetY:', offsetY);
+    const relativeY = offsetY / height;
+    console.log('RelativeY:', relativeY);
 
-  // Calculate the total number of tasks
-  const totalTasks = tasks.length;
+    // Calculate the total number of tasks
+    const totalTasks = tasks.length;
 
-  // Calculate the insertion index based on relative position
-  const insertIndex = Math.floor(relativeY * totalTasks);
+    // Calculate the insertion index based on relative position
+    const insertIndex = Math.floor(relativeY * totalTasks);
 
-  return insertIndex;
-};
-
-
-// Function to calculate the insertion index based on drop position
-const calculateInsertionIndex = (dropPosition: number, tasks: Task[]): number => {
-  // If drop position is 0 or less, insert at the beginning
-  if (dropPosition <= 0) {
-      return 0;
-  }
-  
-  // If drop position exceeds the length of tasks, insert at the end
-  if (dropPosition >= tasks.length) {
-      return tasks.length;
-  }
-
-  // Otherwise, insert at the calculated position
-  return dropPosition;
-};
+    return insertIndex;
+  };
 
 
+  // Function to calculate the insertion index based on drop position
+  const calculateInsertionIndex = (dropPosition: number, tasks: Task[]): number => {
+    // If drop position is 0 or less, insert at the beginning
+    if (dropPosition <= 0) {
+        return 0;
+    }
+    
+    // If drop position exceeds the length of tasks, insert at the end
+    if (dropPosition >= tasks.length) {
+        return tasks.length;
+    }
+
+    // Otherwise, insert at the calculated position
+    return dropPosition;
+  };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+  };
+
+  // Define state variables for the new column name
+  const [newColumnName, setNewColumnName] = useState<ColumnName | "">('');
+
+  // Function to handle renaming a column
+  const handleRenameColumn = (oldColumnName: ColumnName, newColumnName: ColumnName) => {
+    if (newColumnName.trim() !== '') {
+      setColumnOrder(prevOrder => prevOrder.map(col => col === oldColumnName ? newColumnName : col));
+      setTasks(prevTasks => {
+        const updatedTasks = { ...prevTasks };
+        updatedTasks[newColumnName] = updatedTasks[oldColumnName];
+        delete updatedTasks[oldColumnName];
+        return updatedTasks;
+      });
+      setSelectedColumn(null);
+      setNewColumnName(''); // Reset the newColumnName state after renaming
+    }
   };
 
   // For creating a new column

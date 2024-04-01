@@ -12,6 +12,7 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import DevicesRoundedIcon from '@mui/icons-material/DevicesRounded';
 import EdgesensorHighRoundedIcon from '@mui/icons-material/EdgesensorHighRounded';
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
+import { Link as Link2 } from 'react-router-dom';
 
 const items = [
   {
@@ -21,6 +22,7 @@ const items = [
       'Helps to organise your projects using task management to track your project progress.',
     imageLight: 'url("/static/images/templates/templates-images/dash-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/dash-dark.png")',
+    url: '/project/projectoverview'
   },
   {
     icon: <EdgesensorHighRoundedIcon />,
@@ -29,6 +31,7 @@ const items = [
       'Helps to provide documentation for the project so new employees can get up to speed.',
     imageLight: 'url("/static/images/templates/templates-images/mobile-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/mobile-dark.png")',
+    url: '/wiki'
   },
   {
     icon: <DevicesRoundedIcon />,
@@ -37,6 +40,7 @@ const items = [
       'Provides insight and metrics for project statistics such as number of items completed or bugs.',
     imageLight: 'url("/static/images/templates/templates-images/devices-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/devices-dark.png")',
+    url: '/analytics'
   },
   {
     icon: <DevicesRoundedIcon />,
@@ -45,6 +49,7 @@ const items = [
       'Provides quality assurance aspects to ensure the quality of the product is high.',
     imageLight: 'url("/static/images/templates/templates-images/devices-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/devices-dark.png")',
+    url: '/testing'
   },
 ];
 
@@ -76,30 +81,32 @@ export default function Features() {
             </Typography>
           </div>
           <Grid container item gap={1} sx={{ display: { xs: 'auto', sm: 'none' } }}>
-            {items.map(({ title }, index) => (
-              <Chip
-                key={index}
-                label={title}
-                onClick={() => handleItemClick(index)}
-                sx={{
-                  borderColor: (theme) => {
-                    if (theme.palette.mode === 'light') {
+            {items.map(({ title, url }, index) => (
+              <Link2 to={url} key={index}>
+                <Chip
+                  
+                  label={title}
+                  onClick={() => handleItemClick(index)}
+                  sx={{
+                    borderColor: (theme) => {
+                      if (theme.palette.mode === 'light') {
+                        return selectedItemIndex === index ? 'primary.light' : '';
+                      }
                       return selectedItemIndex === index ? 'primary.light' : '';
-                    }
-                    return selectedItemIndex === index ? 'primary.light' : '';
-                  },
-                  background: (theme) => {
-                    if (theme.palette.mode === 'light') {
+                    },
+                    background: (theme) => {
+                      if (theme.palette.mode === 'light') {
+                        return selectedItemIndex === index ? 'none' : '';
+                      }
                       return selectedItemIndex === index ? 'none' : '';
-                    }
-                    return selectedItemIndex === index ? 'none' : '';
-                  },
-                  backgroundColor: selectedItemIndex === index ? 'primary.main' : '',
-                  '& .MuiChip-label': {
-                    color: selectedItemIndex === index ? '#fff' : '',
-                  },
-                }}
-              />
+                    },
+                    backgroundColor: selectedItemIndex === index ? 'primary.main' : '',
+                    '& .MuiChip-label': {
+                      color: selectedItemIndex === index ? '#fff' : '',
+                    },
+                  }}
+                />
+              </Link2>
             ))}
           </Grid>
           <Box
@@ -155,93 +162,97 @@ export default function Features() {
             useFlexGap
             sx={{ width: '100%', display: { xs: 'none', sm: 'flex' } }}
           >
-            {items.map(({ icon, title, description }, index) => (
-              <Card
-                key={index}
-                variant="outlined"
-                component={Button}
-                onClick={() => handleItemClick(index)}
-                sx={{
-                  p: 3,
-                  height: 'fit-content',
-                  width: '100%',
-                  background: 'none',
-                  backgroundColor:
-                    selectedItemIndex === index ? 'action.selected' : undefined,
-                  borderColor: (theme) => {
-                    if (theme.palette.mode === 'light') {
-                      return selectedItemIndex === index
-                        ? 'primary.light'
-                        : 'grey.200';
-                    }
-                    return selectedItemIndex === index ? 'primary.dark' : 'grey.800';
-                  },
-                }}
-              >
-                <Box
+            {items.map(({ icon, title, description, url }, index) => (
+              
+                <Card
+                  key={index}
+                  variant="outlined"
+                  component={Button}
+                  onClick={() => handleItemClick(index)}
                   sx={{
+                    p: 3,
+                    height: 'fit-content',
                     width: '100%',
-                    display: 'flex',
-                    textAlign: 'left',
-                    flexDirection: { xs: 'column', md: 'row' },
-                    alignItems: { md: 'center' },
-                    gap: 2.5,
+                    background: 'none',
+                    backgroundColor:
+                      selectedItemIndex === index ? 'action.selected' : undefined,
+                    borderColor: (theme) => {
+                      if (theme.palette.mode === 'light') {
+                        return selectedItemIndex === index
+                          ? 'primary.light'
+                          : 'grey.200';
+                      }
+                      return selectedItemIndex === index ? 'primary.dark' : 'grey.800';
+                    },
                   }}
                 >
                   <Box
                     sx={{
-                      color: (theme) => {
-                        if (theme.palette.mode === 'light') {
-                          return selectedItemIndex === index
-                            ? 'primary.main'
-                            : 'grey.300';
-                        }
-                        return selectedItemIndex === index
-                          ? 'primary.main'
-                          : 'grey.700';
-                      },
+                      width: '100%',
+                      display: 'flex',
+                      textAlign: 'left',
+                      flexDirection: { xs: 'column', md: 'row' },
+                      alignItems: { md: 'center' },
+                      gap: 2.5,
                     }}
                   >
-                    {icon}
-                  </Box>
-                  <Box sx={{ textTransform: 'none' }}>
-                    <Typography
-                      color="text.primary"
-                      variant="body2"
-                      fontWeight="bold"
-                    >
-                      {title}
-                    </Typography>
-                    <Typography
-                      color="text.secondary"
-                      variant="body2"
-                      sx={{ my: 0.5 }}
-                    >
-                      {description}
-                    </Typography>
-                    <Link
-                      color="primary"
-                      variant="body2"
-                      fontWeight="bold"
+                    <Box
                       sx={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        '& > svg': { transition: '0.2s' },
-                        '&:hover > svg': { transform: 'translateX(2px)' },
-                      }}
-                      onClick={(event) => {
-                        event.stopPropagation();
+                        color: (theme) => {
+                          if (theme.palette.mode === 'light') {
+                            return selectedItemIndex === index
+                              ? 'primary.main'
+                              : 'grey.300';
+                          }
+                          return selectedItemIndex === index
+                            ? 'primary.main'
+                            : 'grey.700';
+                        },
                       }}
                     >
-                      <span>Learn more</span>
-                      <ChevronRightRoundedIcon
-                        fontSize="small"
-                        sx={{ mt: '1px', ml: '2px' }}
-                      />
-                    </Link>
+                      {icon}
+                    </Box>
+                    <Box sx={{ textTransform: 'none' }}>
+                      <Typography
+                        color="text.primary"
+                        variant="body2"
+                        fontWeight="bold"
+                      >
+                        {title}
+                      </Typography>
+                      <Typography
+                        color="text.secondary"
+                        variant="body2"
+                        sx={{ my: 0.5 }}
+                      >
+                        {description}
+                      </Typography>
+                      <Link
+                        color="primary"
+                        variant="body2"
+                        fontWeight="bold"
+                        sx={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          '& > svg': { transition: '0.2s' },
+                          '&:hover > svg': { transform: 'translateX(2px)' },
+                        }}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                        }}
+                      >
+                        <Typography variant="body2" color="text.primary">
+                          <Link2 to={url} key={index} style={{ textDecoration: 'none', color: 'white'}}>Learn more</Link2>
+                        </Typography>
+                        <ChevronRightRoundedIcon
+                          fontSize="small"
+                          sx={{ mt: '1px', ml: '2px' }}
+                        />
+                      </Link>
+                    </Box>
                   </Box>
-                </Box>
-              </Card>
+                </Card>
+              
             ))}
           </Stack>
         </Grid>
