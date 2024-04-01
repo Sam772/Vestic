@@ -2,8 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { ColumnName } from "../pages/ProjectOverview";
 import './TaskModal.css';
 import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import TimePicker from '@mui/lab/TimePicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -11,9 +16,11 @@ interface TaskModalProps {
   taskName: string;
   taskDescription: string;
   comments: string[];
+  startDate: Date
+  endDate: Date
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[]) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], startDate: Date, endDate: Date) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -25,6 +32,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
   taskName,
   taskDescription,
   comments: initialComments = [],
+  startDate,
+  endDate,
   onClose,
   onDelete,
   onSave,
@@ -39,7 +48,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const handleSave = () => {
     console.log('Saving task...');
     console.log('comments: ', comments);
-    onSave(taskId, currentTaskName, currentTaskDescription, commentList);
+    onSave(taskId, currentTaskName, currentTaskDescription, commentList, startDate, endDate);
     onClose();
   };
 
@@ -51,7 +60,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
       setCommentInput('');
     }
   };
-  
   
   const handleNewCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentInput(e.target.value);
@@ -78,6 +86,25 @@ const TaskModal: React.FC<TaskModalProps> = ({
     }
   }, [initialComments]);
   
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<Date | null>(null);
+  const [openCalendar, setOpenCalendar] = useState(false);
+
+  const handleOpenCalendar = () => {
+    setOpenCalendar(true);
+  };
+  
+  const handleCloseCalendar = () => {
+    setOpenCalendar(false);
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+  
+  const handleTimeChange = (time: Date | null) => {
+    setSelectedTime(time);
+  };
 
   if (!isOpen) return null;
   return (
@@ -144,6 +171,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
               }}
             />
           </div>
+            <Button onClick={handleOpenCalendar}>Select Date and Time</Button>
+            
           <div>
             <Button variant='outlined' className='post-btn' onClick={handlePostComment}>Save</Button>
           </div>

@@ -4,7 +4,7 @@ import './ProjectOverview.css';
 import Task from '../components/Task'
 import TaskModal from '../components/TaskModal';
 import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from 'react-dnd';
-import { PaletteMode } from '@mui/material';
+import { PaletteMode } from '@mui/material/';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -14,8 +14,9 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AppAppBar from '../components/AppAppBar';
 import HeroProjectOverview from '../components/HeroProjectOverview';
 import getLPTheme from '../getLPTheme';
-import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import TextField from '@mui/material/TextField'
+import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material/';
+import TextField from '@mui/material/TextField';
+import { DateTimePicker } from '@mui/lab';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -279,6 +280,9 @@ const KanbanBoard: React.FC = () => {
       [columnName]: value,
     }));
   };
+
+  const [startDate, setStartDate] = useState<Date>(Date.now);
+  const [endDate, setEndDate] = useState<Date>(Date.now);
   
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null, dropPosition: number | null ) => {
     // Handle the case where targetColumn is null
@@ -723,6 +727,8 @@ const KanbanBoard: React.FC = () => {
               onPostComment={handlePostComment}
               newComment={newComment}
               onNewCommentChange={handleNewCommentChange}
+              startDate={startDate}
+              endDate={endDate}
             />
           )}
         </div>
