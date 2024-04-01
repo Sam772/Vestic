@@ -422,7 +422,7 @@ const KanbanBoard: React.FC = () => {
     const targetColumn = event.currentTarget.id as ColumnName; // Extract the column name from the drop target
   
     // Get the drop position relative to existing tasks
-    const dropPosition = calculateDropPosition(event.clientY, event.currentTarget);
+    const dropPosition = calculateDropPosition(event.clientY, event.currentTarget, tasks[targetColumn]);
 
     console.log('Drop Position: (handleDrop)', dropPosition);
 
@@ -430,42 +430,69 @@ const KanbanBoard: React.FC = () => {
 
     console.log('totaltasks: ', totalTasksInTargetColumn);
 
+    // Calculate the insertion index based on the drop position
+    const insertionIndex = calculateInsertionIndex(dropPosition, tasks[targetColumn]);
+    console.log('Insertion Index: (handleDrop)', insertionIndex);
+
     // Pass dropPosition as null if it's not a number
     //const updatedDropPosition = dropPosition === 'start' ? 0 : totalTasksInTargetColumn;
 
     //console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
 
-        // Calculate the updated drop position based on the drop position
-        let updatedDropPosition: number;
-        if (dropPosition === 'start') {
-            updatedDropPosition = 0;
-        } else {
-            updatedDropPosition = totalTasksInTargetColumn;
-        }
-    
-        console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
+    // Calculate the updated drop position based on the drop position
+    // let updatedDropPosition: number;
+    // if (dropPosition === 'start') {
+    //     updatedDropPosition = 0;
+    // } else {
+    //     updatedDropPosition = totalTasksInTargetColumn;
+    // }
+
+    // console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
 
     // If the task ID and source column are available, move the task
     if (taskId && sourceColumn) {
       // Move the task to the target column and position
       if (targetColumn !== null && targetColumn !== sourceColumn) {
         // Always pass updatedDropPosition, which could be null
-        moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn, updatedDropPosition);
+        moveTask(parseInt(taskId), sourceColumn as ColumnName, targetColumn, insertionIndex);
       }
     }
   };
 
-  // Function to calculate the drop position relative to existing tasks
-  const calculateDropPosition = (clientY: number, dropTarget: HTMLDivElement) => {
-    const { top, bottom, height } = dropTarget.getBoundingClientRect();
-    const offsetY = clientY - top;
-    console.log('OffsetY:', offsetY);
-    const relativeY = offsetY / height;
-    console.log('RelativeY:', relativeY);
+// Function to calculate the drop position relative to existing tasks
+const calculateDropPosition = (clientY: number, dropTarget: HTMLDivElement, tasks: Task[]): number => {
+  const { top, bottom, height } = dropTarget.getBoundingClientRect();
+  const offsetY = clientY - top;
+  console.log('OffsetY:', offsetY);
+  const relativeY = offsetY / height;
+  console.log('RelativeY:', relativeY);
 
-    // If the relativeY is less than 0.5, drop at the beginning, otherwise drop at the end
-    return relativeY < 0.5 ? 'start' : 'end';
+  // Calculate the total number of tasks
+  const totalTasks = tasks.length;
+
+  // Calculate the insertion index based on relative position
+  const insertIndex = Math.floor(relativeY * totalTasks);
+
+  return insertIndex;
 };
+
+
+// Function to calculate the insertion index based on drop position
+const calculateInsertionIndex = (dropPosition: number, tasks: Task[]): number => {
+  // If drop position is 0 or less, insert at the beginning
+  if (dropPosition <= 0) {
+      return 0;
+  }
+  
+  // If drop position exceeds the length of tasks, insert at the end
+  if (dropPosition >= tasks.length) {
+      return tasks.length;
+  }
+
+  // Otherwise, insert at the calculated position
+  return dropPosition;
+};
+
 
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
