@@ -9,6 +9,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import TimePicker from '@mui/lab/TimePicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { DateTimePicker } from '@mui/lab';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -91,6 +92,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [openCalendar, setOpenCalendar] = useState(false);
 
   const handleOpenCalendar = () => {
+    console.log("Opening calendar...");
     setOpenCalendar(true);
   };
   
@@ -172,7 +174,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
             />
           </div>
             <Button onClick={handleOpenCalendar}>Select Date and Time</Button>
-            
+            {openCalendar && (
+              <DateTimePicker
+                value={selectedDate}
+                onChange={handleDateChange}
+                onClose={handleCloseCalendar}
+              />
+    )}
           <div>
             <Button variant='outlined' className='post-btn' onClick={handlePostComment}>Save</Button>
           </div>

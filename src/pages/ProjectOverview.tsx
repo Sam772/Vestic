@@ -281,8 +281,8 @@ const KanbanBoard: React.FC = () => {
     }));
   };
 
-  const [startDate, setStartDate] = useState<Date>(Date.now);
-  const [endDate, setEndDate] = useState<Date>(Date.now);
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
   
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null, dropPosition: number | null ) => {
     // Handle the case where targetColumn is null
