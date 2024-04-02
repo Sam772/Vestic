@@ -115,10 +115,10 @@ const TaskModal: React.FC<TaskModalProps> = ({
         <div className="task-modal-header">
           <h2>Edit Task</h2>
           <Button className="close-btn" onClick={onClose}>
-            <CloseIcon></CloseIcon>
+            <CloseIcon />
           </Button>
         </div>
-        <div className="">
+        <div className="form-container">
           <div className="form-group">
             <strong>
               <label htmlFor="taskName">Name</label>
@@ -128,11 +128,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
               id="taskName"
               value={currentTaskName}
               onChange={(e) => setCurrentTaskName(e.target.value)}
-              style={{
-                width: '100%',
-                fontSize: '16px',
-                marginBottom: '6px'
-              }}
+              fullWidth
+              variant="outlined"
+              size="small"
             />
           </div>
           <div className="form-group">
@@ -146,11 +144,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
               id="taskDescription"
               value={currentTaskDescription}
               onChange={(e) => setCurrentTaskDescription(e.target.value)}
-              style={{
-                width: '100%',
-                fontSize: '16px',
-                marginBottom: '6px'
-              }}
+              fullWidth
+              size="small"
             />
           </div>
           <div className="form-group">
@@ -166,11 +161,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
               placeholder='Write a comment...'
               value={commentInput}
               onChange={handleNewCommentChange}
-              style={{
-                width: '100%',
-                fontSize: '16px',
-                marginBottom: '6px'
-              }}
+              fullWidth
+              variant="outlined"
+              size="small"
             />
           </div>
             <Button onClick={handleOpenCalendar}>Select Date and Time</Button>
@@ -180,9 +173,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 onChange={handleDateChange}
                 onClose={handleCloseCalendar}
               />
-    )}
+            )}
           <div>
-            <Button variant='outlined' className='post-btn' onClick={handlePostComment}>Save</Button>
+            <Button variant='outlined' className='post-btn' onClick={handlePostComment}>
+              Save
+            </Button>
           </div>
           <div className="comments-preview">
             <strong>Activity</strong>
@@ -197,20 +192,20 @@ const TaskModal: React.FC<TaskModalProps> = ({
                     InputProps={{
                       readOnly: true,
                     }}
-                    style={{
-                      width: '100%',
-                      fontSize: '16px',
-                      marginBottom: '6px'
-                    }}
+                    fullWidth
+                    size="small"
                   />
                 </div>
               ))}
             </div>
         </div>
-        <div>
-          <Button variant='outlined' className="save-btn" onClick={handleSave}>Save</Button>
-          <Button variant='outlined' className="delete-btn" onClick={() => onDelete(taskId)}>Delete Task</Button>
-          {/* <button className="exit-btn" onClick={onClose}>Exit</button> */}
+        <div className="button-container">
+          <Button variant='outlined' className="save-btn" onClick={handleSave}>
+            Save
+          </Button>
+          <Button variant='outlined' className="delete-btn" onClick={() => onDelete(taskId)}>
+            Delete Task
+          </Button>
         </div>
       </div>
     </div>

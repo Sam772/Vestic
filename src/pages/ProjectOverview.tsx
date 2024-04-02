@@ -625,6 +625,7 @@ const KanbanBoard: React.FC = () => {
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
               placeholder="Filter tasks by name"
+              fullWidth
             />
           </div>
           {columnOrder.map((columnName, index) => (
@@ -647,56 +648,63 @@ const KanbanBoard: React.FC = () => {
                       onChange={(e) => setNewColumnName(e.target.value as ColumnName)}
                     />
                     {newColumnName ? (
-                      <Button variant='outlined' onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}>Save</Button>
+                      <Button
+                        variant='outlined'
+                        onClick={() => handleRenameColumn(columnName as ColumnName, newColumnName)}
+                        style={{marginRight: '8px'}}
+                      >Save</Button>
                     ) : (
                       <Button disabled>Save</Button>
                     )}
                   </div>
-                    ) : (
-                      <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
-                    )}
+                ) : (
+                  <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
+                )}
                 </h2>
                 {index > 0 && (
-                  <Button variant='outlined' onClick={() => moveColumnLeft(index)}>Move Left</Button>
+                  <Button variant='outlined' style={{marginRight: '8px'}} onClick={() => moveColumnLeft(index)}>Move Left</Button>
                 )}
                 {index < columnOrder.length - 1 && (
-                  <Button variant='outlined' onClick={() => moveColumnRight(index)}>Move Right</Button>
+                  <Button variant='outlined' style={{marginRight: '8px'}} onClick={() => moveColumnRight(index)}>Move Right</Button>
                 )}
-              {filteredTasks[columnName].map(task => (
-                <Task
-                  key={task.id}
-                  id={task.id}
-                  text={task.text}
-                  sourceColumn={columnName}
-                  onClick={() => openModal(task.id)}
-                  draggable={true}
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData('taskId', String(task.id));
-                    e.dataTransfer.setData('sourceColumn', columnName);
-                  }}
-                />
-              ))}
-              <div>
+                <div style={{marginTop: '8px'}}>
+                  {filteredTasks[columnName].map(task => (
+                    <Task
+                      key={task.id}
+                      id={task.id}
+                      text={task.text}
+                      sourceColumn={columnName}
+                      onClick={() => openModal(task.id)}
+                      draggable={true}
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('taskId', String(task.id));
+                        e.dataTransfer.setData('sourceColumn', columnName);
+                      }}
+                    />
+                  ))}
+              </div>
+              <div className='task-input-container' style={{marginBottom: '8px', marginTop: '8px'}}>
                 <TextField
                   type="text"
                   className="input-field"
                   value={newTaskTexts[columnName]}
                   onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
                   placeholder="Enter task name"
+                  fullWidth
                 />
-                <Button
-                  variant='outlined'
-                  className="create-task-button"
-                  onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
-                </Button>
-                <Button variant='outlined' 
-                  className="delete-column-button"
-                  onClick={() => handleDeleteColumn(columnName)}>Delete Column  
-                </Button>
               </div>
+              <Button
+                variant='outlined'
+                className="create-task-button"
+                onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
+              </Button>
+              <Button variant='outlined' 
+                className="delete-column-button"
+                onClick={() => handleDeleteColumn(columnName)}>Delete Column  
+              </Button>
             </div>
           ))}
-          <div>
+          <div style={{marginBottom: '12px'}}>
             <TextField
               type="text"
               className="input-field"
@@ -708,6 +716,7 @@ const KanbanBoard: React.FC = () => {
                   handleCreateNewColumn(null, selectedColumn!);
                 }
               }}
+              fullWidth
             />
             <Button variant='outlined'
               className="create-column-button"
