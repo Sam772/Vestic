@@ -3,13 +3,15 @@ import { ColumnName } from "../pages/ProjectOverview";
 import './TaskModal.css';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import TimePicker from '@mui/lab/TimePicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { DateTimePicker } from '@mui/lab';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -39,6 +41,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   onDelete,
   onSave,
 }) => {
+
   const [currentTaskName, setCurrentTaskName] = useState(taskName);
   const [currentTaskDescription, setCurrentTaskDescription] = useState(taskDescription);
   const [comments, setComments] = useState<string[]>([]);
@@ -87,20 +90,29 @@ const TaskModal: React.FC<TaskModalProps> = ({
     }
   }, [initialComments]);
   
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+
+  useEffect(() => {
+    if (selectedDate) {
+      setSelectedDate(dayjs(selectedDate));
+    }
+  }, [selectedDate]);
+
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
 
   const handleOpenCalendar = () => {
     console.log("Opening calendar...");
+    console.log("openCalendar state:", openCalendar); // Log the current state before updating
     setOpenCalendar(true);
+    console.log("openCalendar state after update:", openCalendar); // Log the state after updating
   };
   
   const handleCloseCalendar = () => {
     setOpenCalendar(false);
   };
 
-  const handleDateChange = (date: Date | null) => {
+  const handleDateChange = (date: Dayjs | null) => {
     setSelectedDate(date);
   };
   
@@ -166,14 +178,28 @@ const TaskModal: React.FC<TaskModalProps> = ({
               size="small"
             />
           </div>
-            <Button onClick={handleOpenCalendar}>Select Date and Time</Button>
-            {openCalendar && (
-              <DateTimePicker
-                value={selectedDate}
-                onChange={handleDateChange}
-                onClose={handleCloseCalendar}
-              />
-            )}
+            <div style={{marginBottom: '8px', marginTop: '8px'}}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Select Date"
+                  value={selectedDate ? dayjs(selectedDate) : null}
+                  onChange={handleDateChange}
+                  onClose={handleCloseCalendar}
+                  //renderInput={(params: TextFieldProps) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
+            <div style={{marginBottom: '8px', marginTop: '8px'}}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  label="Select Time"
+                  value={selectedTime ? dayjs(selectedTime) : null}
+                  //onChange={handleTimeChange}
+                  onClose={handleCloseCalendar}
+                  //renderInput={(params: TextFieldProps) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
           <div>
             <Button variant='outlined' className='post-btn' onClick={handlePostComment}>
               Save
