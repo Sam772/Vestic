@@ -12,6 +12,7 @@ import { DateTimePicker } from '@mui/lab';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -50,6 +51,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [initialized, setInitialized] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dueDate ? dayjs(dueDate) : null);
   const [selectedTime, setSelectedTime] = useState<Dayjs | null>(dueTime ? dayjs(dueTime) : null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const handleSave = () => {
     console.log('Saving task...');
@@ -102,6 +104,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
     console.log('Initial selectedDate:', selectedDate);
     console.log('Initial selectedTime:', selectedTime);
   }, []);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      setUploadedFiles(prevFiles => [...prevFiles, ...Array.from(files)]);
+    }
+  };
 
   if (!isOpen) return null;
   return (
@@ -167,6 +176,18 @@ const TaskModal: React.FC<TaskModalProps> = ({
                   />
                 </LocalizationProvider>
               </div>
+            </div>
+            <FileUploadIcon />
+            <input type="file" onChange={handleFileUpload} multiple />
+            <div style={{marginBottom: '8px', marginTop: '8px'}}>
+              <strong>
+                <label htmlFor="files">Files</label>
+              </strong>
+              {uploadedFiles.map((file, index) => (
+                <div key={index}>
+                  <a href={URL.createObjectURL(file)} download={file.name}>{file.name}</a>
+                </div>
+              ))}
             </div>
             <strong style={{marginBottom: '8px', marginTop: '8px'}}>
               <label htmlFor="comments">Activity</label>
