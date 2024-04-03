@@ -16,7 +16,7 @@ import HeroProjectOverview from '../components/HeroProjectOverview';
 import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material/';
 import TextField from '@mui/material/TextField';
-import { DateTimePicker } from '@mui/lab';
+import dayjs, { Dayjs } from 'dayjs';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -281,8 +281,8 @@ const KanbanBoard: React.FC = () => {
     }));
   };
 
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [dueDate, setDueDate] = useState<Dayjs>(dayjs());
+  const [dueTime, setDueTime] = useState<Dayjs>(dayjs());
   
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null, dropPosition: number | null ) => {
     // Handle the case where targetColumn is null
@@ -736,8 +736,8 @@ const KanbanBoard: React.FC = () => {
               onPostComment={handlePostComment}
               newComment={newComment}
               onNewCommentChange={handleNewCommentChange}
-              startDate={startDate}
-              endDate={endDate}
+              dueDate={dueDate}
+              dueTime={dueTime}
             />
           )}
         </div>
