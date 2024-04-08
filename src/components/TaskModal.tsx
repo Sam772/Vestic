@@ -12,7 +12,8 @@ import { DateTimePicker } from '@mui/lab';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileUploadButton from './FileUploadButton';
+import ButtonBase from '@mui/material/ButtonBase';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -105,8 +106,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     console.log('Initial selectedTime:', selectedTime);
   }, []);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+  const handleFileUpload = (files: FileList | null) => {
     if (files) {
       setUploadedFiles(prevFiles => [...prevFiles, ...Array.from(files)]);
     }
@@ -177,11 +177,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 </LocalizationProvider>
               </div>
             </div>
-            <FileUploadIcon />
-            <input type="file" onChange={handleFileUpload} multiple />
+            <strong>
+                <label htmlFor="files">File Upload</label>
+            </strong>
+            <FileUploadButton onChange={handleFileUpload} />
             <div style={{marginBottom: '8px', marginTop: '8px'}}>
               <strong>
-                <label htmlFor="files">Files</label>
+                <label htmlFor="files">Uploaded Files</label>
               </strong>
               {uploadedFiles.map((file, index) => (
                 <div key={index}>
