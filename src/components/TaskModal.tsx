@@ -23,9 +23,10 @@ interface TaskModalProps {
   comments: string[];
   dueDate: Dayjs;
   dueTime: Dayjs;
+  //uploadedFiles: File[]
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date, uploadedFiles: File[]) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -39,6 +40,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   comments: initialComments = [],
   dueDate,
   dueTime,
+  //uploadedFiles,
   onClose,
   onDelete,
   onSave,
@@ -58,7 +60,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
     console.log('Saving task...');
     console.log('Due Date:', selectedDate);
     console.log('Due Time:', selectedTime);
-    onSave(taskId, currentTaskName, currentTaskDescription, commentList, selectedDate?.toDate() || new Date(), selectedTime?.toDate() || new Date());
+    console.log("File List: ", uploadedFiles);
+    onSave(taskId, currentTaskName, currentTaskDescription, commentList, selectedDate?.toDate() || new Date(), selectedTime?.toDate() || new Date(), uploadedFiles);
     onClose();
   };
 
@@ -178,7 +181,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               </div>
             </div>
             <strong>
-                <label htmlFor="files">File Upload</label>
+              <label htmlFor="files">File Upload</label>
             </strong>
             <FileUploadButton onChange={handleFileUpload} />
             <div style={{marginBottom: '8px', marginTop: '8px'}}>
@@ -231,7 +234,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 ))}
               </div>
           </div>
-          <div style={{marginTop: '8px'}}>
+          <div>
             <Button variant='outlined' className="save-btn" onClick={handleSave}>
               Save Details
             </Button>
@@ -239,6 +242,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               Delete Task
             </Button>
           </div>
+          <br/>
         </div>
       </div>
     </div>
