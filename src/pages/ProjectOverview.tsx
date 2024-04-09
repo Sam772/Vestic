@@ -201,13 +201,25 @@ const KanbanBoard: React.FC = () => {
 
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
+  const [selectedSprint, setSelectedSprint] = useState<string>('All');
 
-  // Filters tasks by text input in the filter field and returns those tasks
-  const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
-    filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => task.name.toLowerCase().includes(filterText.toLowerCase()));
+  // Get unique sprints from tasks
+  const sprints: string[] = Array.from(
+    new Set(
+      Object.values(tasks).flatMap((taskList: Task[]) => taskList.map((task: Task) => task.sprint))
+    )
+  );
+
+  // Filter tasks based on selected sprint and filter text
+  const filteredTasks: Tasks = Object.keys(tasks).reduce((filtered, columnName) => {
+    filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => {
+      if (selectedSprint === 'All' || task.sprint === selectedSprint) {
+        return task.name.toLowerCase().includes(filterText.toLowerCase());
+      }
+      return false;
+    });
     return filtered;
-  }, {} as Partial<Tasks>) as Tasks;
-  
+  }, {} as Tasks);
 
   // Opens the task modal for the selected task
   const openModal = (taskId: number) => {
@@ -619,6 +631,12 @@ const KanbanBoard: React.FC = () => {
               placeholder="Filter tasks by name"
               fullWidth
             />
+            <select value={selectedSprint} onChange={(e) => setSelectedSprint(e.target.value)}>
+              <option value="All">All</option>
+              {sprints.map((sprint, index) => (
+                <option key={index} value={sprint}>{sprint}</option>
+              ))}
+            </select>
           </div>
           {columnOrder.map((columnName, index) => (
             <div 

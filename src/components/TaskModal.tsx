@@ -71,7 +71,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [currentTaskSprint, setCurrentTaskSprint] = useState<Sprint | string>(taskSprint);
   const [customSprint, setCustomSprint] = useState('');
 
-  
+
   const [availableSprints, setAvailableSprints] = useState<Sprint[]>(() => {
     const savedSprints = localStorage.getItem('customSprints');
     return savedSprints ? JSON.parse(savedSprints) : [Sprint.Sprint1, Sprint.Sprint2, Sprint.Sprint3];
@@ -282,24 +282,21 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 Save
               </Button>
             </div>
-            <div className="comments-preview" >
-              <strong>Activity</strong>
-            </div>
             <div className='comments-list'>
-                {commentList.map((comment, index) => (
-                  <div key={index} className='comment-box' style={{marginBottom: '8px', marginTop: '8px'}}>
-                    <TextField
-                      id="outlined-basic"
-                      variant="outlined"
-                      defaultValue={comment}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      fullWidth
-                      size="small"
-                    />
-                  </div>
-                ))}
+              {commentList.map((comment, index) => (
+                <div key={index} className='comment-box' style={{marginBottom: '8px'}}>
+                  <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    defaultValue={comment}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    fullWidth
+                    size="small"
+                  />
+                </div>
+              ))}
               </div>
           </div>
           <div>
