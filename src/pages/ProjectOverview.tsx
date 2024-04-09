@@ -65,7 +65,7 @@ function ToggleCustomTheme({
 // Defines an individual task
 interface Task {
   id: number;
-  text: string;
+  name: string;
   description: string;
   comments: string[];
   dueDateTime: Dayjs,
@@ -160,14 +160,14 @@ const KanbanBoard: React.FC = () => {
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   
   // Stores the text of new tasks, initialised with empty strings for each column
-  const [newTaskTexts, setNewTaskTexts] = useState<{[key: string]: string}>({
+  const [newTaskName, setNewTaskName] = useState<{[key: string]: string}>({
     New: '',
     Committed: '',
     Done: '',
   });
 
   // Stores the descriptions of new tasks, initialised with empty strings for each column
-  const [newTaskDescriptions, setNewTaskDescriptions] = useState<Record<ColumnName, string>>({
+  const [newTaskDescription, setNewTaskDescription] = useState<Record<ColumnName, string>>({
     New : '',
     Committed : '',
     Done : '',
@@ -204,7 +204,7 @@ const KanbanBoard: React.FC = () => {
 
   // Filters tasks by text input in the filter field and returns those tasks
   const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
-    filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => task.text.toLowerCase().includes(filterText.toLowerCase()));
+    filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => task.name.toLowerCase().includes(filterText.toLowerCase()));
     return filtered;
   }, {} as Partial<Tasks>) as Tasks;
   
@@ -223,7 +223,7 @@ const KanbanBoard: React.FC = () => {
 
   // Updates the task name of tasks
   const handleNewTaskTextChange = (columnName: ColumnName, newText: string) => {
-    setNewTaskTexts(prevTexts => ({
+    setNewTaskName(prevTexts => ({
       ...prevTexts,
       [columnName]: newText,
     }));
@@ -233,18 +233,18 @@ const KanbanBoard: React.FC = () => {
   const handleCreateNewTask = (columnName: ColumnName) => {
 
     // These fields are initialised when the task is created
-    const text = newTaskTexts[columnName];
-    const description = newTaskDescriptions[columnName];
+    const name = newTaskName[columnName];
+    const description = newTaskDescription[columnName];
     const comment = newComment[columnName] || '';
     const files = newFiles[columnName] || [];
     const dueDateTime = setNewDueDateTime[columnName] || Dayjs;
     const sprint = setNewSprint[columnName] || Sprint.Sprint1;
     
     // Prevents task from being created if there is no text
-    if (text.trim() !== '') {
+    if (name.trim() !== '') {
       const newTask: Task = {
         id: Date.now(),
-        text: text,
+        name: name,
         description: description,
         comments: [comment],
         dueDateTime: dueDateTime,
@@ -257,12 +257,12 @@ const KanbanBoard: React.FC = () => {
         [columnName]: [...prevTasks[columnName], newTask],
       }));
       // Sets the initial task name
-      setNewTaskTexts(prevTexts => ({
+      setNewTaskName(prevTexts => ({
         ...prevTexts,
         [columnName]: '',
       }));
       // Sets the initial task description
-      setNewTaskDescriptions(prevDescriptions => ({
+      setNewTaskDescription(prevDescriptions => ({
         ...prevDescriptions,
         [columnName]: '',
       }));
@@ -274,17 +274,17 @@ const KanbanBoard: React.FC = () => {
       // Sets the initial task due date and time
       setDueDateTime(prevDueDateTime => ({
         ...prevDueDateTime,
-        [columnName]: '',
+        [columnName]: dayjs(),
       }));
       // Sets the initial task files
       setNewFiles(prevFiles => ({
         ...prevFiles,
-        [columnName]: '',
+        [columnName]: [],
       }));
       // Sets the initial task files
       setSprint(prevSprint => ({
         ...prevSprint,
-        [columnName]: '',
+        [columnName]: Sprint.Sprint1,
       }));
     }
   };
@@ -420,24 +420,6 @@ const KanbanBoard: React.FC = () => {
     }
   };
 
-  const moveColumn = (dragColumnName: ColumnName, hoverColumnName: ColumnName) => {
-    // Find the indices of the columns being dragged and hovered over
-    const dragIndex = columnOrder.indexOf(dragColumnName);
-    const hoverIndex = columnOrder.indexOf(hoverColumnName);
-  
-    // Make a copy of the column order array
-    const newColumnOrder = [...columnOrder];
-  
-    // Remove the dragged column from its original position
-    const [draggedColumn] = newColumnOrder.splice(dragIndex, 1);
-  
-    // Insert the dragged column at the position of the hovered column
-    newColumnOrder.splice(hoverIndex, 0, draggedColumn);
-  
-    // Update the state with the new column order
-    setColumnOrder(newColumnOrder);
-  };
-
   // Handle the onDrop event
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     // Prevent the default behavior
@@ -460,21 +442,6 @@ const KanbanBoard: React.FC = () => {
     // Calculate the insertion index based on the drop position
     const insertionIndex = calculateInsertionIndex(dropPosition, tasks[targetColumn]);
     console.log('Insertion Index: (handleDrop)', insertionIndex);
-
-    // Pass dropPosition as null if it's not a number
-    //const updatedDropPosition = dropPosition === 'start' ? 0 : totalTasksInTargetColumn;
-
-    //console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
-
-    // Calculate the updated drop position based on the drop position
-    // let updatedDropPosition: number;
-    // if (dropPosition === 'start') {
-    //     updatedDropPosition = 0;
-    // } else {
-    //     updatedDropPosition = totalTasksInTargetColumn;
-    // }
-
-    // console.log('UpdatedDrop Position: (handleDrop)', updatedDropPosition);
 
     // If the task ID and source column are available, move the task
     if (taskId && sourceColumn) {
@@ -593,7 +560,7 @@ const KanbanBoard: React.FC = () => {
     const updatedTasks = {
       ...tasks,
       New: tasks.New.map(task => task.id === taskId ? 
-        { ...task, text: newTaskName,
+        { ...task, name: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
           dueDateTime: dueDateTime,
@@ -601,7 +568,7 @@ const KanbanBoard: React.FC = () => {
           sprint: sprint,
         } : task),
       Committed: tasks.Committed.map(task => task.id === taskId ?
-        { ...task, text: newTaskName,
+        { ...task, name: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
           dueDateTime: dueDateTime,
@@ -609,7 +576,7 @@ const KanbanBoard: React.FC = () => {
           sprint: sprint,
         } : task),
       Done: tasks.Done.map(task => task.id === taskId ?
-        { ...task, text: newTaskName,
+        { ...task, name: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
           dueDateTime: dueDateTime,
@@ -635,68 +602,6 @@ const KanbanBoard: React.FC = () => {
 
     return calculatedHeight;
   };
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      // Assuming single file upload
-      setSelectedFile(event.target.files[0]);
-    }
-  };
-
-  const handleUpload = () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      // Send formData to your backend server using Axios or Fetch
-      // Example with Axios:
-      // axios.post('/upload', formData)
-      //   .then(response => {
-      //     // Handle response
-      //   })
-      //   .catch(error => {
-      //     // Handle error
-      //   });
-    }
-  };
-
-  //#region - Unused functions
-  const handleTaskRename = (taskId: number, newTaskName: string) => {
-    const updatedTasks = {
-      ...tasks,
-      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-      done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName } : task),
-    };
-    setTasks(updatedTasks);
-  };
-
-  const handleDescriptionChange = (columnName: ColumnName, description: string) => {
-    setNewTaskDescriptions(prevDescriptions => ({
-      ...prevDescriptions,
-      [columnName]: description,
-    }));
-  };
-
-  const updateComments = (tasksArray: Task[], comment: string): Task[] => {
-    return tasksArray.map(task => ({
-      ...task,
-      comments: [...task.comments, comment], // Add the new comment to the task's comments array
-    }));
-  };
-
-  const getTaskName = (taskId: number): string => {
-    for (const column of Object.values(tasks)) {
-      const task = column.find((task : Task) => task.id === taskId);
-      if (task) {
-        return task.text;
-      }
-    }
-    return '';
-  };
-  //#endregion
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
@@ -759,7 +664,9 @@ const KanbanBoard: React.FC = () => {
                     <Task
                       key={task.id}
                       id={task.id}
-                      text={task.text}
+                      taskName={task.name}
+                      taskSprint={task.sprint}
+                      taskDueDate={task.dueDateTime}
                       sourceColumn={columnName}
                       onClick={() => openModal(task.id)}
                       draggable={true}
@@ -774,7 +681,7 @@ const KanbanBoard: React.FC = () => {
                 <TextField
                   type="text"
                   className="input-field"
-                  value={newTaskTexts[columnName]}
+                  value={newTaskName[columnName]}
                   onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
                   placeholder="Enter task name"
                   fullWidth
@@ -814,11 +721,11 @@ const KanbanBoard: React.FC = () => {
             <TaskModal
               isOpen={isModalOpen}
               taskId={selectedTaskId || 0}
-              taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
+              taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.name || '' : ''}
               taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
               comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
               uploadedFiles={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.files || [] : []}
-              dueDateTime={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.dueDateTime || null : null}
+              dueDateTime={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.dueDateTime || dayjs() : dayjs()}
               taskSprint={selectedTaskId ? (tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.sprint || Sprint.Sprint1) : Sprint.Sprint1}
               onClose={closeModal}
               onDelete={deleteTask}
@@ -830,10 +737,6 @@ const KanbanBoard: React.FC = () => {
           )}
         </div>
       </Box>
-      {/* <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      /> */}
     </ThemeProvider>
   );
 };

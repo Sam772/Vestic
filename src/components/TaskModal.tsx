@@ -15,6 +15,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import FileUploadButton from './FileUploadButton';
 import Typography from '@mui/material/Typography';
 import { upload } from '@testing-library/user-event/dist/upload';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -171,11 +173,18 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 size="small"
               />
             </div>
-            <select value={currentTaskSprint} onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}>
-              {Object.values(Sprint).map(sprint => (
-                <option key={sprint} value={sprint}>{sprint}</option>
-              ))}
-            </select>
+              <div style={{marginBottom: '8px', marginTop: '8px'}}>
+              <Select
+                value={currentTaskSprint}
+                onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}
+              >
+                {Object.values(Sprint).map(sprint => (
+                  <MenuItem key={sprint} value={sprint}>
+                    {sprint}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
             <div className="date-time-container">
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -185,15 +194,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
                     onChange={(date: Dayjs | null) => setSelectedDateTime(date ? dayjs(date.toDate()) : null)}
                   />
                 </LocalizationProvider>
-              </div>
-              <div style={{marginBottom: '8px', marginTop: '8px'}}>
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    label="Select Time"
-                    value={selectedTime ? dayjs(selectedTime) : null}
-                    onChange={(time: Dayjs | null) => setSelectedTime(time ? dayjs(time.toDate()) : null)}
-                  />
-                </LocalizationProvider> */}
               </div>
             </div>
             <strong>
