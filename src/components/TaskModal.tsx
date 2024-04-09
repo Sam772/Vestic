@@ -8,8 +8,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { DateTimePicker } from '@mui/lab';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import FileUploadButton from './FileUploadButton';
@@ -22,12 +22,11 @@ interface TaskModalProps {
   taskName: string;
   taskDescription: string;
   comments: string[];
-  dueDate: Dayjs;
-  dueTime: Dayjs;
+  dueDateTime: Dayjs | null;
   uploadedFiles: File[]
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date, newUploadedFiles: File[]) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[]) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -39,8 +38,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   taskName,
   taskDescription,
   comments: initialComments = [],
-  dueDate,
-  dueTime,
+  dueDateTime,
   uploadedFiles,
   onClose,
   onDelete,
@@ -53,22 +51,20 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [commentInput, setCommentInput] = useState('');
   const [commentList, setCommentList] = useState<string[]>([]); // Initialize with initial comments
   const [initialized, setInitialized] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dueDate ? dayjs(dueDate) : null);
-  const [selectedTime, setSelectedTime] = useState<Dayjs | null>(dueTime ? dayjs(dueTime) : null);
+  const [selectedDateTime, setSelectedDateTime] = useState<Dayjs | null>(dueDateTime ? dayjs(dueDateTime) : null);
   const [currentUploadedFiles, setCurrentUploadedFiles] = useState<File[]>(uploadedFiles);
 
   const handleSave = () => {
     console.log('Saving task...');
-    console.log('Due Date:', selectedDate);
-    console.log('Due Time:', selectedTime);
+    console.log('Due Date & Time:', selectedDateTime);
+    //console.log('Due Time:', selectedTime);
     //console.log("File List: ", currentUploadedFiles);
     onSave(
       taskId,
       currentTaskName,
       currentTaskDescription,
       commentList,
-      selectedDate?.toDate() || new Date(),
-      selectedTime?.toDate() || new Date(),
+      selectedDateTime ? dayjs(selectedDateTime.toDate()) : dayjs(),
       currentUploadedFiles
     );
     onClose();
@@ -91,12 +87,15 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setCurrentTaskName(taskName);
     setCurrentTaskDescription(taskDescription);
     setCurrentUploadedFiles(uploadedFiles);
+    setSelectedDateTime(dueDateTime ? dayjs(dueDateTime) : null);
+    console.log('Due Date & Time:', dueDateTime);
+    //console.log('Due Time:', dueTime);
     //console.log('Task name:', currentTaskName);
     //console.log('Task description:', currentTaskDescription);
     //console.log('Comments:', commentList);
     // console.log("File List1: ", currentUploadedFiles);
     // console.log("File List2: ", uploadedFiles);
-  }, [taskName, taskDescription, commentList, uploadedFiles]);
+  }, [taskName, taskDescription, commentList, dueDateTime, uploadedFiles]);
 
   useEffect(() => {
     if (!initialized) {
@@ -110,16 +109,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
       setCommentList(initialComments);
     }
   }, [initialComments]);
-
-  useEffect(() => {
-    setSelectedDate(dueDate ? dayjs(dueDate) : null);
-    setSelectedTime(dueTime ? dayjs(dueTime) : null);
-  }, [dueDate, dueTime]);
-
-  useEffect(() => {
-    //console.log('Initial selectedDate:', selectedDate);
-    //console.log('Initial selectedTime:', selectedTime);
-  }, []);
 
   const handleFileUpload = (files: FileList | null) => {
     if (files) {
@@ -175,21 +164,21 @@ const TaskModal: React.FC<TaskModalProps> = ({
             <div className="date-time-container">
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Select Date"
-                    value={selectedDate ? dayjs(selectedDate) : null}
-                    onChange={(date: Dayjs | null) => setSelectedDate(date ? dayjs(date.toDate()) : null)}
+                  <DateTimePicker
+                    label="Select DateTime"
+                    value={selectedDateTime ? dayjs(selectedDateTime) : null}
+                    onChange={(date: Dayjs | null) => setSelectedDateTime(date ? dayjs(date.toDate()) : null)}
                   />
                 </LocalizationProvider>
               </div>
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <TimePicker
                     label="Select Time"
                     value={selectedTime ? dayjs(selectedTime) : null}
                     onChange={(time: Dayjs | null) => setSelectedTime(time ? dayjs(time.toDate()) : null)}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
               </div>
             </div>
             <strong>

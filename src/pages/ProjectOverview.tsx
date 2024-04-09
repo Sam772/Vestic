@@ -67,6 +67,7 @@ interface Task {
   text: string;
   description: string;
   comments: string[];
+  dueDateTime: Dayjs,
   files: File[]
 }
 
@@ -184,6 +185,12 @@ const KanbanBoard: React.FC = () => {
     Done: [],
   });
 
+  const [setNewDueDateTime, setDueDateTime] = useState<Record<ColumnName, Dayjs>>({
+    New: dayjs(),
+    Committed: dayjs(),
+    Done: dayjs(),
+  });
+
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
 
@@ -223,6 +230,7 @@ const KanbanBoard: React.FC = () => {
     const description = newTaskDescriptions[columnName];
     const comment = newComment[columnName] || '';
     const files = newFiles[columnName] || [];
+    const dueDateTime = setNewDueDateTime[columnName] || Dayjs;
     
     // Prevents task from being created if there is no text
     if (text.trim() !== '') {
@@ -231,6 +239,7 @@ const KanbanBoard: React.FC = () => {
         text: text,
         description: description,
         comments: [comment],
+        dueDateTime: dueDateTime,
         files: files,
       };
       // Sets the initial state of tasks
@@ -251,6 +260,11 @@ const KanbanBoard: React.FC = () => {
       // Sets the initial task comments
       setNewComment(prevComments => ({
         ...prevComments,
+        [columnName]: '',
+      }));
+      // Sets the initial task due date and time
+      setDueDateTime(prevDueDateTime => ({
+        ...prevDueDateTime,
         [columnName]: '',
       }));
       // Sets the initial task files
@@ -295,9 +309,6 @@ const KanbanBoard: React.FC = () => {
       [columnName]: value,
     }));
   };
-
-  const [dueDate, setDueDate] = useState<Dayjs>(dayjs());
-  const [dueTime, setDueTime] = useState<Dayjs>(dayjs());
   
   const moveTask = (taskId: number, sourceColumn: keyof Tasks, targetColumn: keyof Tasks | null, dropPosition: number | null ) => {
     // Handle the case where targetColumn is null
@@ -564,31 +575,28 @@ const KanbanBoard: React.FC = () => {
   };
 
   // For saving the updated data of a new task
-  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date, files: File[]) => {
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[]) => {
     const updatedTasks = {
       ...tasks,
       New: tasks.New.map(task => task.id === taskId ? 
         { ...task, text: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
-          dueDate: dueDate,
-          dueTime: dueTime,
+          dueDateTime: dueDateTime,
           files: files
         } : task),
       Committed: tasks.Committed.map(task => task.id === taskId ?
         { ...task, text: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
-          dueDate: dueDate,
-          dueTime: dueTime,
+          dueDateTime: dueDateTime,
           files: files
         } : task),
       Done: tasks.Done.map(task => task.id === taskId ?
         { ...task, text: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
-          dueDate: dueDate,
-          dueTime: dueTime,
+          dueDateTime: dueDateTime,
           files: files
         } : task),
     };
@@ -793,14 +801,13 @@ const KanbanBoard: React.FC = () => {
               taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
               comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
               uploadedFiles={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.files || [] : []}
+              dueDateTime={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.dueDateTime || null : null}
               onClose={closeModal}
               onDelete={deleteTask}
               onSave={handleSaveTask}
               onPostComment={handlePostComment}
               newComment={newComment}
               onNewCommentChange={handleNewCommentChange}
-              dueDate={dueDate}
-              dueTime={dueTime}
             />
           )}
         </div>
