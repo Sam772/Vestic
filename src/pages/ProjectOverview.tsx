@@ -20,6 +20,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Sprint } from '../components/TaskModal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import WestIcon from '@mui/icons-material/West';
+import EastIcon from '@mui/icons-material/East';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -609,8 +611,8 @@ const KanbanBoard: React.FC = () => {
     // Get the number of tasks in the column
     const numTasks = filteredTasks[columnName].length;
 
-    const minHeight = 120;
-    const maxHeightPerTask = 50;
+    const minHeight = 214;
+    const maxHeightPerTask = 115;
     const shouldAdjustHeight = numTasks > initialTaskCounts[columnName];
     const calculatedHeight = shouldAdjustHeight ? minHeight + (numTasks - initialTaskCounts[columnName]) * maxHeightPerTask : minHeight;
 
@@ -638,7 +640,7 @@ const KanbanBoard: React.FC = () => {
               onChange={(e) => setSelectedSprint(e.target.value)}
               fullWidth
             >
-              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="All">All Sprints</MenuItem>
               {sprints.map((sprint, index) => (
                 <MenuItem key={index} value={sprint}>{sprint}</MenuItem>
               ))}
@@ -676,13 +678,13 @@ const KanbanBoard: React.FC = () => {
                 ) : (
                   <span onClick={() => setSelectedColumn(columnName)}>{columnName}</span>
                 )}
-                </h2>
                 {index > 0 && (
-                  <Button variant='outlined' style={{marginRight: '8px'}} onClick={() => moveColumnLeft(index)}>Move Left</Button>
+                  <Button variant='outlined' style={{marginLeft: '8px'}} onClick={() => moveColumnLeft(index)}><WestIcon/></Button>
                 )}
                 {index < columnOrder.length - 1 && (
-                  <Button variant='outlined' style={{marginRight: '8px'}} onClick={() => moveColumnRight(index)}>Move Right</Button>
+                  <Button variant='outlined' style={{marginLeft: '8px'}} onClick={() => moveColumnRight(index)}><EastIcon/></Button>
                 )}
+                </h2>
                 <div style={{marginTop: '8px'}}>
                   {filteredTasks[columnName].map(task => (
                     <Task
@@ -716,10 +718,12 @@ const KanbanBoard: React.FC = () => {
                 className="create-task-button"
                 onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
               </Button>
+              <div style={{ marginTop: '8px'}}>
               <Button variant='outlined' 
                 className="delete-column-button"
                 onClick={() => handleDeleteColumn(columnName)}>Delete Column  
               </Button>
+              </div>
             </div>
           ))}
           <div style={{marginBottom: '12px'}}>
