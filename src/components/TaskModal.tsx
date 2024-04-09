@@ -13,7 +13,8 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import FileUploadButton from './FileUploadButton';
-import ButtonBase from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
+import { upload } from '@testing-library/user-event/dist/upload';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -23,10 +24,10 @@ interface TaskModalProps {
   comments: string[];
   dueDate: Dayjs;
   dueTime: Dayjs;
-  //uploadedFiles: File[]
+  uploadedFiles: File[]
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date, uploadedFiles: File[]) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date, newUploadedFiles: File[]) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -40,7 +41,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   comments: initialComments = [],
   dueDate,
   dueTime,
-  //uploadedFiles,
+  uploadedFiles,
   onClose,
   onDelete,
   onSave,
@@ -54,14 +55,22 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [initialized, setInitialized] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dueDate ? dayjs(dueDate) : null);
   const [selectedTime, setSelectedTime] = useState<Dayjs | null>(dueTime ? dayjs(dueTime) : null);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [currentUploadedFiles, setCurrentUploadedFiles] = useState<File[]>(uploadedFiles);
 
   const handleSave = () => {
     console.log('Saving task...');
     console.log('Due Date:', selectedDate);
     console.log('Due Time:', selectedTime);
-    console.log("File List: ", uploadedFiles);
-    onSave(taskId, currentTaskName, currentTaskDescription, commentList, selectedDate?.toDate() || new Date(), selectedTime?.toDate() || new Date(), uploadedFiles);
+    //console.log("File List: ", currentUploadedFiles);
+    onSave(
+      taskId,
+      currentTaskName,
+      currentTaskDescription,
+      commentList,
+      selectedDate?.toDate() || new Date(),
+      selectedTime?.toDate() || new Date(),
+      currentUploadedFiles
+    );
     onClose();
   };
 
@@ -81,10 +90,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
   useEffect(() => {
     setCurrentTaskName(taskName);
     setCurrentTaskDescription(taskDescription);
-    console.log('Task name:', currentTaskName);
-    console.log('Task description:', currentTaskDescription);
-    console.log('Comments:', commentList);
-  }, [taskName, taskDescription, commentList]);
+    setCurrentUploadedFiles(uploadedFiles);
+    //console.log('Task name:', currentTaskName);
+    //console.log('Task description:', currentTaskDescription);
+    //console.log('Comments:', commentList);
+    // console.log("File List1: ", currentUploadedFiles);
+    // console.log("File List2: ", uploadedFiles);
+  }, [taskName, taskDescription, commentList, uploadedFiles]);
 
   useEffect(() => {
     if (!initialized) {
@@ -105,13 +117,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
   }, [dueDate, dueTime]);
 
   useEffect(() => {
-    console.log('Initial selectedDate:', selectedDate);
-    console.log('Initial selectedTime:', selectedTime);
+    //console.log('Initial selectedDate:', selectedDate);
+    //console.log('Initial selectedTime:', selectedTime);
   }, []);
 
   const handleFileUpload = (files: FileList | null) => {
     if (files) {
-      setUploadedFiles(prevFiles => [...prevFiles, ...Array.from(files)]);
+      setCurrentUploadedFiles(prevFiles => [...prevFiles, ...Array.from(files)]);
     }
   };
 
@@ -188,9 +200,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
               <strong>
                 <label htmlFor="files">Uploaded Files</label>
               </strong>
-              {uploadedFiles.map((file, index) => (
-                <div key={index}>
-                  <a href={URL.createObjectURL(file)} download={file.name}>{file.name}</a>
+              {currentUploadedFiles.map((file, index) => (
+                <div key={index} style={{marginTop: '2px'}}>
+                  <a href={URL.createObjectURL(file)} download={file.name}>
+                    <Typography color="text.primary" variant="body2">
+                      {file.name}
+                    </Typography>
+                  </a>
                 </div>
               ))}
             </div>
@@ -211,7 +227,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             />
             <div style={{marginBottom: '8px', marginTop: '16px'}}>
               <Button variant='outlined' className='post-btn' onClick={handlePostComment}>
-                Save Comment
+                Save
               </Button>
             </div>
             <div className="comments-preview" >

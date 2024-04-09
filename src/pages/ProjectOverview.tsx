@@ -67,6 +67,7 @@ interface Task {
   text: string;
   description: string;
   comments: string[];
+  files: File[]
 }
 
 // Represents a collection of tasks for each column of different states
@@ -176,6 +177,13 @@ const KanbanBoard: React.FC = () => {
     Done: '',
   });
 
+  // Stores new files, initialised with empty array for each column name
+  const [newFiles, setNewFiles] = useState<Record<ColumnName, File[]>>({
+    New: [],
+    Committed: [],
+    Done: [],
+  });
+
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
 
@@ -214,6 +222,7 @@ const KanbanBoard: React.FC = () => {
     const text = newTaskTexts[columnName];
     const description = newTaskDescriptions[columnName];
     const comment = newComment[columnName] || '';
+    const files = newFiles[columnName] || [];
     
     // Prevents task from being created if there is no text
     if (text.trim() !== '') {
@@ -222,6 +231,7 @@ const KanbanBoard: React.FC = () => {
         text: text,
         description: description,
         comments: [comment],
+        files: files,
       };
       // Sets the initial state of tasks
       setTasks(prevTasks => ({
@@ -241,6 +251,11 @@ const KanbanBoard: React.FC = () => {
       // Sets the initial task comments
       setNewComment(prevComments => ({
         ...prevComments,
+        [columnName]: '',
+      }));
+      // Sets the initial task files
+      setNewFiles(prevFiles => ({
+        ...prevFiles,
         [columnName]: '',
       }));
     }
@@ -549,12 +564,33 @@ const KanbanBoard: React.FC = () => {
   };
 
   // For saving the updated data of a new task
-  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[]) => {
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDate: Date, dueTime: Date, files: File[]) => {
     const updatedTasks = {
       ...tasks,
-      New: tasks.New.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription, comments: [...comments] } : task),
-      Committed: tasks.Committed.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription, comments: [...comments] } : task),
-      Done: tasks.Done.map(task => task.id === taskId ? { ...task, text: newTaskName, description: newTaskDescription, comments: [...comments] } : task),
+      New: tasks.New.map(task => task.id === taskId ? 
+        { ...task, text: newTaskName,
+          description: newTaskDescription,
+          comments: [...comments],
+          dueDate: dueDate,
+          dueTime: dueTime,
+          files: files
+        } : task),
+      Committed: tasks.Committed.map(task => task.id === taskId ?
+        { ...task, text: newTaskName,
+          description: newTaskDescription,
+          comments: [...comments],
+          dueDate: dueDate,
+          dueTime: dueTime,
+          files: files
+        } : task),
+      Done: tasks.Done.map(task => task.id === taskId ?
+        { ...task, text: newTaskName,
+          description: newTaskDescription,
+          comments: [...comments],
+          dueDate: dueDate,
+          dueTime: dueTime,
+          files: files
+        } : task),
     };
     setTasks(updatedTasks);
     closeModal();
@@ -573,6 +609,32 @@ const KanbanBoard: React.FC = () => {
     const calculatedHeight = shouldAdjustHeight ? minHeight + (numTasks - initialTaskCounts[columnName]) * maxHeightPerTask : minHeight;
 
     return calculatedHeight;
+  };
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      // Assuming single file upload
+      setSelectedFile(event.target.files[0]);
+    }
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      // Send formData to your backend server using Axios or Fetch
+      // Example with Axios:
+      // axios.post('/upload', formData)
+      //   .then(response => {
+      //     // Handle response
+      //   })
+      //   .catch(error => {
+      //     // Handle error
+      //   });
+    }
   };
 
   //#region - Unused functions
@@ -730,6 +792,7 @@ const KanbanBoard: React.FC = () => {
               taskName={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.text || '' : ''}
               taskDescription={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.description || '' : ''}
               comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
+              uploadedFiles={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.files || [] : []}
               onClose={closeModal}
               onDelete={deleteTask}
               onSave={handleSaveTask}

@@ -33,7 +33,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ onChange }) => {
       />
       <ButtonBase onClick={handleFileButtonClick} style={{ display: 'inline-flex' }}>
         <Button variant="outlined" startIcon={<FileUploadIcon />}>
-          Choose Files
+          Upload Files
         </Button>
       </ButtonBase>
     </React.Fragment>
