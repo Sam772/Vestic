@@ -6,7 +6,7 @@ import dayjs, { Dayjs } from 'dayjs';
 interface TaskProps {
   id: number;
   taskName: string;
-  taskSprint: Sprint;
+  taskSprint: Sprint | string;
   taskDueDate: Dayjs;
   sourceColumn: string;
   draggable?: boolean;

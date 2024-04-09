@@ -26,10 +26,10 @@ interface TaskModalProps {
   comments: string[];
   dueDateTime: Dayjs | null;
   uploadedFiles: File[]
-  taskSprint: Sprint;
+  taskSprint: Sprint | string;
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[], taskSprint: Sprint) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[], taskSprint: Sprint | string) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -56,14 +56,30 @@ const TaskModal: React.FC<TaskModalProps> = ({
 }) => {
 
   const [currentTaskName, setCurrentTaskName] = useState(taskName);
+
   const [currentTaskDescription, setCurrentTaskDescription] = useState(taskDescription);
+
   const [comments, setComments] = useState<string[]>([]);
   const [commentInput, setCommentInput] = useState('');
   const [commentList, setCommentList] = useState<string[]>([]); // Initialize with initial comments
   const [initialized, setInitialized] = useState(false);
+
   const [selectedDateTime, setSelectedDateTime] = useState<Dayjs | null>(dueDateTime ? dayjs(dueDateTime) : null);
+
   const [currentUploadedFiles, setCurrentUploadedFiles] = useState<File[]>(uploadedFiles);
-  const [currentTaskSprint, setCurrentTaskSprint] = useState(taskSprint);
+
+  const [currentTaskSprint, setCurrentTaskSprint] = useState<Sprint | string>(taskSprint);
+  const [customSprint, setCustomSprint] = useState('');
+
+  
+  const [availableSprints, setAvailableSprints] = useState<Sprint[]>(() => {
+    const savedSprints = localStorage.getItem('customSprints');
+    return savedSprints ? JSON.parse(savedSprints) : [Sprint.Sprint1, Sprint.Sprint2, Sprint.Sprint3];
+  });
+  
+  useEffect(() => {
+    localStorage.setItem('customSprints', JSON.stringify(availableSprints));
+  }, [availableSprints]);
 
   const handleSave = () => {
     console.log('Saving task...');
@@ -128,6 +144,24 @@ const TaskModal: React.FC<TaskModalProps> = ({
     }
   };
 
+  const handleCustomSprintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomSprint(e.target.value);
+  };
+
+  const handleAddCustomSprint = () => {
+    if (customSprint.trim() !== '') {
+      setAvailableSprints(prevSprints => [...prevSprints, customSprint as Sprint]);
+      setCurrentTaskSprint(customSprint as Sprint); // Set current sprint to custom sprint
+      setCustomSprint('');
+    }
+  };
+
+
+  
+  const handleTextFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
   if (!isOpen) return null;
   return (
     <div className="task-modal-overlay" onClick={onClose}>
@@ -178,13 +212,27 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 value={currentTaskSprint}
                 onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}
               >
-                {Object.values(Sprint).map(sprint => (
+                <MenuItem disabled value="">
+                  Select Sprint
+                </MenuItem>
+                {availableSprints.map(sprint => (
                   <MenuItem key={sprint} value={sprint}>
                     {sprint}
                   </MenuItem>
                 ))}
               </Select>
             </div>
+              <div style={{marginBottom: '8px', marginTop: '8px'}}>
+                <TextField
+                  value={customSprint}
+                  onChange={handleCustomSprintChange}
+                  onKeyDown={handleTextFieldKeyDown}
+                  label="Custom Sprint"
+                  variant="outlined"
+                  size="small"
+                />
+                <Button variant='outlined' onClick={handleAddCustomSprint}>Confirm</Button>
+              </div>
             <div className="date-time-container">
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>

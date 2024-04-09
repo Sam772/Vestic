@@ -70,7 +70,7 @@ interface Task {
   comments: string[];
   dueDateTime: Dayjs,
   files: File[]
-  sprint: Sprint
+  sprint: Sprint | string
 }
 
 // Represents a collection of tasks for each column of different states
@@ -556,7 +556,7 @@ const KanbanBoard: React.FC = () => {
   };
 
   // For saving the updated data of a new task
-  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[], sprint: Sprint) => {
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[], sprint: Sprint | string) => {
     const updatedTasks = {
       ...tasks,
       New: tasks.New.map(task => task.id === taskId ? 
