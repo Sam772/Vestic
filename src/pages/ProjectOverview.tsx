@@ -17,7 +17,9 @@ import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material/';
 import TextField from '@mui/material/TextField';
 import dayjs, { Dayjs } from 'dayjs';
-import { Sprint } from '../components/TaskModal'
+import { Sprint } from '../components/TaskModal';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -631,12 +633,16 @@ const KanbanBoard: React.FC = () => {
               placeholder="Filter tasks by name"
               fullWidth
             />
-            <select value={selectedSprint} onChange={(e) => setSelectedSprint(e.target.value)}>
-              <option value="All">All</option>
+            <Select
+              value={selectedSprint}
+              onChange={(e) => setSelectedSprint(e.target.value)}
+              fullWidth
+            >
+              <MenuItem value="All">All</MenuItem>
               {sprints.map((sprint, index) => (
-                <option key={index} value={sprint}>{sprint}</option>
+                <MenuItem key={index} value={sprint}>{sprint}</MenuItem>
               ))}
-            </select>
+            </Select>
           </div>
           {columnOrder.map((columnName, index) => (
             <div 
