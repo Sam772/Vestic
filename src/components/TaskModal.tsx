@@ -24,12 +24,19 @@ interface TaskModalProps {
   comments: string[];
   dueDateTime: Dayjs | null;
   uploadedFiles: File[]
+  taskSprint: Sprint;
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[]) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[], taskSprint: Sprint) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export enum Sprint {
+  Sprint1 = 'Sprint 1',
+  Sprint2 = 'Sprint 2',
+  Sprint3 = 'Sprint 3',
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({
@@ -40,6 +47,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   comments: initialComments = [],
   dueDateTime,
   uploadedFiles,
+  taskSprint,
   onClose,
   onDelete,
   onSave,
@@ -53,10 +61,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [initialized, setInitialized] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Dayjs | null>(dueDateTime ? dayjs(dueDateTime) : null);
   const [currentUploadedFiles, setCurrentUploadedFiles] = useState<File[]>(uploadedFiles);
+  const [currentTaskSprint, setCurrentTaskSprint] = useState(taskSprint);
 
   const handleSave = () => {
     console.log('Saving task...');
-    console.log('Due Date & Time:', selectedDateTime);
+    // console.log('Due Date & Time:', selectedDateTime);
     //console.log('Due Time:', selectedTime);
     //console.log("File List: ", currentUploadedFiles);
     onSave(
@@ -65,7 +74,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
       currentTaskDescription,
       commentList,
       selectedDateTime ? dayjs(selectedDateTime.toDate()) : dayjs(),
-      currentUploadedFiles
+      currentUploadedFiles,
+      currentTaskSprint
     );
     onClose();
   };
@@ -88,7 +98,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setCurrentTaskDescription(taskDescription);
     setCurrentUploadedFiles(uploadedFiles);
     setSelectedDateTime(dueDateTime ? dayjs(dueDateTime) : null);
-    console.log('Due Date & Time:', dueDateTime);
+    // console.log('Due Date & Time:', dueDateTime);
     //console.log('Due Time:', dueTime);
     //console.log('Task name:', currentTaskName);
     //console.log('Task description:', currentTaskDescription);
@@ -161,6 +171,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 size="small"
               />
             </div>
+            <select value={currentTaskSprint} onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}>
+              {Object.values(Sprint).map(sprint => (
+                <option key={sprint} value={sprint}>{sprint}</option>
+              ))}
+            </select>
             <div className="date-time-container">
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>

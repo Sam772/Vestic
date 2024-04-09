@@ -17,6 +17,7 @@ import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material/';
 import TextField from '@mui/material/TextField';
 import dayjs, { Dayjs } from 'dayjs';
+import { Sprint } from '../components/TaskModal'
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -69,6 +70,7 @@ interface Task {
   comments: string[];
   dueDateTime: Dayjs,
   files: File[]
+  sprint: Sprint
 }
 
 // Represents a collection of tasks for each column of different states
@@ -191,9 +193,14 @@ const KanbanBoard: React.FC = () => {
     Done: dayjs(),
   });
 
+  const [setNewSprint, setSprint] = useState<Record<ColumnName, Sprint>>({
+    New: Sprint.Sprint1,
+    Committed: Sprint.Sprint1,
+    Done: Sprint.Sprint1,
+  });
+
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
-
 
   // Filters tasks by text input in the filter field and returns those tasks
   const filteredTasks = Object.keys(tasks).reduce((filtered, columnName) => {
@@ -231,6 +238,7 @@ const KanbanBoard: React.FC = () => {
     const comment = newComment[columnName] || '';
     const files = newFiles[columnName] || [];
     const dueDateTime = setNewDueDateTime[columnName] || Dayjs;
+    const sprint = setNewSprint[columnName] || Sprint.Sprint1;
     
     // Prevents task from being created if there is no text
     if (text.trim() !== '') {
@@ -241,6 +249,7 @@ const KanbanBoard: React.FC = () => {
         comments: [comment],
         dueDateTime: dueDateTime,
         files: files,
+        sprint: sprint,
       };
       // Sets the initial state of tasks
       setTasks(prevTasks => ({
@@ -270,6 +279,11 @@ const KanbanBoard: React.FC = () => {
       // Sets the initial task files
       setNewFiles(prevFiles => ({
         ...prevFiles,
+        [columnName]: '',
+      }));
+      // Sets the initial task files
+      setSprint(prevSprint => ({
+        ...prevSprint,
         [columnName]: '',
       }));
     }
@@ -575,7 +589,7 @@ const KanbanBoard: React.FC = () => {
   };
 
   // For saving the updated data of a new task
-  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[]) => {
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[], sprint: Sprint) => {
     const updatedTasks = {
       ...tasks,
       New: tasks.New.map(task => task.id === taskId ? 
@@ -583,21 +597,24 @@ const KanbanBoard: React.FC = () => {
           description: newTaskDescription,
           comments: [...comments],
           dueDateTime: dueDateTime,
-          files: files
+          files: files,
+          sprint: sprint,
         } : task),
       Committed: tasks.Committed.map(task => task.id === taskId ?
         { ...task, text: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
           dueDateTime: dueDateTime,
-          files: files
+          files: files,
+          sprint: sprint,
         } : task),
       Done: tasks.Done.map(task => task.id === taskId ?
         { ...task, text: newTaskName,
           description: newTaskDescription,
           comments: [...comments],
           dueDateTime: dueDateTime,
-          files: files
+          files: files,
+          sprint: sprint,
         } : task),
     };
     setTasks(updatedTasks);
@@ -802,6 +819,7 @@ const KanbanBoard: React.FC = () => {
               comments={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.comments || [] : []}
               uploadedFiles={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.files || [] : []}
               dueDateTime={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.dueDateTime || null : null}
+              taskSprint={selectedTaskId ? (tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.sprint || Sprint.Sprint1) : Sprint.Sprint1}
               onClose={closeModal}
               onDelete={deleteTask}
               onSave={handleSaveTask}
