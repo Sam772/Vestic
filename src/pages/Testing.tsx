@@ -74,7 +74,7 @@ const Testing: React.FC = () => {
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
     <HeroTesting />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+      <Box sx={{ bgcolor: 'background.default'}}>
         <div className='testing-container'>
           {/* <h1>Testing Page</h1> */}
         </div>

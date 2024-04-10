@@ -120,7 +120,7 @@ const Analytics: React.FC = () => {
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
     <HeroAnalytics />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+      <Box sx={{ bgcolor: 'background.default'}}>
       <div className='analytics-container'>
           <div>
             {/* Workspace selection */}

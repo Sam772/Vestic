@@ -245,10 +245,13 @@ const KanbanBoard: React.FC = () => {
   }, {} as Tasks);
 
   // Opens the task modal for the selected task
-  const openModal = (taskId: number) => {
-    setSelectedTaskId(taskId);
-    setIsModalOpen(true);
+  const openModal = (taskId: number, event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!event || !(event.target as HTMLElement).closest('.dropdown-button')) {
+      setSelectedTaskId(taskId);
+      setIsModalOpen(true);
+    }
   };
+
 
   // Closes the task modal
   const closeModal = () => {
@@ -734,7 +737,7 @@ const KanbanBoard: React.FC = () => {
                       taskTag={task.tag}
                       taskDueDate={task.dueDateTime}
                       sourceColumn={columnName}
-                      onClick={() => openModal(task.id)}
+                      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => openModal(task.id, e)}
                       draggable={true}
                       onDragStart={(e) => {
                         e.dataTransfer.setData('taskId', String(task.id));

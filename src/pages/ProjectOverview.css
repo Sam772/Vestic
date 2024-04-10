@@ -22,11 +22,11 @@
   }
   
   .task {
-    background-color: #333;
+    /* background-color: #333;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 8px; */
     cursor: pointer;
   }
   
@@ -40,23 +40,19 @@
   }
   
   .task button {
-    padding: 6px 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
     cursor: pointer;
   }
   
-  .task button:hover {
+  /* .task button:hover {
     background-color: #0056b3;
-  }
+  } */
 
-  .task.dragging {
+  /* .task.dragging {
     opacity: 0.5;
     border-color: #007bff;
   }
-  
+   */
+   
   .add-column {
     margin-top: 20px;
   }
@@ -66,18 +62,18 @@
     margin-right: 10px;
   }
   
-  .add-column button {
+  /* .add-column button {
     padding: 8px 12px;
     background-color: #28a745;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
+  } */
   
-  .add-column button:hover {
+  /* .add-column button:hover {
     background-color: #218838;
-  }
+  } */
 
   .input-field {
     margin-bottom: 8px;
@@ -88,7 +84,7 @@
     color: white;
   }
   
-  .create-task-button {
+  /* .create-task-button {
     padding: 8px 16px;
     margin-right: 8px;
     border: none;
@@ -96,40 +92,40 @@
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
-  }
+  } */
   
-  .create-task-button:hover {
+  /* .create-task-button:hover {
     background-color: #0056b3;
-  }
+  } */
   
-  .delete-column-button {
+  /* .delete-column-button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     background-color: #dc3545;
     color: #fff;
     cursor: pointer;
-  }
+  } */
 
-  .create-column-button {
+  /* .create-column-button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     background-color: #28a745;
     color: #fff;
     cursor: pointer;
-  }
+  } */
 
-  .create-column-button:hover {
+  /* .create-column-button:hover {
     background-color: #218838;
   }
   
   .delete-column-button:hover {
     background-color: #bd2130;
-  }
+  } */
   
   .column:hover {
-    background-color: #1c1b1b;
+    background-color: #151515;
   }
   
   .filter-box {
