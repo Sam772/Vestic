@@ -1,12 +1,13 @@
 import React from 'react';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
-import { Sprint } from './TaskModal';
+import { Sprint, Tag } from './TaskModal';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface TaskProps {
   id: number;
   taskName: string;
   taskSprint: Sprint | string;
+  taskTag: Tag | string;
   taskDueDate: Dayjs;
   sourceColumn: string;
   draggable?: boolean;
@@ -14,7 +15,7 @@ interface TaskProps {
   onClick?: () => void;
 }
 
-const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskDueDate, sourceColumn, draggable = true, onDragStart, onClick }) => {
+const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueDate, sourceColumn, draggable = true, onDragStart, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'TASK',
     item: { type: 'TASK', id, sourceColumn },
@@ -35,6 +36,7 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskDueDate, sour
       <div>{taskName}</div>
       <div>Iteration Path: {taskSprint}</div>
       <div>State: {sourceColumn}</div>
+      <div>Item Type: {taskTag}</div>
       <div>Due Date: {taskDueDate.format('YYYY-MM-DD')}</div>
     </div>
   );

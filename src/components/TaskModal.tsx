@@ -27,9 +27,10 @@ interface TaskModalProps {
   dueDateTime: Dayjs | null;
   uploadedFiles: File[]
   taskSprint: Sprint | string;
+  taskTag: Tag | string;
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[], taskSprint: Sprint | string) => void;
+  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[], taskSprint: Sprint | string, taskTag: Tag | string) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -41,6 +42,13 @@ export enum Sprint {
   Sprint3 = 'Sprint 3',
 }
 
+export enum Tag {
+  Tag1 = 'Feature',
+  Tag2 = 'Bug',
+  Tag3 = 'Epic',
+  Tag4 = 'User Story'
+}
+
 const TaskModal: React.FC<TaskModalProps> = ({
   isOpen,
   taskId,
@@ -50,6 +58,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   dueDateTime,
   uploadedFiles,
   taskSprint,
+  taskTag,
   onClose,
   onDelete,
   onSave,
@@ -71,6 +80,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [currentTaskSprint, setCurrentTaskSprint] = useState<Sprint | string>(taskSprint);
   const [customSprint, setCustomSprint] = useState('');
 
+  const [currentTaskTag, setCurrentTaskTag] = useState<Tag | string>(taskTag|| Tag.Tag1);
+  const [customTag, setCustomTag] = useState('');
+
 
   const [availableSprints, setAvailableSprints] = useState<Sprint[]>(() => {
     const savedSprints = localStorage.getItem('customSprints');
@@ -80,6 +92,15 @@ const TaskModal: React.FC<TaskModalProps> = ({
   useEffect(() => {
     localStorage.setItem('customSprints', JSON.stringify(availableSprints));
   }, [availableSprints]);
+
+  const [availableTags, setAvailableTags] = useState<Tag[]>(() => {
+    const savedTags = localStorage.getItem('customTags');
+    return savedTags ? JSON.parse(savedTags) : [Tag.Tag1, Tag.Tag2, Tag.Tag3, Tag.Tag4];
+  });
+    
+  useEffect(() => {
+    localStorage.setItem('customTags', JSON.stringify(availableTags));
+  }, [availableTags]);
 
   const handleSave = () => {
     console.log('Saving task...');
@@ -93,7 +114,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
       commentList,
       selectedDateTime ? dayjs(selectedDateTime.toDate()) : dayjs(),
       currentUploadedFiles,
-      currentTaskSprint
+      currentTaskSprint,
+      currentTaskTag
     );
     onClose();
   };
@@ -116,6 +138,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setCurrentTaskDescription(taskDescription);
     setCurrentUploadedFiles(uploadedFiles);
     setSelectedDateTime(dueDateTime ? dayjs(dueDateTime) : null);
+    //setCurrentTaskTag(taskTag);
     // console.log('Due Date & Time:', dueDateTime);
     //console.log('Due Time:', dueTime);
     //console.log('Task name:', currentTaskName);
@@ -156,7 +179,17 @@ const TaskModal: React.FC<TaskModalProps> = ({
     }
   };
 
+  const handleCustomTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomTag(e.target.value);
+  };
 
+  const handleAddCustomTag = () => {
+    if (customTag.trim() !== '') {
+      setAvailableTags(prevTags => [...prevTags, customTag as Tag]);
+      setCurrentTaskTag(customTag as Tag); // Set current sprint to custom sprint
+      setCustomTag('');
+    }
+  };
   
   const handleTextFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -207,7 +240,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 size="small"
               />
             </div>
-              <div style={{marginBottom: '8px', marginTop: '8px'}}>
+            <div style={{marginBottom: '8px', marginTop: '8px'}}>
               <Select
                 value={currentTaskSprint}
                 onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}
@@ -228,6 +261,32 @@ const TaskModal: React.FC<TaskModalProps> = ({
                   onChange={handleCustomSprintChange}
                   onKeyDown={handleTextFieldKeyDown}
                   label="Custom Sprint"
+                  variant="outlined"
+                  size="small"
+                />
+                <Button variant='outlined' onClick={handleAddCustomSprint}>Confirm</Button>
+              </div>
+              <div style={{marginBottom: '8px', marginTop: '8px'}}>
+              <Select
+                value={currentTaskTag}
+                onChange={(e) => setCurrentTaskTag(e.target.value as Tag)}
+              >
+                <MenuItem disabled value="">
+                  Select Tag
+                </MenuItem>
+                {availableTags.map(tag => (
+                  <MenuItem key={tag} value={tag}>
+                    {tag}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+              <div style={{marginBottom: '8px', marginTop: '8px'}}>
+                <TextField
+                  value={customTag}
+                  onChange={handleCustomTagChange}
+                  onKeyDown={handleTextFieldKeyDown}
+                  label="Custom Tag"
                   variant="outlined"
                   size="small"
                 />

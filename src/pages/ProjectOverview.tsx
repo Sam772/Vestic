@@ -17,7 +17,7 @@ import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material/';
 import TextField from '@mui/material/TextField';
 import dayjs, { Dayjs } from 'dayjs';
-import { Sprint } from '../components/TaskModal';
+import { Sprint, Tag } from '../components/TaskModal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import WestIcon from '@mui/icons-material/West';
@@ -75,6 +75,7 @@ interface Task {
   dueDateTime: Dayjs,
   files: File[]
   sprint: Sprint | string
+  tag: Tag | string
 }
 
 // Represents a collection of tasks for each column of different states
@@ -203,6 +204,13 @@ const KanbanBoard: React.FC = () => {
     Done: Sprint.Sprint1,
   });
 
+  // Stores the descriptions of new tasks, initialised with empty strings for each column
+  const [newTaskTag, setNewTaskTag] = useState<Record<ColumnName, Tag>>({
+    New : Tag.Tag1,
+    Committed : Tag.Tag1,
+    Done : Tag.Tag1,
+  });
+
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
   const [selectedSprint, setSelectedSprint] = useState<string>('All');
@@ -255,6 +263,7 @@ const KanbanBoard: React.FC = () => {
     const files = newFiles[columnName] || [];
     const dueDateTime = setNewDueDateTime[columnName] || Dayjs;
     const sprint = setNewSprint[columnName] || Sprint.Sprint1;
+    const tag = newTaskTag[columnName] || Tag.Tag1;
     
     // Prevents task from being created if there is no text
     if (name.trim() !== '') {
@@ -266,6 +275,7 @@ const KanbanBoard: React.FC = () => {
         dueDateTime: dueDateTime,
         files: files,
         sprint: sprint,
+        tag: tag,
       };
       // Sets the initial state of tasks
       setTasks(prevTasks => ({
@@ -301,6 +311,11 @@ const KanbanBoard: React.FC = () => {
       setSprint(prevSprint => ({
         ...prevSprint,
         [columnName]: Sprint.Sprint1,
+      }));
+      // Sets the initial task tag
+      setNewTaskTag(prevTags => ({
+        ...prevTags,
+        [columnName]: Tag.Tag1,
       }));
     }
   };
@@ -572,7 +587,7 @@ const KanbanBoard: React.FC = () => {
   };
 
   // For saving the updated data of a new task
-  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[], sprint: Sprint | string) => {
+  const handleSaveTask = (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, files: File[], sprint: Sprint | string, tag: Tag | string) => {
     const updatedTasks = {
       ...tasks,
       New: tasks.New.map(task => task.id === taskId ? 
@@ -582,6 +597,7 @@ const KanbanBoard: React.FC = () => {
           dueDateTime: dueDateTime,
           files: files,
           sprint: sprint,
+          tag: tag,
         } : task),
       Committed: tasks.Committed.map(task => task.id === taskId ?
         { ...task, name: newTaskName,
@@ -590,6 +606,7 @@ const KanbanBoard: React.FC = () => {
           dueDateTime: dueDateTime,
           files: files,
           sprint: sprint,
+          tag: tag,
         } : task),
       Done: tasks.Done.map(task => task.id === taskId ?
         { ...task, name: newTaskName,
@@ -598,6 +615,7 @@ const KanbanBoard: React.FC = () => {
           dueDateTime: dueDateTime,
           files: files,
           sprint: sprint,
+          tag: tag,
         } : task),
     };
     setTasks(updatedTasks);
@@ -611,8 +629,8 @@ const KanbanBoard: React.FC = () => {
     // Get the number of tasks in the column
     const numTasks = filteredTasks[columnName].length;
 
-    const minHeight = 214;
-    const maxHeightPerTask = 115;
+    const minHeight = 214; //120
+    const maxHeightPerTask = 1334; //50
     const shouldAdjustHeight = numTasks > initialTaskCounts[columnName];
     const calculatedHeight = shouldAdjustHeight ? minHeight + (numTasks - initialTaskCounts[columnName]) * maxHeightPerTask : minHeight;
 
@@ -692,6 +710,7 @@ const KanbanBoard: React.FC = () => {
                       id={task.id}
                       taskName={task.name}
                       taskSprint={task.sprint}
+                      taskTag={task.tag}
                       taskDueDate={task.dueDateTime}
                       sourceColumn={columnName}
                       onClick={() => openModal(task.id)}
@@ -704,20 +723,24 @@ const KanbanBoard: React.FC = () => {
                   ))}
               </div>
               <div className='task-input-container' style={{marginBottom: '8px', marginTop: '8px'}}>
-                <TextField
-                  type="text"
-                  className="input-field"
-                  value={newTaskName[columnName]}
-                  onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
-                  placeholder="Enter task name"
-                  fullWidth
-                />
+                {columnName === ColumnName.NEW && (
+                  <TextField
+                    type="text"
+                    className="input-field"
+                    value={newTaskName[columnName]}
+                    onChange={(e) => handleNewTaskTextChange(columnName as ColumnName, e.target.value)}
+                    placeholder="Enter task name"
+                    fullWidth
+                  />
+                )}
               </div>
-              <Button
-                variant='outlined'
-                className="create-task-button"
-                onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
-              </Button>
+              {columnName === ColumnName.NEW && (
+                <Button
+                  variant='outlined'
+                  className="create-task-button"
+                  onClick={() => handleCreateNewTask(columnName as ColumnName)}>Create New Task
+                </Button>
+              )}
               <div style={{ marginTop: '8px'}}>
               <Button variant='outlined' 
                 className="delete-column-button"
@@ -755,6 +778,7 @@ const KanbanBoard: React.FC = () => {
               uploadedFiles={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.files || [] : []}
               dueDateTime={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.dueDateTime || dayjs() : dayjs()}
               taskSprint={selectedTaskId ? (tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.sprint || Sprint.Sprint1) : Sprint.Sprint1}
+              taskTag={selectedTaskId ? tasks.New.concat(tasks.Committed, tasks.Done).find(task => task.id === selectedTaskId)?.tag || Tag.Tag1 : Tag.Tag1}
               onClose={closeModal}
               onDelete={deleteTask}
               onSave={handleSaveTask}
