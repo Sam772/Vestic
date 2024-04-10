@@ -214,6 +214,7 @@ const KanbanBoard: React.FC = () => {
   // Stores the text used to filter tasks by name, initialised as an empty string
   const [filterText, setFilterText] = useState<string>('');
   const [selectedSprint, setSelectedSprint] = useState<string>('All');
+  const [selectedTag, setSelectedTag] = useState<string>('All');
 
   // Get unique sprints from tasks
   const sprints: string[] = Array.from(
@@ -222,10 +223,20 @@ const KanbanBoard: React.FC = () => {
     )
   );
 
+  // Get unique tags from tasks
+  const tags: string[] = Array.from(
+    new Set(
+      Object.values(tasks).flatMap((taskList: Task[]) => taskList.map((task: Task) => task.tag))
+    )
+  );
+
   // Filter tasks based on selected sprint and filter text
   const filteredTasks: Tasks = Object.keys(tasks).reduce((filtered, columnName) => {
     filtered[columnName as keyof Tasks] = tasks[columnName as keyof Tasks].filter(task => {
-      if (selectedSprint === 'All' || task.sprint === selectedSprint) {
+      if (
+        (selectedSprint === 'All' || task.sprint === selectedSprint) && 
+        (selectedTag === 'All' || task.tag === selectedTag)
+      ) {
         return task.name.toLowerCase().includes(filterText.toLowerCase());
       }
       return false;
@@ -643,27 +654,37 @@ const KanbanBoard: React.FC = () => {
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
     <HeroProjectOverview />
       <Box sx={{ bgcolor: 'background.default'}}>
+        <div className="filter-container" style={{ display: 'flex', alignItems: 'center' }}>
+          <TextField
+            type="text"
+            className="filter-box"
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            placeholder="Filter tasks by name"
+            fullWidth
+          />
+          <Select
+            value={selectedSprint}
+            onChange={(e) => setSelectedSprint(e.target.value)}
+            fullWidth
+          >
+            <MenuItem value="All">All Sprints</MenuItem>
+            {sprints.map((sprint, index) => (
+              <MenuItem key={index} value={sprint}>{sprint}</MenuItem>
+            ))}
+          </Select>
+          <Select
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+            fullWidth
+          >
+            <MenuItem value="All">All Tags</MenuItem>
+            {tags.map((tag, index) => (
+              <MenuItem key={index} value={tag}>{tag}</MenuItem>
+            ))}
+          </Select>
+        </div>
         <div ref={drop} className="kanban-board" /*onDrop={handleDrop}*/ onDragOver={handleDragOver}>
-          <div className="filter-container">
-            <TextField
-              type="text"
-              className="filter-box"
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-              placeholder="Filter tasks by name"
-              fullWidth
-            />
-            <Select
-              value={selectedSprint}
-              onChange={(e) => setSelectedSprint(e.target.value)}
-              fullWidth
-            >
-              <MenuItem value="All">All Sprints</MenuItem>
-              {sprints.map((sprint, index) => (
-                <MenuItem key={index} value={sprint}>{sprint}</MenuItem>
-              ))}
-            </Select>
-          </div>
           {columnOrder.map((columnName, index) => (
             <div 
               key={columnName}

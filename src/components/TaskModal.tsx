@@ -241,6 +241,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
               />
             </div>
             <div style={{marginBottom: '8px', marginTop: '8px'}}>
+            <div style={{marginBottom: '8px'}}>
+              <strong>
+                <label htmlFor="taskName">Sprints</label>
+              </strong>
+            </div>
               <Select
                 value={currentTaskSprint}
                 onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}
@@ -267,6 +272,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 <Button variant='outlined' onClick={handleAddCustomSprint}>Confirm</Button>
               </div>
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
+                <div style={{marginBottom: '8px'}}>
+                  <strong>
+                    <label htmlFor="taskName">Tags</label>
+                  </strong>
+                </div>
               <Select
                 value={currentTaskTag}
                 onChange={(e) => setCurrentTaskTag(e.target.value as Tag)}
