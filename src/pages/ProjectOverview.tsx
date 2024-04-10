@@ -743,6 +743,7 @@ const KanbanBoard: React.FC = () => {
                         e.dataTransfer.setData('taskId', String(task.id));
                         e.dataTransfer.setData('sourceColumn', columnName);
                       }}
+                      onDeleteTask={deleteTask}
                     />
                   ))}
               </div>

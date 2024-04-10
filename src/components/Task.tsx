@@ -10,6 +10,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import TestModal from './TestModal';
 
 interface TaskProps {
   id: number;
@@ -21,6 +22,7 @@ interface TaskProps {
   draggable?: boolean;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onDeleteTask?: (taskId: number) => void;
 }
 
 type ActionType = 'Add Test' | 'Delete Task';
@@ -34,7 +36,7 @@ const bull = (
   </Box>
 );
 
-const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueDate, sourceColumn, draggable = true, onDragStart, onClick }) => {
+const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueDate, sourceColumn, draggable = true, onDragStart, onClick, onDeleteTask }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'TASK',
     item: { type: 'TASK', id, sourceColumn },
@@ -59,20 +61,37 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
     setDropdownOpen(!dropdownOpen);
   };
 
+  const [addTestModalOpen, setAddTestModalOpen] = useState(false);
+
+  const handleAddTest = (testName: string) => {
+    // Add your logic here to handle adding the test
+    console.log('Test added:', testName);
+    // Update state or data source accordingly
+    setAddTestModalOpen(false); // Close the modal after adding the test
+  };
+
   const handleButtonClick = (action: ActionType) => {
     // Define actions for each button in the dropdown
     switch (action) {
       case 'Add Test':
-        // Handle action 1
+        setAddTestModalOpen(true);
         break;
       case 'Delete Task':
-        // Handle action 2
+        deleteTask(id);
         break;
       default:
         break;
     }
     // Close the dropdown after an action is performed
     setAnchorEl(null);
+  };
+
+  const deleteTask = (taskId: number) => {
+    // Call the onDeleteTask function passed from parent component
+    console.log('Deleting task with ID:', taskId);
+    if (onDeleteTask) {
+      onDeleteTask(taskId);
+    }
   };
 
   return (
@@ -131,6 +150,13 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
             </CardActions>
           </React.Fragment>
         </Card>
+        {addTestModalOpen && (
+          <TestModal
+            open={addTestModalOpen}
+            onClose={() => setAddTestModalOpen(false)}
+            onAddTest={handleAddTest}
+          />
+        )}
     </div>
   );
 };
