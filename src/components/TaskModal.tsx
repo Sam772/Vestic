@@ -174,9 +174,14 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const handleAddCustomSprint = () => {
     if (customSprint.trim() !== '') {
       setAvailableSprints(prevSprints => [...prevSprints, customSprint as Sprint]);
-      setCurrentTaskSprint(customSprint as Sprint); // Set current sprint to custom sprint
+      setCurrentTaskSprint(customSprint as Sprint);
       setCustomSprint('');
     }
+  };
+
+  const handleDeleteSprint = (sprint: Sprint) => {
+    setAvailableSprints(prevSprints => prevSprints.filter(s => s !== sprint));
+    setCurrentTaskSprint('');
   };
 
   const handleCustomTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,9 +191,14 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const handleAddCustomTag = () => {
     if (customTag.trim() !== '') {
       setAvailableTags(prevTags => [...prevTags, customTag as Tag]);
-      setCurrentTaskTag(customTag as Tag); // Set current sprint to custom sprint
+      setCurrentTaskTag(customTag as Tag);
       setCustomTag('');
     }
+  };
+
+  const handleDeleteTag = (tag: Tag) => {
+    setAvailableTags(prevTags => prevTags.filter(t => t !== tag));
+    setCurrentTaskTag('');
   };
   
   const handleTextFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -241,11 +251,11 @@ const TaskModal: React.FC<TaskModalProps> = ({
               />
             </div>
             <div style={{marginBottom: '8px', marginTop: '8px'}}>
-            <div style={{marginBottom: '8px'}}>
-              <strong>
-                <label htmlFor="taskName">Sprints</label>
-              </strong>
-            </div>
+              <div style={{marginBottom: '8px'}}>
+                <strong>
+                  <label htmlFor="taskName">Sprints</label>
+                </strong>
+              </div>
               <Select
                 value={currentTaskSprint}
                 onChange={(e) => setCurrentTaskSprint(e.target.value as Sprint)}
@@ -253,9 +263,15 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 <MenuItem disabled value="">
                   Select Sprint
                 </MenuItem>
-                {availableSprints.map(sprint => (
-                  <MenuItem key={sprint} value={sprint}>
+                {availableSprints.map((sprint, index) => (
+                  <MenuItem key={index} value={sprint}>
                     {sprint}
+                    <Button
+                      size="small"
+                      onClick={() => handleDeleteSprint(sprint)}
+                    >
+                      <CloseIcon />
+                    </Button>
                   </MenuItem>
                 ))}
               </Select>
@@ -284,9 +300,15 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 <MenuItem disabled value="">
                   Select Tag
                 </MenuItem>
-                {availableTags.map(tag => (
-                  <MenuItem key={tag} value={tag}>
+                {availableTags.map((tag, index) => (
+                  <MenuItem key={index} value={tag}>
                     {tag}
+                    <Button
+                      size="small"
+                      onClick={() => handleDeleteTag(tag)}
+                    >
+                      <CloseIcon />
+                    </Button>
                   </MenuItem>
                 ))}
               </Select>
@@ -300,7 +322,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                   variant="outlined"
                   size="small"
                 />
-                <Button variant='outlined' onClick={handleAddCustomSprint}>Confirm</Button>
+                <Button variant='outlined' onClick={handleAddCustomTag}>Confirm</Button>
               </div>
             <div className="date-time-container">
               <div style={{marginBottom: '8px', marginTop: '8px'}}>
