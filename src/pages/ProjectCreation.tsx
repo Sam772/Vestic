@@ -103,6 +103,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
   useEffect(() => {
     // Update local storage when workspaces state changes
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
+    //console.log(workspaces);
   }, [workspaces]);
 
   // In ProjectCreation component

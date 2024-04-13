@@ -507,10 +507,13 @@ const KanbanBoard: React.FC = () => {
     console.log('RelativeY:', relativeY);
 
     // Calculate the total number of tasks
-    const totalTasks = tasks.length;
+    const totalTasks = tasks.length * 120;
+
+    // Calculate the total height of tasks
+    const totalHeight = tasks.length * 120; // Assuming each task has a height of 120px
 
     // Calculate the insertion index based on relative position
-    const insertIndex = Math.floor(relativeY * totalTasks);
+    const insertIndex = Math.floor(relativeY * totalHeight) / 120;
 
     return insertIndex;
   };
@@ -643,8 +646,8 @@ const KanbanBoard: React.FC = () => {
     // Get the number of tasks in the column
     const numTasks = filteredTasks[columnName].length;
 
-    const minHeight = 214; //120
-    const maxHeightPerTask = 1334; //50
+    const minHeight = 300; //120
+    const maxHeightPerTask = 120; //50
     const shouldAdjustHeight = numTasks > initialTaskCounts[columnName];
     const calculatedHeight = shouldAdjustHeight ? minHeight + (numTasks - initialTaskCounts[columnName]) * maxHeightPerTask : minHeight;
 

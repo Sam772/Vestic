@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WorkspaceCreation.css';
 import { PaletteMode } from '@mui/material';
@@ -120,8 +120,20 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
     setError('');
   
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`, { state: { workspaces } });
+    console.log(workspaces);
   };
+
+  useEffect(() => {
+    // Retrieve workspaces from local storage
+    const storedWorkspaces = JSON.parse(localStorage.getItem('workspaces') || '[]');
   
+    // Check if there are any stored workspaces
+    if (storedWorkspaces.length > 0) {
+      // If there are stored workspaces, navigate the user to the project creation page
+      navigate(`/${encodeURIComponent(storedWorkspaces[0].name)}`);
+      console.log(storedWorkspaces);
+    }
+  }, [navigate]); // Make sure to include any dependencies used inside the useEffect  
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
