@@ -170,81 +170,23 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     setIsProjectModalOpen(false);
   };
 
-  const handleCreateWorkspaceClick = () => {
-    setIsWorkspaceModalOpen(true);
-  };
-
   const closeWorkspaceModal = () => {
     setIsWorkspaceModalOpen(false);
   };
 
-  // const handleWorkspaceCreate = (workspace: Workspace) => {
-  //   if (!workspace.name.trim() || !workspace.description.trim()) {
-  //     setError('Please fill in both workspace name and description.');
-  //     return;
-  //   }
+  useEffect(() => {
+    // Retrieve the first workspace from the list of workspaces
+    const firstWorkspace = workspaces[0];
   
-  //   // Create workspace object
-  //   const newWorkspace: Workspace = {
-  //     name: workspace.name,
-  //     description: workspace.description,
-  //   };
-  
-  //   // Update the list of workspaces
-  //   setWorkspaces((prevWorkspaces) => [...prevWorkspaces, newWorkspace]);
-
-  //   onCreateWorkspace(newWorkspace);
-  
-  //   // Reset input fields and error message
-  //   setWorkspaceName('');
-  //   setWorkspaceDescription('');
-  //   setError('');
-  
-  //   // Navigate to the newly created workspace
-  //   navigate(`/${encodeURIComponent(workspace.name)}?description=${encodeURIComponent(workspace.description)}`, { state: { workspaces } });
-  // };
-
-  const [newWorkspaceName, setNewWorkspaceName] = useState('');
-  const [newWorkspaceDescription, setNewWorkspaceDescription] = useState('');
-  const [error, setError] = useState('');
+    if (firstWorkspace) {
+      handleWorkspaceButtonClick(firstWorkspace.name);
+    }
+  }, [workspaces]); // Run this effect whenever the list of workspaces changes  
 
   // Function to add a new workspace
   const addWorkspace = (newWorkspace: Workspace) => {
     setWorkspaces((prevWorkspaces: Workspace[]) => [...prevWorkspaces, newWorkspace]);
   };
-
-  const handleWorkspaceCreate = () => {
-    if (!newWorkspaceName.trim() || !newWorkspaceDescription.trim()) {
-      setError('Please fill in both workspace name and description.');
-      return;
-    }
-  
-    // Create workspace object
-    const newWorkspace: Workspace = {
-      name: newWorkspaceName,
-      description: newWorkspaceDescription,
-    };
-  
-    // // Call the onCreateWorkspace function to handle the creation of the workspace
-    // setWorkspaces((prevWorkspaces) => [...prevWorkspaces, newWorkspace]);
-    addWorkspace(newWorkspace);
-
-    setWorkspaces((prevWorkspaces: Workspace[]) => [...prevWorkspaces, newWorkspace]);
-
-    console.log(newWorkspace);
-    console.log(workspaces);
-  
-    // Reset input fields and error message
-    setNewWorkspaceName('');
-    setNewWorkspaceDescription('');
-    setError('');
-  
-    // Close the modal
-    setIsWorkspaceModalOpen(false);
-  };
-  
-
-  
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
