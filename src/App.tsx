@@ -67,7 +67,7 @@ const App: React.FC = () => {
         <div>
           <Routes>
             <Route path="/" element={<LandingPage/>} />
-            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} deleteWorkspace={deleteWorkspace} projects={projects} setProjects={setProjects}/>} />
+            <Route path="/:name" element={<ProjectCreation workspaces={workspaces} setWorkspaces={setWorkspaces} deleteWorkspace={deleteWorkspace} projects={projects} setProjects={setProjects}/>} />
             <Route path="/workspacecreation" element={<WorkspaceCreation handleWorkspaceCreate={handleWorkspaceCreate}/>} />
             <Route path="/:workspace/:projectName" element={<KanbanBoard />} />
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} wikiPages={wikiPages} />} />

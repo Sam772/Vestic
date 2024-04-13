@@ -14,7 +14,7 @@ import Hero from '../components/Hero';
 import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import WorkspaceCreation from './WorkspaceCreation';
+import WorkspaceModal from '../components/WorkspaceModal';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -31,6 +31,7 @@ interface ProjectCreationProps {
   projects: Project[];
   deleteWorkspace: (workspaceName: string) => void;
   setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
+  setWorkspaces: React.Dispatch<React.SetStateAction<Workspace[]>>;
 }
 
 export interface Project {
@@ -76,7 +77,7 @@ function ToggleCustomTheme({
   );
 }
 
-const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWorkspace, projects, setProjects } ) => {
+const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorkspaces, deleteWorkspace, projects, setProjects } ) => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -115,7 +116,9 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
   const [selectedWorkspace, setSelectedWorkspace] = useState<string>('');
 
   const [showProjectList, setShowProjectList] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
 
   const handleWorkspaceButtonClick = (workspaceName: string) => {
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
@@ -129,11 +132,11 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
   };
 
   const handleCreateProjectClick = () => {
-    setIsModalOpen(true);
+    setIsProjectModalOpen(true);
   };
 
   const handleProjectCreate = (projectName: string, projectDescription: string) => {
-    setIsModalOpen(false);
+    setIsProjectModalOpen(true);
     // You can handle the project creation logic here
     // const projectLink = `${name}/${projectName}`;
     // navigate(`/${projectLink}`, { state: { projectName, projectDescription } });
@@ -154,9 +157,85 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
     // Optionally, you can navigate to a different page or show a confirmation message after deletion
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeProjectModal = () => {
+    setIsProjectModalOpen(false);
   };
+
+  const handleCreateWorkspaceClick = () => {
+    setIsWorkspaceModalOpen(true);
+  };
+
+  const closeWorkspaceModal = () => {
+    setIsWorkspaceModalOpen(false);
+  };
+
+  // const handleWorkspaceCreate = (workspace: Workspace) => {
+  //   if (!workspace.name.trim() || !workspace.description.trim()) {
+  //     setError('Please fill in both workspace name and description.');
+  //     return;
+  //   }
+  
+  //   // Create workspace object
+  //   const newWorkspace: Workspace = {
+  //     name: workspace.name,
+  //     description: workspace.description,
+  //   };
+  
+  //   // Update the list of workspaces
+  //   setWorkspaces((prevWorkspaces) => [...prevWorkspaces, newWorkspace]);
+
+  //   onCreateWorkspace(newWorkspace);
+  
+  //   // Reset input fields and error message
+  //   setWorkspaceName('');
+  //   setWorkspaceDescription('');
+  //   setError('');
+  
+  //   // Navigate to the newly created workspace
+  //   navigate(`/${encodeURIComponent(workspace.name)}?description=${encodeURIComponent(workspace.description)}`, { state: { workspaces } });
+  // };
+
+  const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  const [newWorkspaceDescription, setNewWorkspaceDescription] = useState('');
+  const [error, setError] = useState('');
+
+  // Function to add a new workspace
+  const addWorkspace = (newWorkspace: Workspace) => {
+    setWorkspaces((prevWorkspaces: Workspace[]) => [...prevWorkspaces, newWorkspace]);
+  };
+
+  const handleWorkspaceCreate = () => {
+    if (!newWorkspaceName.trim() || !newWorkspaceDescription.trim()) {
+      setError('Please fill in both workspace name and description.');
+      return;
+    }
+  
+    // Create workspace object
+    const newWorkspace: Workspace = {
+      name: newWorkspaceName,
+      description: newWorkspaceDescription,
+    };
+  
+    // // Call the onCreateWorkspace function to handle the creation of the workspace
+    // setWorkspaces((prevWorkspaces) => [...prevWorkspaces, newWorkspace]);
+    addWorkspace(newWorkspace);
+
+    setWorkspaces((prevWorkspaces: Workspace[]) => [...prevWorkspaces, newWorkspace]);
+
+    console.log(newWorkspace);
+    console.log(workspaces);
+  
+    // Reset input fields and error message
+    setNewWorkspaceName('');
+    setNewWorkspaceDescription('');
+    setError('');
+  
+    // Close the modal
+    setIsWorkspaceModalOpen(false);
+  };
+  
+
+  
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
@@ -177,7 +256,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
                   <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)}>Delete Workspace</Button>
                 </ListItem>
               ))}
-                <Button variant='outlined' onClick={() => navigate('/workspacecreation')}>Create a Workspace</Button>
+                <Button variant='outlined' onClick={() => setIsWorkspaceModalOpen(true)}>Create a Workspace</Button>
             </List>
           </div>
           <div className="main-content">
@@ -217,15 +296,22 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, deleteWo
               </button>
             </div>
           </div>
-          {isModalOpen && (
+          {isProjectModalOpen && (
             <ProjectModal
-              isOpen={isModalOpen}
+              isOpen={isProjectModalOpen}
               projectName=""
               projectDescription=""
-              onClose={closeModal}
+              onClose={closeProjectModal}
               onProjectCreate={handleProjectCreate}
             />
           )}
+          {isWorkspaceModalOpen && ( // Added workspace modal
+            <WorkspaceModal
+              isOpen={isWorkspaceModalOpen}
+              onClose={closeWorkspaceModal}
+              onCreateWorkspace={addWorkspace}
+            />
+           )}
         </div>
       </Box>
         {/* <ToggleCustomTheme
