@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './ProjectModal.css';
+import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -33,37 +33,58 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="project-modal-overlay" onClick={onClose}>
-      <div className="project-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="project-modal-header">
-          <h2>Create Project</h2>
-          <button className="close-btn" onClick={onClose}>X</button>
-        </div>
-        <div className="project-modal-body">
-          <div className="form-group">
-            <label htmlFor="projectName">Project Name:</label>
-            <input
-              type="text"
-              id="projectName"
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="projectDescription">Project Description:</label>
-            <textarea
-              id="projectDescription"
-              value={projectDescription}
-              onChange={(e) => setProjectDescription(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="project-modal-footer">
-        <button className="create-btn" onClick={handleCreate}>Create</button>
-          <button className="exit-btn" onClick={onClose}>Exit</button>
-        </div>
-      </div>
-    </div>
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      aria-labelledby="project-modal-title"
+      aria-describedby="project-modal-description"
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          borderRadius: '8px',
+        }}
+      >
+        <Typography variant="h5" component="h2" id="project-modal-title" gutterBottom>
+          Create Project
+        </Typography>
+        <TextField
+          label="Project Name"
+          id="projectName"
+          fullWidth
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          label="Project Description"
+          id="projectDescription"
+          fullWidth
+          multiline
+          rows={4}
+          value={projectDescription}
+          onChange={(e) => setProjectDescription(e.target.value)}
+          margin="normal"
+          variant="outlined"
+        />
+        <Box sx={{ textAlign: 'right', mt: 2 }}>
+          <Button variant="contained" onClick={handleCreate} color="primary">
+            Create
+          </Button>
+          <Button variant="contained" onClick={onClose} color="secondary" sx={{ ml: 2 }}>
+            Close
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
 };
 
