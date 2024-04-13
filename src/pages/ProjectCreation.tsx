@@ -124,7 +124,9 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
     setShowProjectList(true);
     setSelectedWorkspace(workspaceName);
-    setProjects([]);
+
+    const workspaceProjects = JSON.parse(localStorage.getItem(workspaceName) || '[]');
+    setProjects(workspaceProjects);
   };
 
   const handleProjectButtonClick = (projectName: string) => {
@@ -149,6 +151,13 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
 
     // Add the new project to the list of projects for the selected workspace
     setProjects((prevProjects) => [...prevProjects, newProject]);
+
+    // Save projects to local storage
+    const workspaceProjects = JSON.parse(localStorage.getItem(selectedWorkspace) || '[]');
+    localStorage.setItem(selectedWorkspace, JSON.stringify([...workspaceProjects, newProject]));
+
+    // Close the project modal
+    closeProjectModal();
   };
   
   // Function to delete a workspace
@@ -303,6 +312,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
               projectDescription=""
               onClose={closeProjectModal}
               onProjectCreate={handleProjectCreate}
+              workspaceName={selectedWorkspace}
             />
           )}
           {isWorkspaceModalOpen && ( // Added workspace modal

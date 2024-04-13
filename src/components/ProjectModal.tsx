@@ -5,14 +5,16 @@ interface ProjectModalProps {
   isOpen: boolean;
   projectName: string;
   projectDescription: string;
+  workspaceName: string;
   onClose: () => void;
-  onProjectCreate: (projectName: string, projectDescription: string) => void;
+  onProjectCreate: (projectName: string, projectDescription: string, workspaceName: string) => void;
 }
 
 const ProjectModal: React.FC<ProjectModalProps> = ({
   isOpen,
   projectName: initialProjectName,
   projectDescription: initialProjectDescription,
+  workspaceName,
   onClose,
   onProjectCreate,
 }) => {
@@ -21,7 +23,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
   const handleCreate = () => {
     // Handle save logic here
-    onProjectCreate(projectName, projectDescription);
+    onProjectCreate(projectName, projectDescription, workspaceName);
     onClose();
   };
 
