@@ -97,9 +97,10 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { name } = useParams<{ name: string }>();
+  const params = useParams<{ name: string; description: string }>();
+  const { name, description } = params;
 
-  const workspaceDescription = new URLSearchParams(location.search).get('description') || '';
+  // const workspaceDescription = new URLSearchParams(location.search).get('description') || '';
 
   useEffect(() => {
     // Update local storage when workspaces state changes
@@ -113,17 +114,19 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     localStorage.setItem('projects', JSON.stringify(projects));
   }, [projects]);
 
-  const [selectedWorkspace, setSelectedWorkspace] = useState<string>('');
+  const [selectedWorkspaceName, setSelectedWorkspaceName] = useState<string>('');
+  const [selectedWorkspaceDescription, setSelectedWorkspaceDescription] = useState<string>('');
 
   const [showProjectList, setShowProjectList] = useState(false);
   
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
 
-  const handleWorkspaceButtonClick = (workspaceName: string) => {
+  const handleWorkspaceButtonClick = (workspaceName: string, workspaceDescription: string) => {
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
     setShowProjectList(true);
-    setSelectedWorkspace(workspaceName);
+    setSelectedWorkspaceName(workspaceName);
+    setSelectedWorkspaceDescription(workspaceDescription);
 
     const workspaceProjects = JSON.parse(localStorage.getItem(workspaceName) || '[]');
     setProjects(workspaceProjects);
@@ -153,8 +156,11 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     setProjects((prevProjects) => [...prevProjects, newProject]);
 
     // Save projects to local storage
-    const workspaceProjects = JSON.parse(localStorage.getItem(selectedWorkspace) || '[]');
-    localStorage.setItem(selectedWorkspace, JSON.stringify([...workspaceProjects, newProject]));
+    const workspaceProjects = JSON.parse(localStorage.getItem(selectedWorkspaceName) || '[]');
+    localStorage.setItem(selectedWorkspaceName, JSON.stringify([...workspaceProjects, newProject]));
+
+    const workspaceProjectsDesc = JSON.parse(localStorage.getItem(selectedWorkspaceDescription) || '[]');
+    localStorage.setItem(selectedWorkspaceDescription, JSON.stringify([...workspaceProjects, newProject]));
 
     // Close the project modal
     closeProjectModal();
@@ -179,7 +185,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     const firstWorkspace = workspaces[0];
   
     if (firstWorkspace) {
-      handleWorkspaceButtonClick(firstWorkspace.name);
+      handleWorkspaceButtonClick(firstWorkspace.name, firstWorkspace.description);
     }
   }, [workspaces]); // Run this effect whenever the list of workspaces changes  
 
@@ -201,8 +207,8 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
             <List>
               {workspaces.map((workspace, index) => (
                 <ListItem key={index}>
-                  <ListItemButton onClick={() => handleWorkspaceButtonClick(workspace.name)}>
-                    <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name)}>{workspace.name}</Button>
+                  <ListItemButton onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>
+                    <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>{workspace.name}</Button>
                   </ListItemButton>
                   <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)}>Delete Workspace</Button>
                 </ListItem>
@@ -221,14 +227,14 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                 <div className="workspace-details-container">
                   <h2>Workspace Details</h2>
                   <p>Name: {name}</p>
-                  <p>Description: {workspaceDescription}</p>
+                  <p>Description: {description}</p>
                 </div>
               </Typography>
           </ThemeProvider>
             {showProjectList && (
               <div className="project-list-container">
                 <h2>Projects</h2>
-                {selectedWorkspace && (
+                {selectedWorkspaceName && (
                 <div>
                   {projects.map(project => (
                     <div key={project.name} className="project-item">
@@ -254,7 +260,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
               projectDescription=""
               onClose={closeProjectModal}
               onProjectCreate={handleProjectCreate}
-              workspaceName={selectedWorkspace}
+              workspaceName={selectedWorkspaceName}
             />
           )}
           {isWorkspaceModalOpen && ( // Added workspace modal
