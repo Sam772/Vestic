@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TestModal from './TestModal';
+import ScienceIcon from '@mui/icons-material/Science';
 
 interface TaskProps {
   id: number;
@@ -62,11 +63,14 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
   };
 
   const [addTestModalOpen, setAddTestModalOpen] = useState(false);
+  const [testInfo, setTestInfo] = useState<{ testName: string; steps: string[]; expectedResults: string[] } | null>(null);
 
-  const handleAddTest = (testName: string) => {
+  const handleAddTest = (testName: string, steps: string[], expectedResults: string[]) => {
     // Add your logic here to handle adding the test
     console.log('Test added:', testName);
-    // Update state or data source accordingly
+    console.log('Steps:', steps);
+    console.log('Expected Results:', expectedResults);
+    setTestInfo({ testName, steps, expectedResults });
     setAddTestModalOpen(false); // Close the modal after adding the test
   };
 
@@ -105,26 +109,26 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
     >
       <Card variant='outlined'>
         <div className='task-header'>
-        <Button
-            variant="outlined"
-            aria-controls="task-menu"
-            aria-haspopup="true"
-            onClick={handleMenuOpen}
+          <Button
+              variant="outlined"
+              aria-controls="task-menu"
+              aria-haspopup="true"
+              onClick={handleMenuOpen}
+              className='dropdown-button'
+            >
+            <MoreVertIcon />
+          </Button>
+          <Menu
+            id="task-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
             className='dropdown-button'
           >
-          <MoreVertIcon />
-        </Button>
-        <Menu
-          id="task-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          className='dropdown-button'
-        >
-          <MenuItem onClick={() => handleButtonClick('Add Test')}>Add Test</MenuItem>
-          <MenuItem onClick={() => handleButtonClick('Delete Task')}>Delete Task</MenuItem>
-        </Menu>
+            <MenuItem onClick={() => handleButtonClick('Add Test')}>Add Test</MenuItem>
+            <MenuItem onClick={() => handleButtonClick('Delete Task')}>Delete Task</MenuItem>
+          </Menu>
         </div>
           <React.Fragment>
             <CardContent>
@@ -147,6 +151,11 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
             </CardContent>
             <CardActions>
               <Button variant='outlined' size="small">Due Date: {taskDueDate.format('YYYY-MM-DD')}</Button>
+              {testInfo && (
+                <Button className='dropdown-button' variant="outlined" onClick={() => setAddTestModalOpen(true)}>
+                  <ScienceIcon />
+                </Button>
+              )}
             </CardActions>
           </React.Fragment>
         </Card>
@@ -155,6 +164,9 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
             open={addTestModalOpen}
             onClose={() => setAddTestModalOpen(false)}
             onAddTest={handleAddTest}
+            testName={testInfo?.testName || ''}
+            steps={testInfo?.steps || []}
+            expectedResults={testInfo?.expectedResults || []}
           />
         )}
     </div>

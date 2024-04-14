@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, Grid  } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Modal, Box, Typography, TextField, Button, Grid } from '@mui/material';
 
 interface TestModalProps {
   open: boolean;
+  testName: string;
+  steps: string[];
+  expectedResults: string[];
   onClose: () => void;
-  onAddTest: (testName: string) => void;
+  onAddTest: (testName: string, steps: string[], expectedResults: string[]) => void;
 }
 
-const TestModal: React.FC<TestModalProps> = ({ open, onClose, onAddTest }) => {
-  const [testName, setTestName] = useState('');
-  const [steps, setSteps] = useState<string[]>([]);
-  const [expectedResults, setExpectedResults] = useState<string[]>([]);
+const TestModal: React.FC<TestModalProps> = ({ open, testName: initialTestName = '', steps: initialSteps = [], expectedResults: initialExpectedResults = [], onClose, onAddTest }) => {
+  const [testName, setTestName] = useState(initialTestName);
+  const [steps, setSteps] = useState<string[]>(initialSteps);
+  const [expectedResults, setExpectedResults] = useState<string[]>(initialExpectedResults);
+
+  useEffect(() => {
+    setTestName(initialTestName);
+    setSteps(initialSteps);
+    setExpectedResults(initialExpectedResults);
+  }, [open, initialTestName, initialSteps, initialExpectedResults]);
 
   const handleAddTest = () => {
-    onAddTest(testName);
+    onAddTest(testName, steps, expectedResults);
     setTestName('');
     setSteps([]);
     setExpectedResults([]);
@@ -102,7 +111,7 @@ const TestModal: React.FC<TestModalProps> = ({ open, onClose, onAddTest }) => {
             <Button variant="contained" onClick={handleAddExpectedResult}>Add Expected Result</Button>
           </Grid>
         </Grid>
-        <Button variant="contained" onClick={handleAddTest}>Add</Button>
+        <Button variant="contained" onClick={handleAddTest}>Create Test</Button>
       </Box>
     </Modal>
   );
