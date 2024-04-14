@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './ProjectOverview.css';
-import Task from '../components/Task'
+import Task from '../components/Task';
 import TaskModal from '../components/TaskModal';
 import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from 'react-dnd';
 import { PaletteMode } from '@mui/material/';
@@ -93,7 +93,7 @@ export enum ColumnName {
 }
 
 // Initialised with initial columns and tasks
-const initialTasks: Tasks = {
+let initialTasks: Tasks = {
   New: [],
   Committed: [],
   Done: [],
@@ -132,7 +132,7 @@ const KanbanBoard: React.FC = () => {
 
   // Has the count of initial tasks
   const [initialTaskCounts, setInitialTaskCounts] = useState<Record<ColumnName, number>>({
-    New: 0,
+    New: 3,
     Committed: 0,
     Done: 0,
   });
@@ -151,6 +151,37 @@ const KanbanBoard: React.FC = () => {
       Done: doneTaskCount,
     });
   }, []);
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      console.log('Tasks loaded from localStorage:', JSON.parse(savedTasks));
+      const loadedTasks = JSON.parse(savedTasks);
+      // Update initialTasks with loaded tasks
+      initialTasks = loadedTasks;
+      // Set tasks state with loaded tasks
+      setTasks(loadedTasks);
+    }
+  }, []);
+  
+
+  // Function to save tasks to localStorage
+  useEffect(() => {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      console.log('Tasks saved:', tasks);
+  }, [tasks]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [tasks]);
 
   // Represents the id of selected tasks, which doesn't exist initially hence null
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
