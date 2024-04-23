@@ -63,9 +63,9 @@ export default function HeroTesting() {
             <List>
               <button className='new-button'>
                 <ListItem>
-                  {/* <Link2 to="/workspacecreation" className="create-workspace-link"> */}
+                  <Link2 to="/testplans">
                     <MUIButton variant='outlined'>Start Now</MUIButton>
-                  {/* </Link2> */}
+                  </Link2>
                 </ListItem>
               </button>
             </List>

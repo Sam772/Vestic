@@ -132,7 +132,7 @@ const KanbanBoard: React.FC = () => {
 
   // Has the count of initial tasks
   const [initialTaskCounts, setInitialTaskCounts] = useState<Record<ColumnName, number>>({
-    New: 3,
+    New: 0,
     Committed: 0,
     Done: 0,
   });

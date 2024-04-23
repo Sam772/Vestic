@@ -207,9 +207,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
             <List>
               {workspaces.map((workspace, index) => (
                 <ListItem key={index}>
-                  <ListItemButton onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>
-                    <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>{workspace.name}</Button>
-                  </ListItemButton>
+                  <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>{workspace.name}</Button>
                   <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)}>Delete Workspace</Button>
                 </ListItem>
               ))}

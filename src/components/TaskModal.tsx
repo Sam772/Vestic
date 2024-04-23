@@ -30,7 +30,15 @@ interface TaskModalProps {
   taskTag: Tag | string;
   onClose: () => void;
   onDelete: (taskId: number) => void;
-  onSave: (taskId: number, newTaskName: string, newTaskDescription: string, comments: string[], dueDateTime: Dayjs, newUploadedFiles: File[], taskSprint: Sprint | string, taskTag: Tag | string) => void;
+  onSave: (
+    taskId: number,
+    newTaskName: string,
+    newTaskDescription: string,
+    comments: string[],
+    dueDateTime: Dayjs,
+    newUploadedFiles: File[],
+    taskSprint: Sprint | string,
+    taskTag: Tag | string) => void;
   onPostComment: (columnName: ColumnName) => void;
   newComment: Record<ColumnName, string>;
   onNewCommentChange: (columnName: ColumnName, e: React.ChangeEvent<HTMLInputElement>) => void;

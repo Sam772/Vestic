@@ -15,6 +15,7 @@ import Analytics from './pages/Analytics';
 import Testing from './pages/Testing';
 import Sidebar from './components/Sidebar';
 import WikiCreate from './pages/WikiCreate';
+import TestPlans from './pages/TestPlans';
 import { PaletteMode } from '@mui/material';
 import { Link } from './components/Types';
 
@@ -73,6 +74,7 @@ const App: React.FC = () => {
             <Route path="/wiki" element={<Wiki createWikiPage={createWikiPage} wikiPages={wikiPages} />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/testing" element={<Testing />} />
+            <Route path="/testplans" element={<TestPlans />} />
             <Route path="/wikicreate" element={<WikiCreate createWikiPage={createWikiPage} />} />
             {wikiPages.map(pageName => (
               <Route

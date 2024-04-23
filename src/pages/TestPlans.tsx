@@ -57,7 +57,7 @@ function ToggleCustomTheme({
   );
 }
 
-const Testing: React.FC = () => {
+const TestPlans: React.FC = () => {
 
   const [mode, setMode] = React.useState<PaletteMode>('dark');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -79,9 +79,24 @@ const Testing: React.FC = () => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-    <HeroTesting />
+      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px'}}>
+        <div className="project-creation-page-container">
+          <div className="sidebar">
+            <ThemeProvider theme={theme}>
+              <Typography variant="h5">Your Workspaces</Typography>
+            </ThemeProvider>
+            <List>
+              <ListItem>
+                <Button variant='outlined'>Workspace name</Button>
+                <Button variant='outlined'>Delete Test Plan</Button>
+              </ListItem>
+              <Button variant='outlined' >Create a Test Plan</Button>
+            </List>
+          </div>
+        </div>
+      </Box>
     </ThemeProvider>
   );
 };
 
-export default Testing;
+export default TestPlans;
