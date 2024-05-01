@@ -54,11 +54,14 @@ export default function HeroWiki() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              Vestic
+              Wikis
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            provides a wiki feature to create new pages to document your projects.<br />
+            Wiki pages allow you to create new pages to document your projects.
+            <br />
+            You can create multiple wikis, delete them and edit them to your liking.
+            <br />
             Get started with Wikis now.
             <List>
               <button className='new-button'>

@@ -54,11 +54,14 @@ export default function HeroTesting() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              Vestic
+              Quality Assurance
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            provides testing features to add flexibility to your project.<br />
+            Using the Quality Assurance test plans will allow users to ensure the quality of their application remains high.
+            <br />
+            Users will be able to run their tests manually on individual tasks at any point during the project.
+            <br />
             Get started with Testing features now.
             <List>
               <button className='new-button'>

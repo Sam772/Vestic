@@ -13,6 +13,7 @@ import getLPTheme from '../getLPTheme';
 import TextField from '@mui/material/TextField';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import HeroProjectOverview from '../components/HeroProjectOverview';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -139,7 +140,8 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
     <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+    <HeroProjectOverview />
+      <Box sx={{ bgcolor: 'background.default'}}>
         <div className="workspace-creation-container">
         <ThemeProvider theme={theme}>
           <Typography variant="h6">
@@ -165,9 +167,9 @@ const WorkspaceCreation: React.FC<WorkspaceCreationProps> = ({ handleWorkspaceCr
           </div>
           <div className="input-container">
             <ThemeProvider theme={theme}>
-                <Typography variant="subtitle1">
-                  <label>Enter Workspace Description</label>
-                </Typography>
+              <Typography variant="subtitle1">
+                <label>Enter Workspace Description</label>
+              </Typography>
             </ThemeProvider>
             <TextField
               type="text"

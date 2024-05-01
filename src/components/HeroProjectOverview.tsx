@@ -19,7 +19,7 @@ export default function HeroWiki() {
           theme.palette.mode === 'light'
             ? 'linear-gradient(180deg, #CEE5FD, #FFF)'
             : `linear-gradient(#02294F, ${alpha('#090E10', 0.0)})`,
-        backgroundSize: '100% 20%',
+        backgroundSize: '100% 75%',
         backgroundRepeat: 'no-repeat',
       })}
     >
@@ -28,12 +28,12 @@ export default function HeroWiki() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          pt: { xs: 14, sm: 20 },
-          pb: { xs: 8, sm: 12 },
+          pt: { xs: 14, sm: 6 },
+          pb: { xs: 8, sm: 10 },
         }}
       >
         <Stack spacing={2} useFlexGap sx={{ width: { xs: '100%', sm: '70%' } }}>
-          <Typography
+          {/* <Typography
             component="h1"
             variant="h1"
             sx={{
@@ -42,9 +42,9 @@ export default function HeroWiki() {
               alignSelf: 'center',
               textAlign: 'center',
             }}
-          >
+          > */}
             {/* Vestic&nbsp; */}
-            <Typography
+            {/* <Typography
               component="span"
               variant="h1"
               sx={{
@@ -58,7 +58,7 @@ export default function HeroWiki() {
           <Typography variant="body1" textAlign="center" color="text.secondary">
             provides kanban board to help you manage your projects.<br />
             Scroll down for kanban boards now.
-          </Typography>
+          </Typography> */}
           {/* <Stack
             direction={{ xs: 'column', sm: 'row' }}
             alignSelf="center"

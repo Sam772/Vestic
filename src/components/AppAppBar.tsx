@@ -117,6 +117,17 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   </MenuItem>
                 </Link>
 
+                <Link to="/projectcreation">
+                  <MenuItem
+                    // onClick={() => scrollToSection('testimonials')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      <div className='appappbar-link'>Project Creation</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
+
                 <Link to="/projectoverview/project">
                   <MenuItem
                     // onClick={() => scrollToSection('testimonials')}
@@ -134,7 +145,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     sx={{ py: '6px', px: '12px' }}
                   >
                     <Typography variant="body2" color="text.primary">
-                      <div className='appappbar-link'>Wiki</div>
+                      <div className='appappbar-link'>Wikis</div>
                     </Typography>
                   </MenuItem>
                 </Link>
@@ -145,7 +156,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     sx={{ py: '6px', px: '12px' }}
                   >
                     <Typography variant="body2" color="text.primary">
-                      <div className='appappbar-link'>Analytics</div>
+                      <div className='appappbar-link'>Project Analytics</div>
                     </Typography>
                   </MenuItem>
                 </Link>
@@ -156,7 +167,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     sx={{ py: '6px', px: '12px' }}
                   >
                     <Typography variant="body2" color="text.primary">
-                    <div className='appappbar-link'>Testing</div>
+                    <div className='appappbar-link'>Quality Assurance</div>
                     </Typography>
                   </MenuItem>
                 </Link>

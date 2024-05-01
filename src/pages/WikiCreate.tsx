@@ -14,6 +14,7 @@ import getLPTheme from '../getLPTheme';
 import TextField from '@mui/material/TextField';
 import { Button as MUIButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import HeroProjectOverview from '../components/HeroProjectOverview';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -97,7 +98,8 @@ const Wiki: React.FC<WikiProps> = ({ createWikiPage }) => {
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '60px' }}>
+      <HeroProjectOverview />
+      <Box sx={{ bgcolor: 'background.default'}}>
         <div className="wiki-container">
           <ThemeProvider theme={theme}>
             <Typography variant="h6">

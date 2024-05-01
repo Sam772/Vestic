@@ -15,6 +15,7 @@ import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import WorkspaceModal from '../components/WorkspaceModal';
+import HeroProjectOverview from '../components/HeroProjectOverview';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -198,7 +199,8 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', paddingTop: '80px' }}>
+      <HeroProjectOverview />
+      <Box sx={{ bgcolor: 'background.default'}}>
         <div className="project-creation-page-container">
           <div className="sidebar">
             <ThemeProvider theme={theme}>

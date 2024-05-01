@@ -54,11 +54,14 @@ export default function HeroAnalytics() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              Vestic
+              Project Analytics
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            provides project analytics to give insights into project statistics.<br />
+            Project analytics allow users to filter their projects using different metrics which can be used to get insight into the project's success.
+            <br />
+            These metrics can be shown to clients or used for other purposes.
+            <br />
             Get started with Analytics now.
             <List>
               <button className='new-button'>
