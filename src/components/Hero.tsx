@@ -63,8 +63,9 @@ export default function Hero() {
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            provides a project management solution like no other.<br />
-            Combining the best features of Trello, DevOps and Jira to create a new and improved idea.
+            Explore Vestic, providing you with a unique project management solution.
+            <br />
+            A simple project management tool allowing you to organise your projects into workspaces, with additional features allowing you to document, test and provide statistics for them.
             <div className="landing-page-container">
               <List>
                 <button className='new-workspace-button'>

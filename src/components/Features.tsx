@@ -19,7 +19,7 @@ const items = [
     icon: <ViewQuiltRoundedIcon />,
     title: 'Kanban Boards',
     description:
-      'Helps to organise your projects using task management to track your project progress.',
+      'Helps to organise your projects using task management by doing individual tasks to track project progression.',
     imageLight: 'url("/static/images/templates/templates-images/dash-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/dash-dark.png")',
     url: '/project/projectoverview'
@@ -28,7 +28,7 @@ const items = [
     icon: <EdgesensorHighRoundedIcon />,
     title: 'Wiki Pages',
     description:
-      'Helps to provide documentation for the project so new employees can get up to speed.',
+      'Allows users to provide documentation for their projects so new employees can get up to speed or knowledge can be accessed by others.',
     imageLight: 'url("/static/images/templates/templates-images/mobile-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/mobile-dark.png")',
     url: '/wiki'
@@ -37,7 +37,7 @@ const items = [
     icon: <DevicesRoundedIcon />,
     title: 'Analytics',
     description:
-      'Provides insight and metrics for project statistics such as number of items completed or bugs.',
+      'Provides insight and metrics for project statistics which can be used as success values for internal use or clients.',
     imageLight: 'url("/static/images/templates/templates-images/devices-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/devices-dark.png")',
     url: '/analytics'
@@ -46,7 +46,7 @@ const items = [
     icon: <DevicesRoundedIcon />,
     title: 'Testing',
     description:
-      'Provides quality assurance aspects to ensure the quality of the product is high.',
+      'Tests can be conducted via the Kanban Board allowing for high quality of the project.',
     imageLight: 'url("/static/images/templates/templates-images/devices-light.png")',
     imageDark: 'url("/static/images/templates/templates-images/devices-dark.png")',
     url: '/testing'
@@ -68,16 +68,14 @@ export default function Features() {
         <Grid item xs={12} md={6}>
           <div>
             <Typography component="h2" variant="h4" color="text.primary">
-              Vestic Features
+              Vestic's Features
             </Typography>
             <Typography
               variant="body1"
               color="text.secondary"
               sx={{ mb: { xs: 2, sm: 4 } }}
             >
-              Here you can view a brief overview of the key features of the
-              Vestic project management application. For example, we provide kanban boards to manage tasks,
-              wiki pages for project documentation, analytics to view project stats, and testing for quality assurance.
+              Here is a brief overview of Vestic's features. These are the main features of the application that will allow you to manage your projects.
             </Typography>
           </div>
           <Grid container item gap={1} sx={{ display: { xs: 'auto', sm: 'none' } }}>
