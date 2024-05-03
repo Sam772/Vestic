@@ -16,6 +16,7 @@ import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/mater
 import Typography from '@mui/material/Typography';
 import WorkspaceModal from '../components/WorkspaceModal';
 import EditWorkspaceModal from '../components/EditWorkspaceModal';
+import EditProjectModal from '../components/EditProjectModal';
 import HeroProjectOverview from '../components/HeroProjectOverview';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -128,15 +129,15 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
 
-  // Define state variables for edited workspace name and description
   const [editedWorkspaceName, setEditedWorkspaceName] = useState('');
   const [editedWorkspaceDescription, setEditedWorkspaceDescription] = useState('');
-
-  // Define state variable to hold selected workspace
   const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
-
-  // Define state variable to control the visibility of the edit workspace modal
   const [isEditWorkspaceModalOpen, setIsEditWorkspaceModalOpen] = useState(false);
+
+  const [editedProjectName, setEditedProjectName] = useState('');
+  const [editedProjectDescription, setEditedProjectDescription] = useState('');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
 
   const handleWorkspaceButtonClick = (workspaceName: string, workspaceDescription: string) => {
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
@@ -233,10 +234,47 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
   
     // Close the modal
     setIsEditWorkspaceModalOpen(false);
+  };
+
+  const handleEditProject = (project: Project) => {
+    // Set the details of the project being edited to state variables
+    setEditedProjectName(project.name);
+    setEditedProjectDescription(project.description);
+    setSelectedProject(project);
+    // Open the edit project modal or navigate to a new page for editing
+    setIsEditProjectModalOpen(true);
+  };
+
+  const handleEditProjectModal = (name: string, description: string) => {
+    // Find the index of the selected project in the projects array
+    const projectIndex = projects.findIndex(project => project.name === selectedProject?.name);
+    // Create a copy of the projects array
+    const updatedProjects = [...projects];
+    // Update the name and description of the selected project
+    updatedProjects[projectIndex] = { ...selectedProject!, name, description };
+    // Update the state with the new projects array
+    setProjects(updatedProjects);
+  
+    // Update local storage with the new projects array
+    const workspaceProjects = JSON.parse(localStorage.getItem(selectedWorkspaceName) || '[]');
+    const updatedWorkspaceProjects = workspaceProjects.map((project: Project) => {
+      if (project.name === selectedProject?.name) {
+        return { ...project, name };
+      }
+      return project;
+    });
+    localStorage.setItem(selectedWorkspaceName, JSON.stringify(updatedWorkspaceProjects));
+    
+    // Close the modal
+    setIsEditProjectModalOpen(false);
   };  
   
   const closeEditWorkspaceModal = () => {
     setIsEditWorkspaceModalOpen(false);
+  };
+
+  const closeEditProjectModal = () => {
+    setIsEditProjectModalOpen(false);
   };
 
   const closeProjectModal = () => {
@@ -303,7 +341,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                         className="project-card"
                         sx={{
                           padding: 2,
-                          height: 250,
+                          height: 280,
                           '&:hover': {
                             border: '1px solid #3f51b5',
                           },
@@ -319,7 +357,10 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                             </Typography>
                           </Box>
                           <Button onClick={() => handleProjectButtonClick(project.name)} variant="outlined">
-                            Select Project
+                            Project Overview
+                          </Button>
+                          <Button onClick={() => handleEditProject(project)} variant="outlined">
+                            Edit Project
                           </Button>
                           <Button onClick={() => handleDeleteProject(project.name)} variant="outlined" color="error">
                             Delete Project
@@ -357,6 +398,15 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
               editedWorkspaceName={editedWorkspaceName}
               editedWorkspaceDescription={editedWorkspaceDescription}
               onWorkspaceEdit={handleEditWorkspaceModal}
+            />
+          )}
+          {isEditProjectModalOpen && (
+            <EditProjectModal
+              isOpen={isEditProjectModalOpen}
+              onClose={closeEditProjectModal}
+              editedProjectName={editedProjectName}
+              editedProjectDescription={editedProjectDescription}
+              onProjectEdit={handleEditProjectModal}
             />
           )}
         </div>
