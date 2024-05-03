@@ -232,9 +232,14 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
           </div>
           <div className="main-content">
             <ThemeProvider theme={theme}>
-              <Typography variant="subtitle1">
-                <h1 className="project-creation-page-heading">{name} - {description}</h1>
-              </Typography>
+            <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h1 className="project-creation-page-heading">{name} - {description}</h1>
+              <div className="create-project-container">
+                <button onClick={handleCreateProjectClick} className="new-button">
+                  <Button variant='outlined'>Create New Project</Button>
+                </button>
+              </div>
+            </Typography>
             </ThemeProvider>
             {showProjectList && (
               <div className="project-list-container">
@@ -276,11 +281,6 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                 </Grid>
               </div>
             )}
-            <div className="create-project-container">
-              <button onClick={handleCreateProjectClick} className="new-button">
-                <Button variant='outlined'>Create New Project</Button>
-              </button>
-            </div>
           </div>
           {isProjectModalOpen && (
             <ProjectModal
