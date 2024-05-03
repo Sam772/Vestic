@@ -323,7 +323,6 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
-                      marginRight: 1 
                     }}
                   >
                     {workspace.name}
@@ -338,7 +337,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
           <div className="main-content">
             <ThemeProvider theme={theme}>
             <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h1 className="project-creation-page-heading">{name}</h1>
+              <h1>{name}</h1>
               <div className="create-project-container">
                 <button onClick={handleCreateProjectClick} className="new-button">
                   <Button variant='outlined'>Create New Project</Button>
@@ -356,7 +355,7 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                         component={Card}
                         className="project-card"
                         sx={{
-                          padding: 2,
+                          padding: 1,
                           height: 280,
                           '&:hover': {
                             border: '1px solid #3f51b5',
