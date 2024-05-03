@@ -306,19 +306,35 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
       <HeroProjectOverview />
       <Box sx={{ bgcolor: 'background.default'}}>
         <div className="project-creation-page-container">
-        <div className="sidebar">
-          <Typography variant="h5">Your Workspaces</Typography>
-          <List>
-            {workspaces.map((workspace, index) => (
-              <ListItem key={index}>
-                <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>{workspace.name}</Button>
-                <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)} sx={{ marginLeft: 1 }}>Delete</Button>
-                <Button variant='outlined' onClick={() => handleEditWorkspace(workspace)} sx={{ marginLeft: 1 }}>Edit</Button>
-              </ListItem>
-            ))}
-            <Button variant='outlined' onClick={() => setIsWorkspaceModalOpen(true)} sx={{ marginTop: 1 }}>Create a Workspace</Button>
-          </List>
-        </div>
+          <div className="sidebar">
+            <Typography variant="h5">Your Workspaces</Typography>
+            <List>
+              {workspaces.map((workspace, index) => (
+                <ListItem key={index}>
+                  <Button 
+                    variant='outlined' 
+                    onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}
+                    sx={{ 
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minWidth: '160px',
+                      maxWidth: '160px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      marginRight: 1 
+                    }}
+                  >
+                    {workspace.name}
+                  </Button>
+                  <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)} sx={{ marginLeft: 1 }}>Delete</Button>
+                  <Button variant='outlined' onClick={() => handleEditWorkspace(workspace)} sx={{ marginLeft: 1 }}>Edit</Button>
+                </ListItem>
+              ))}
+              <Button variant='outlined' onClick={() => setIsWorkspaceModalOpen(true)} sx={{ marginTop: 1, marginLeft: 2 }}>Create a Workspace</Button>
+            </List>
+          </div>
           <div className="main-content">
             <ThemeProvider theme={theme}>
             <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
