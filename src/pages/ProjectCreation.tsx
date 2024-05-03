@@ -18,6 +18,7 @@ import WorkspaceModal from '../components/WorkspaceModal';
 import HeroProjectOverview from '../components/HeroProjectOverview';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardActionArea from '@mui/material/CardActionArea';
 import Grid from '@mui/material/Grid';
 
 interface ToggleCustomThemeProps {
@@ -170,6 +171,16 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     closeProjectModal();
   };
   
+  const handleDeleteProject = (projectName: string) => {
+    // Filter out the project to be deleted
+    const updatedProjects = projects.filter(project => project.name !== projectName);
+    setProjects(updatedProjects);
+  
+    // Remove the project from local storage (if needed)
+    const updatedWorkspaceProjects = JSON.parse(localStorage.getItem(selectedWorkspaceName) || '[]').filter((project: Project) => project.name !== projectName);
+    localStorage.setItem(selectedWorkspaceName, JSON.stringify(updatedWorkspaceProjects));
+  };
+
   // Function to delete a workspace
   const handleDeleteWorkspace = (workspaceName: string) => {
     deleteWorkspace(workspaceName);
@@ -221,36 +232,45 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
           </div>
           <div className="main-content">
             <ThemeProvider theme={theme}>
-              <Typography variant="h6">
-                <h1 className="project-creation-page-heading">Project Creation Page</h1>
-              </Typography>
-            </ThemeProvider>
-            <ThemeProvider theme={theme}>
               <Typography variant="subtitle1">
-                <div className="workspace-details-container">
-                  <h2>Workspace Details</h2>
-                  <p>Name: {name}</p>
-                  <p>Description: {description}</p>
-                </div>
+                <h1 className="project-creation-page-heading">{name} - {description}</h1>
               </Typography>
             </ThemeProvider>
             {showProjectList && (
               <div className="project-list-container">
-                <h2>Projects</h2>
+                <h2>My Projects</h2>
                 <Grid container spacing={2}>
                   {projects.map((project, index) => (
                     <Grid item key={index} xs={12} sm={6} md={4}>
-                      <Card className="project-card">
+                      <Box
+                        component={Card}
+                        className="project-card"
+                        sx={{
+                          padding: 2,
+                          height: 250,
+                          '&:hover': {
+                            border: '1px solid #3f51b5',
+                          },
+                        }}
+                      >
                         <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
+                          <Typography gutterBottom variant="h5" component="div" sx={{ marginBottom: 1 }}>
                             {project.name}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {project.description}
-                          </Typography>
+                          <Box sx={{ maxHeight: 100, overflowY: 'auto', marginBottom: 2 }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                              {project.description}
+                            </Typography>
+                          </Box>
+                          <Button onClick={() => handleProjectButtonClick(project.name)} variant="outlined">
+                            Select Project
+                          </Button>
+                          <Button onClick={() => handleDeleteProject(project.name)} variant="outlined" color="error">
+                            Delete Project
+                          </Button>
                         </CardContent>
-                        {/* Add more details or actions as needed */}
-                      </Card>
+                          {/* Add more details or actions as needed */}
+                      </Box>
                     </Grid>
                   ))}
                 </Grid>
