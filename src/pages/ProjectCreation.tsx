@@ -15,6 +15,7 @@ import getLPTheme from '../getLPTheme';
 import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import WorkspaceModal from '../components/WorkspaceModal';
+import EditWorkspaceModal from '../components/EditWorkspaceModal';
 import HeroProjectOverview from '../components/HeroProjectOverview';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -127,6 +128,16 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
 
+  // Define state variables for edited workspace name and description
+  const [editedWorkspaceName, setEditedWorkspaceName] = useState('');
+  const [editedWorkspaceDescription, setEditedWorkspaceDescription] = useState('');
+
+  // Define state variable to hold selected workspace
+  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
+
+  // Define state variable to control the visibility of the edit workspace modal
+  const [isEditWorkspaceModalOpen, setIsEditWorkspaceModalOpen] = useState(false);
+
   const handleWorkspaceButtonClick = (workspaceName: string, workspaceDescription: string) => {
     navigate(`/${encodeURIComponent(workspaceName)}?description=${encodeURIComponent(workspaceDescription)}`);
     setShowProjectList(true);
@@ -187,6 +198,47 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
     // Optionally, you can navigate to a different page or show a confirmation message after deletion
   };
 
+  const handleEditWorkspace = (workspace: Workspace) => {
+    // Assuming you have state variables to hold the edited workspace name and description
+    setEditedWorkspaceName(workspace.name);
+    setEditedWorkspaceDescription(workspace.description);
+    setSelectedWorkspace(workspace);
+    setIsEditWorkspaceModalOpen(true);
+  };
+
+  const handleEditWorkspaceModal = (name: string, description: string) => {
+    // Find the index of the selected workspace in the workspaces array
+    const workspaceIndex = workspaces.findIndex(workspace => workspace.name === selectedWorkspace?.name);
+    // Create a copy of the workspaces array
+    const updatedWorkspaces = [...workspaces];
+    // Update the name and description of the selected workspace
+    updatedWorkspaces[workspaceIndex] = { ...selectedWorkspace!, name, description };
+    // Update the state with the new workspaces array
+    setWorkspaces(updatedWorkspaces);
+  
+    // Update project data associated with the workspace
+    const updatedProjects = projects.map(project => {
+      if (project.name === selectedWorkspace?.name) {
+        return { ...project, name };
+      }
+      return project;
+    });
+  
+    // Update local storage with the new projects array
+    localStorage.setItem(name, JSON.stringify(updatedProjects));
+    localStorage.removeItem(selectedWorkspace?.name || '');
+  
+    // Update the state with the new projects array
+    setProjects(updatedProjects);
+  
+    // Close the modal
+    setIsEditWorkspaceModalOpen(false);
+  };  
+  
+  const closeEditWorkspaceModal = () => {
+    setIsEditWorkspaceModalOpen(false);
+  };
+
   const closeProjectModal = () => {
     setIsProjectModalOpen(false);
   };
@@ -216,24 +268,23 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
       <HeroProjectOverview />
       <Box sx={{ bgcolor: 'background.default'}}>
         <div className="project-creation-page-container">
-          <div className="sidebar">
-            <ThemeProvider theme={theme}>
-              <Typography variant="h5">Your Workspaces</Typography>
-            </ThemeProvider>
-            <List>
-              {workspaces.map((workspace, index) => (
-                <ListItem key={index}>
-                  <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>{workspace.name}</Button>
-                  <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)}>Delete Workspace</Button>
-                </ListItem>
-              ))}
-                <Button variant='outlined' onClick={() => setIsWorkspaceModalOpen(true)}>Create a Workspace</Button>
-            </List>
-          </div>
+        <div className="sidebar">
+          <Typography variant="h5">Your Workspaces</Typography>
+          <List>
+            {workspaces.map((workspace, index) => (
+              <ListItem key={index}>
+                <Button variant='outlined' onClick={() => handleWorkspaceButtonClick(workspace.name, workspace.description)}>{workspace.name}</Button>
+                <Button variant='outlined' onClick={() => handleDeleteWorkspace(workspace.name)} sx={{ marginLeft: 1 }}>Delete</Button>
+                <Button variant='outlined' onClick={() => handleEditWorkspace(workspace)} sx={{ marginLeft: 1 }}>Edit</Button>
+              </ListItem>
+            ))}
+            <Button variant='outlined' onClick={() => setIsWorkspaceModalOpen(true)} sx={{ marginTop: 1 }}>Create a Workspace</Button>
+          </List>
+        </div>
           <div className="main-content">
             <ThemeProvider theme={theme}>
             <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h1 className="project-creation-page-heading">{name} - {description}</h1>
+              <h1 className="project-creation-page-heading">{name}</h1>
               <div className="create-project-container">
                 <button onClick={handleCreateProjectClick} className="new-button">
                   <Button variant='outlined'>Create New Project</Button>
@@ -292,13 +343,22 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
               workspaceName={selectedWorkspaceName}
             />
           )}
-          {isWorkspaceModalOpen && ( // Added workspace modal
+          {isWorkspaceModalOpen && (
             <WorkspaceModal
               isOpen={isWorkspaceModalOpen}
               onClose={closeWorkspaceModal}
               onCreateWorkspace={addWorkspace}
             />
            )}
+           {isEditWorkspaceModalOpen && (
+            <EditWorkspaceModal
+              isOpen={isEditWorkspaceModalOpen}
+              onClose={closeEditWorkspaceModal}
+              editedWorkspaceName={editedWorkspaceName}
+              editedWorkspaceDescription={editedWorkspaceDescription}
+              onWorkspaceEdit={handleEditWorkspaceModal}
+            />
+          )}
         </div>
       </Box>
         {/* <ToggleCustomTheme
