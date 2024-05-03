@@ -20,8 +20,8 @@ const items = [
     title: 'Kanban Boards',
     description:
       'Helps to organise your projects using task management by doing individual tasks to track project progression.',
-    imageLight: 'url("/static/images/templates/templates-images/dash-light.png")',
-    imageDark: 'url("/static/images/templates/templates-images/dash-dark.png")',
+    imageLight: '',
+    imageDark: 'url("images/kanban-board-dark.png")',
     url: '/project/projectoverview'
   },
   {
@@ -29,8 +29,8 @@ const items = [
     title: 'Wiki Pages',
     description:
       'Allows users to provide documentation for their projects so new employees can get up to speed or knowledge can be accessed by others.',
-    imageLight: 'url("/static/images/templates/templates-images/mobile-light.png")',
-    imageDark: 'url("/static/images/templates/templates-images/mobile-dark.png")',
+    imageLight: '',
+    imageDark: 'url("images/wikis.png")',
     url: '/wiki'
   },
   {
@@ -38,8 +38,8 @@ const items = [
     title: 'Analytics',
     description:
       'Provides insight and metrics for project statistics which can be used as success values for internal use or clients.',
-    imageLight: 'url("/static/images/templates/templates-images/devices-light.png")',
-    imageDark: 'url("/static/images/templates/templates-images/devices-dark.png")',
+    imageLight: '',
+    imageDark: '',
     url: '/analytics'
   },
   {
@@ -47,8 +47,8 @@ const items = [
     title: 'Testing',
     description:
       'Tests can be conducted via the Kanban Board allowing for high quality of the project.',
-    imageLight: 'url("/static/images/templates/templates-images/devices-light.png")',
-    imageDark: 'url("/static/images/templates/templates-images/devices-dark.png")',
+    imageLight: '',
+    imageDark: '',
     url: '/testing'
   },
 ];
