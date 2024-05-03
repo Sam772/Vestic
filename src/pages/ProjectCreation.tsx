@@ -16,6 +16,9 @@ import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/mater
 import Typography from '@mui/material/Typography';
 import WorkspaceModal from '../components/WorkspaceModal';
 import HeroProjectOverview from '../components/HeroProjectOverview';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -217,12 +220,12 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
             </List>
           </div>
           <div className="main-content">
-          <ThemeProvider theme={theme}>
-            <Typography variant="h6">
-              <h1 className="project-creation-page-heading">Project Creation Page</h1>
-            </Typography>
-          </ThemeProvider>
-          <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+              <Typography variant="h6">
+                <h1 className="project-creation-page-heading">Project Creation Page</h1>
+              </Typography>
+            </ThemeProvider>
+            <ThemeProvider theme={theme}>
               <Typography variant="subtitle1">
                 <div className="workspace-details-container">
                   <h2>Workspace Details</h2>
@@ -230,21 +233,27 @@ const ProjectCreation: React.FC<ProjectCreationProps> = ( { workspaces, setWorks
                   <p>Description: {description}</p>
                 </div>
               </Typography>
-          </ThemeProvider>
+            </ThemeProvider>
             {showProjectList && (
               <div className="project-list-container">
                 <h2>Projects</h2>
-                {selectedWorkspaceName && (
-                <div>
-                  {projects.map(project => (
-                    <div key={project.name} className="project-item">
-                      <Button variant='outlined' onClick={() => handleProjectButtonClick(project.name)}>{project.name}</Button>
-                    </div>
+                <Grid container spacing={2}>
+                  {projects.map((project, index) => (
+                    <Grid item key={index} xs={12} sm={6} md={4}>
+                      <Card className="project-card">
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {project.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {project.description}
+                          </Typography>
+                        </CardContent>
+                        {/* Add more details or actions as needed */}
+                      </Card>
+                    </Grid>
                   ))}
-                </div>
-              )}
-                {/* <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 1</Button></button>
-                <button onClick={handleProjectButtonClick} className="new-button"><Button variant='outlined'>Project 2</Button></button> */}
+                </Grid>
               </div>
             )}
             <div className="create-project-container">
