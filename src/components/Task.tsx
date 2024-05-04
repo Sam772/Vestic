@@ -150,7 +150,7 @@ const Task: React.FC<TaskProps> = ({ id, taskName, taskSprint, taskTag, taskDueD
               </Typography>
             </CardContent>
             <CardActions>
-              <Button variant='outlined' size="small">Due Date: {taskDueDate.format('YYYY-MM-DD')}</Button>
+              <Button variant='outlined' size="small">Due Date: {taskDueDate.toString()}</Button>
               {testInfo && (
                 <Button className='dropdown-button' variant="outlined" onClick={() => setAddTestModalOpen(true)}>
                   <ScienceIcon />

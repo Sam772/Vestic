@@ -128,11 +128,11 @@ const KanbanBoard: React.FC = () => {
   const projectDescription = location.state?.projectDescription || '';
 
   // Represents the initial state of tasks
-  const [tasks, setTasks] = useState<Tasks>(initialTasks);
+  let [tasks, setTasks] = useState<Tasks>(initialTasks);
 
   // Has the count of initial tasks
   const [initialTaskCounts, setInitialTaskCounts] = useState<Record<ColumnName, number>>({
-    New: 0,
+    New: 3,
     Committed: 0,
     Done: 0,
   });
@@ -157,10 +157,13 @@ const KanbanBoard: React.FC = () => {
     if (savedTasks) {
       console.log('Tasks loaded from localStorage:', JSON.parse(savedTasks));
       const loadedTasks = JSON.parse(savedTasks);
+      console.log('Loaded tasks:', loadedTasks);
       // Update initialTasks with loaded tasks
       initialTasks = loadedTasks;
+      tasks = loadedTasks;
       // Set tasks state with loaded tasks
       setTasks(loadedTasks);
+      console.log('Tasks after setting state:', tasks);
     }
   }, []);
   
