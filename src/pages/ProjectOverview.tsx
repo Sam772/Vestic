@@ -723,6 +723,22 @@ const KanbanBoard: React.FC = () => {
               <MenuItem key={index} value={tag}>{tag}</MenuItem>
             ))}
           </Select>
+
+          <Button
+            variant="outlined"
+            onClick={() => { }}
+            style={{ marginLeft: '8px' }}
+          >
+            Test Plans
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={() => { }}
+            style={{ marginLeft: '8px' }}
+          >
+            Project Analytics
+          </Button>
         </div>
         <div ref={drop} className="kanban-board" /*onDrop={handleDrop}*/ onDragOver={handleDragOver}>
           {columnOrder.map((columnName, index) => (
