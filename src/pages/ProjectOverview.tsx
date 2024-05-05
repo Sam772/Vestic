@@ -22,6 +22,10 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
+import { Modal} from '@mui/material';
+import ProjectAnalyticsModal from '../components/ProjectAnalyticsModal';
+import TestPlansModal from '../components/TestPlansModal';
+
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
@@ -132,7 +136,7 @@ const KanbanBoard: React.FC = () => {
 
   // Has the count of initial tasks
   const [initialTaskCounts, setInitialTaskCounts] = useState<Record<ColumnName, number>>({
-    New: 3,
+    New: 0,
     Committed: 0,
     Done: 0,
   });
@@ -688,6 +692,63 @@ const KanbanBoard: React.FC = () => {
     return calculatedHeight;
   };
 
+  // Project Analytics and Test Plans
+  const [openTestPlansModal, setOpenTestPlansModal] = useState(false);
+  const [openProjectAnalyticsModal, setOpenProjectAnalyticsModal] = useState(false);
+
+  const [testPlansField, setTestPlansField] = useState('');
+  const [projectAnalyticsField, setProjectAnalyticsField] = useState('');
+
+  // Function to open Test Plans modal
+  const handleOpenTestPlansModal = () => {
+    setOpenTestPlansModal(true);
+  };
+
+  // Function to close Test Plans modal
+  const handleCloseTestPlansModal = () => {
+    setOpenTestPlansModal(false);
+  };
+
+   // Function to save Test Plans input and close modal
+   const handleSaveTestPlans = () => {
+    // Add your logic to save Test Plans input
+    console.log('Test Plans:', testPlansField);
+    // Close the modal
+    handleCloseTestPlansModal();
+  };
+
+  // Function to open Project Analytics modal
+  const handleOpenProjectAnalyticsModal = () => {
+    setOpenProjectAnalyticsModal(true);
+  };
+
+  // Function to close Project Analytics modal
+  const handleCloseProjectAnalyticsModal = () => {
+    setOpenProjectAnalyticsModal(false);
+  };
+
+  // Function to save Project Analytics input and close modal
+  const handleSaveProjectAnalytics = () => {
+    // Add your logic to save Project Analytics input
+    console.log('Project Analytics:', projectAnalyticsField);
+    // Close the modal
+    handleCloseProjectAnalyticsModal();
+  };
+
+  const getTotalItemsCount = (): number => {
+    const totalItemCount = Object.values(tasks).reduce((total, columnTasks) => {
+      return total + columnTasks.length;
+    }, 0);
+  
+    return totalItemCount;
+  };
+  
+  const getItemsInSprintsCount = (): number => {
+    const itemsInSprintsCount = tasks.Committed.length + tasks.Done.length; // Assuming only Committed and Done columns are considered sprints
+  
+    return itemsInSprintsCount;
+  };
+
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
@@ -726,7 +787,7 @@ const KanbanBoard: React.FC = () => {
 
           <Button
             variant="outlined"
-            onClick={() => { }}
+            onClick={handleOpenTestPlansModal}
             style={{ marginLeft: '8px' }}
           >
             Test Plans
@@ -734,11 +795,12 @@ const KanbanBoard: React.FC = () => {
 
           <Button
             variant="outlined"
-            onClick={() => { }}
+            onClick={handleOpenProjectAnalyticsModal}
             style={{ marginLeft: '8px' }}
           >
             Project Analytics
           </Button>
+
         </div>
         <div ref={drop} className="kanban-board" /*onDrop={handleDrop}*/ onDragOver={handleDragOver}>
           {columnOrder.map((columnName, index) => (
@@ -863,6 +925,20 @@ const KanbanBoard: React.FC = () => {
               onPostComment={handlePostComment}
               newComment={newComment}
               onNewCommentChange={handleNewCommentChange}
+            />
+          )}
+          {openProjectAnalyticsModal && (
+            <ProjectAnalyticsModal
+              open={openProjectAnalyticsModal}
+              onClose={handleCloseProjectAnalyticsModal}
+              totalItems={getTotalItemsCount}
+              itemsInSprints={getItemsInSprintsCount}
+            />
+          )}
+          {openTestPlansModal && (
+            <TestPlansModal
+              open={openTestPlansModal}
+              onClose={handleCloseTestPlansModal}
             />
           )}
         </div>
