@@ -118,7 +118,7 @@ const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <Typography variant="h5" gutterBottom>
-              Tag Analytics
+              Item Type Analytics
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
