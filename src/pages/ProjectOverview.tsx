@@ -774,6 +774,41 @@ const KanbanBoard: React.FC = () => {
     return tasks.Done.length;
   };
 
+  const getFeaturesCount = (): number => {
+    const featureTasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.tag === Tag.Tag1)
+    );
+  
+    const featuresCount = featureTasks.length;
+  
+    return featuresCount;
+  };
+
+  const getBugsCount = (): number => {
+    const bugTasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.tag === Tag.Tag2)
+    );
+  
+    const bugsCount = bugTasks.length;
+  
+    return bugsCount;
+  };
+
+  const getOtherTagsCount = (): number => {
+    const epicTasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.tag === Tag.Tag3)
+    );
+  
+    const userStoryTasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.tag === Tag.Tag4)
+    );
+  
+    const otherTagsCount = epicTasks.length + userStoryTasks.length;
+  
+    return otherTagsCount;
+  };
+  
+
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <CssBaseline />
@@ -960,6 +995,9 @@ const KanbanBoard: React.FC = () => {
               tasksInSprint1={getItemsInSprint1Count}
               tasksInSprint2={getItemsInSprint2Count}
               tasksInSprint3={getItemsInSprint3Count}
+              featureTasks={getFeaturesCount}
+              bugTasks={getBugsCount}
+              otherTasks={getOtherTagsCount}
               completedTasks={getCompletedTasksCount}
             />
           )}
