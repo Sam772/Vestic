@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button, Grid } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ProjectAnalyticsModalProps {
   open: boolean;
   onClose: () => void;
-  totalItems: () => number;
-  itemsInSprints: () => number;
+  totalTasks: () => number;
+  tasksInSprint1: () => number;
+  tasksInSprint2: () => number;
+  tasksInSprint3: () => number;
+  completedTasks: () => number;
 }
 
-const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({ open, onClose, totalItems, itemsInSprints }) => {
+const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({ 
+  open,
+  onClose,
+  totalTasks:
+  totalTasks,
+  tasksInSprint1: tasksInSprint1,
+  tasksInSprint2: tasksInSprint2,
+  tasksInSprint3: tasksInSprint3,
+  completedTasks: completedTasks
+}) => {
 
   return (
     <Modal 
@@ -27,21 +40,40 @@ const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({ open, onC
         p: 4,
         minWidth: 300
       }}>
-        <Typography variant="h6" id="projectanalytics-modal-title" gutterBottom>
-          Add Analytic
-        </Typography>
+          <Button className="close-btn" onClick={onClose} sx={{ position: 'absolute', top: 5, right: 0 }}>
+            <CloseIcon />
+          </Button>
+        <h2> Your Project Analytics </h2>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography>Total Items:</Typography>
+            <Typography>Total Tasks:</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography>{totalItems()}</Typography>
+            <Typography>{totalTasks()}</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography>Items in Sprints:</Typography>
+            <Typography>Tasks in Sprint 1:</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography>{itemsInSprints()}</Typography>
+            <Typography>{tasksInSprint1()}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Tasks in Sprint 2:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>{tasksInSprint2()}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Tasks in Sprint 3:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>{tasksInSprint3()}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Completed Tasks:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>{completedTasks()}</Typography>
           </Grid>
           {/* Add more Grid items for other statistics */}
         </Grid>

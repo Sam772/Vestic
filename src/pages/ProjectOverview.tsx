@@ -743,10 +743,35 @@ const KanbanBoard: React.FC = () => {
     return totalItemCount;
   };
   
-  const getItemsInSprintsCount = (): number => {
-    const itemsInSprintsCount = tasks.Committed.length + tasks.Done.length; // Assuming only Committed and Done columns are considered sprints
+  const getItemsInSprint1Count = (): number => {
+    // Filter tasks in Sprint 1 across all columns
+    const sprint1Tasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.sprint === Sprint.Sprint1)
+    );
   
-    return itemsInSprintsCount;
+    return sprint1Tasks.length;
+  };
+
+  const getItemsInSprint2Count = (): number => {
+    // Filter tasks in Sprint 1 across all columns
+    const sprint2Tasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.sprint === Sprint.Sprint2)
+    );
+  
+    return sprint2Tasks.length;
+  };
+
+  const getItemsInSprint3Count = (): number => {
+    // Filter tasks in Sprint 1 across all columns
+    const sprint3Tasks = Object.values(tasks).flatMap(columnTasks =>
+      columnTasks.filter((task: Task) => task.sprint === Sprint.Sprint3)
+    );
+  
+    return sprint3Tasks.length;
+  };
+
+  const getCompletedTasksCount = (): number => {
+    return tasks.Done.length;
   };
 
   return (
@@ -931,8 +956,11 @@ const KanbanBoard: React.FC = () => {
             <ProjectAnalyticsModal
               open={openProjectAnalyticsModal}
               onClose={handleCloseProjectAnalyticsModal}
-              totalItems={getTotalItemsCount}
-              itemsInSprints={getItemsInSprintsCount}
+              totalTasks={getTotalItemsCount}
+              tasksInSprint1={getItemsInSprint1Count}
+              tasksInSprint2={getItemsInSprint2Count}
+              tasksInSprint3={getItemsInSprint3Count}
+              completedTasks={getCompletedTasksCount}
             />
           )}
           {openTestPlansModal && (

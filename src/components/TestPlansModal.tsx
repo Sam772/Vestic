@@ -25,9 +25,7 @@ const TestPlansModal: React.FC<TestPlansModalProps> = ({ open, onClose, }) => {
         p: 4,
         minWidth: 300
       }}>
-        <Typography variant="h6" id="testplans-modal-title" gutterBottom>
-          Add Test Plan
-        </Typography>
+         <h2> Your Test Plans </h2>
       </Box>
     </Modal>
   );
