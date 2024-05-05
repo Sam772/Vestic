@@ -150,7 +150,18 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   </MenuItem>
                 </Link>
 
-                <Link to="/analytics">
+                <Link to="/gettingstarted">
+                  <MenuItem
+                    // onClick={() => scrollToSection('highlights')}
+                    sx={{ py: '6px', px: '12px' }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      <div className='appappbar-link'>Getting Started</div>
+                    </Typography>
+                  </MenuItem>
+                </Link>
+
+                {/* <Link to="/analytics">
                   <MenuItem
                     // onClick={() => scrollToSection('pricing')}
                     sx={{ py: '6px', px: '12px' }}
@@ -170,7 +181,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     <div className='appappbar-link'>Quality Assurance</div>
                     </Typography>
                   </MenuItem>
-                </Link>
+                </Link> */}
                 
               </Box>
             </Box>

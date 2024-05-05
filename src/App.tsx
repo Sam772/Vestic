@@ -18,6 +18,7 @@ import WikiCreate from './pages/WikiCreate';
 import TestPlans from './pages/TestPlans';
 import { PaletteMode } from '@mui/material';
 import { Link } from './components/Types';
+import GettingStarted from './pages/GettingStarted';
 
 const App: React.FC = () => {
   const [wikiPages, setWikiPages] = useState<string[]>([]);
@@ -75,6 +76,7 @@ const App: React.FC = () => {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/testing" element={<Testing />} />
             <Route path="/testplans" element={<TestPlans />} />
+            <Route path="/gettingstarted" element={<GettingStarted />} />
             <Route path="/wikicreate" element={<WikiCreate createWikiPage={createWikiPage} />} />
             {wikiPages.map(pageName => (
               <Route

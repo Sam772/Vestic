@@ -39,7 +39,7 @@ const items = [
     description:
       'Provides insight and metrics for project statistics which can be used as success values for internal use or clients.',
     imageLight: '',
-    imageDark: '',
+    imageDark: 'url("images/project-analytics-dark.png")',
     url: '/analytics'
   },
   {
@@ -48,7 +48,7 @@ const items = [
     description:
       'Tests can be conducted via the Kanban Board allowing for high quality of the project.',
     imageLight: '',
-    imageDark: '',
+    imageDark: 'url("images/test-case-dark.png")',
     url: '/testing'
   },
 ];
