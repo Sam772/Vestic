@@ -784,6 +784,14 @@ const KanbanBoard: React.FC = () => {
     return featuresCount;
   };
 
+  const getCompletedFeaturesCount = (): number => {
+    const completedTasks = tasks.Done;
+    
+    const completedFeatures = completedTasks.filter((task: Task) => task.tag === Tag.Tag1);
+    
+    return completedFeatures.length;
+  };  
+
   const getBugsCount = (): number => {
     const bugTasks = Object.values(tasks).flatMap(columnTasks =>
       columnTasks.filter((task: Task) => task.tag === Tag.Tag2)
@@ -793,6 +801,15 @@ const KanbanBoard: React.FC = () => {
   
     return bugsCount;
   };
+
+  
+  const getCompletedBugsCount = (): number => {
+    const completedTasks = tasks.Done;
+    
+    const completedBugs = completedTasks.filter((task: Task) => task.tag === Tag.Tag2);
+    
+    return completedBugs.length;
+  };  
 
   const getOtherTagsCount = (): number => {
     const epicTasks = Object.values(tasks).flatMap(columnTasks =>
@@ -845,13 +862,13 @@ const KanbanBoard: React.FC = () => {
             ))}
           </Select>
 
-          <Button
+          {/* <Button
             variant="outlined"
             onClick={handleOpenTestPlansModal}
             style={{ marginLeft: '8px' }}
           >
             Test Plans
-          </Button>
+          </Button> */}
 
           <Button
             variant="outlined"
@@ -996,7 +1013,9 @@ const KanbanBoard: React.FC = () => {
               tasksInSprint2={getItemsInSprint2Count}
               tasksInSprint3={getItemsInSprint3Count}
               featureTasks={getFeaturesCount}
+              completedFeatures={getCompletedFeaturesCount}
               bugTasks={getBugsCount}
+              completedBugs={getCompletedBugsCount}
               otherTasks={getOtherTagsCount}
               completedTasks={getCompletedTasksCount}
             />

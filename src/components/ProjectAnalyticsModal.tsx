@@ -10,7 +10,9 @@ interface ProjectAnalyticsModalProps {
   tasksInSprint2: () => number;
   tasksInSprint3: () => number;
   featureTasks: () => number;
+  completedFeatures: () => number;
   bugTasks: () => number;
+  completedBugs: () => number;
   otherTasks: () => number;
   completedTasks: () => number;
 }
@@ -18,16 +20,19 @@ interface ProjectAnalyticsModalProps {
 const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({ 
   open,
   onClose,
-  totalTasks:
-  totalTasks,
+  totalTasks: totalTasks,
   tasksInSprint1: tasksInSprint1,
   tasksInSprint2: tasksInSprint2,
   tasksInSprint3: tasksInSprint3,
   featureTasks: featureTasks,
+  completedFeatures: completedFeatures,
   bugTasks: bugTasks,
+  completedBugs: completedBugs,
   otherTasks: otherTasks,
   completedTasks: completedTasks
 }) => {
+
+  const completedPercentage = totalTasks() === 0 ? 0 : (completedTasks() / totalTasks()) * 100;
 
   return (
     <Modal 
@@ -89,6 +94,12 @@ const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({
               <Grid item xs={2}>
                 <Typography className="analytics-item">{completedTasks()}</Typography>
               </Grid>
+              <Grid item xs={8}>
+                <Typography className="analytics-item">Percentage of Completed Tasks:</Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Typography className="analytics-item">{completedPercentage.toFixed(2)}%</Typography>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} md={4}>
@@ -118,7 +129,7 @@ const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <Typography variant="h5" gutterBottom>
-              Item Type Analytics
+              Task Type Analytics
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -128,10 +139,22 @@ const ProjectAnalyticsModal: React.FC<ProjectAnalyticsModalProps> = ({
                 <Typography className="analytics-item">{featureTasks()}</Typography>
               </Grid>
               <Grid item xs={6}>
+                <Typography className="analytics-item">Completed Features:</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className="analytics-item">{completedFeatures()}</Typography>
+              </Grid>
+              <Grid item xs={6}>
                 <Typography className="analytics-item">Bug Tasks:</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography className="analytics-item">{bugTasks()}</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className="analytics-item">Completed Bugs:</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className="analytics-item">{completedBugs()}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography className="analytics-item">Other Tasks:</Typography>
